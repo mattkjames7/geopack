@@ -1,23 +1,28 @@
 # CFLAGS for CC
-CFLAGS=-lm -fopenmp
+CFLAGS=-lm -g -O3 -std=c++17 -Wextra -fPIC
 
 # Compiler
-CCo=g++ -fPIC -c $(CFLAGS)
+CCo=g++ -c $(CFLAGS)
 CC=g++ $(CFLAGS)
+
+# set the build directory
+ifndef BUILDDIR 
+	BUILDDIR=.
+endif
 
 all: obj lib
 
 obj:
-	$(CCo) matrix.cc -o matrix.o
-	$(CCo) matrixarray.cc -o matrixarray.o
-	$(CCo) matrixmath.cc -o matrixmath.o
-	$(CCo) identity.cc -o identity.o
-	$(CCo) rotmatrix.cc -o rotmatrix.o
-	$(CCo) libmatrix.cc -o libmatrix.o
+	$(CCo) matrix.cc -o $(BUILDDIR)/matrix.o
+	$(CCo) matrixarray.cc -o $(BUILDDIR)/matrixarray.o
+	$(CCo) matrixmath.cc -o $(BUILDDIR)/matrixmath.o
+	$(CCo) identity.cc -o $(BUILDDIR)/identity.o
+	$(CCo) rotmatrix.cc -o $(BUILDDIR)/rotmatrix.o
+	$(CCo) libmatrix.cc -o $(BUILDDIR)/libmatrix.o
 
 
 lib: 
-	$(CC) -shared -o libmatrix.so *.o
+	$(CC) -shared -o libmatrix.so $(BUILDDIR)/*.o
 
 clean:
-	rm -v *.o
+	rm -v $(BUILDDIR)/*.o

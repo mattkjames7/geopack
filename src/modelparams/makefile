@@ -1,18 +1,23 @@
 # CFLAGS for CC
-CFLAGS=-lm 
+CFLAGS=-lm -g -O3 -std=c++17 -Wextra -fPIC 
 
 # Compiler
-CCo=g++ -fPIC -c $(CFLAGS)
-CC=g++ -fPIC $(CFLAGS)
+CCo=g++ -c $(CFLAGS)
+CC=g++ $(CFLAGS)
+
+# set the build directory
+ifndef BUILDDIR 
+	BUILDDIR=.
+endif
 
 all: obj
 
 obj:
-	$(CCo) calculatew.cc -o calcualtew.o
-	$(CCo) calculateg.cc -o calculateg.o
-	$(CCo) tsygdata.cc -o tsygdata.o
-	$(CCo) modelparams.cc -o modelparams.o
-	$(CCo) checkv.cc -o checkv.o
-	$(CCo) fillinkp.cc -o fillinkp.o
+	$(CCo) calculatew.cc -o $(BUILDDIR)/calcualtew.o
+	$(CCo) calculateg.cc -o $(BUILDDIR)/calculateg.o
+	$(CCo) tsygdata.cc -o $(BUILDDIR)/tsygdata.o
+	$(CCo) modelparams.cc -o $(BUILDDIR)/modelparams.o
+	$(CCo) checkv.cc -o $(BUILDDIR)/checkv.o
+	$(CCo) fillinkp.cc -o $(BUILDDIR)/fillinkp.o
 clean:
-	rm -v *.o
+	rm -v $(BUILDDIR)/*.o

@@ -1,18 +1,23 @@
 # CFLAGS for CC
-CFLAGS=-lm 
+CFLAGS=-lm -g -O3 -std=c++17 -Wextra -fPIC
 
 # Compiler
-CCo=g++ -fPIC -c $(CFLAGS)
-CC=g++ -fPIC $(CFLAGS)
+CCo=g++ -c $(CFLAGS)
+CC=g++ $(CFLAGS)
+
+# set the build directory
+ifndef BUILDDIR 
+	BUILDDIR=.
+endif
 
 all: obj
 
 obj:
-	$(CCo) argmax.cc -o argmax.o
-	$(CCo) carttospherical.cc -o carttospherical.o
-	$(CCo) linterp.cc -o linterp.o
-	$(CCo) reverseelements.cc -o reverseelements.o
-	$(CCo) BubbleArgSort.cc -o BubbleArgSort.o
+	$(CCo) argmax.cc -o $(BUILDDIR)/argmax.o
+	$(CCo) carttospherical.cc -o $(BUILDDIR)/carttospherical.o
+	$(CCo) linterp.cc -o $(BUILDDIR)/linterp.o
+	$(CCo) reverseelements.cc -o $(BUILDDIR)/reverseelements.o
+	$(CCo) BubbleArgSort.cc -o $(BUILDDIR)/BubbleArgSort.o
 		
 clean:
-	rm -v *.o
+	rm -v $(BUILDDIR)/*.o

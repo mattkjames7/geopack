@@ -1,27 +1,32 @@
 # CFLAGS for CC
-CFLAGS=-lm -Wall -g
+CFLAGS=-lm -g -O3 -std=c++17 -Wextra -fPIC
 
 # Compiler
-CCo=g++ -fPIC -c $(CFLAGS)
-CC=g++ -fPIC $(CFLAGS)
+CCo=g++ -c $(CFLAGS)
+CC=g++ $(CFLAGS)
+
+# set the build directory
+ifndef BUILDDIR 
+	BUILDDIR=.
+endif
 
 all: obj
 
 obj:
-	$(CCo) converttracecoords.cc -o converttracecoords.o
-	$(CCo) fieldlinedist.cc -o fieldlinedist.o
-	$(CCo) fieldlinemidpoint.cc -o fieldlinemidpoint.o
-	$(CCo) fieldliner.cc -o fieldliner.o
-	$(CCo) fieldlinernorm.cc -o fieldlinernorm.o
-	$(CCo) getmagequatorfp.cc -o getmagequatorfp.o
-	$(CCo) latlonlt.cc -o latlonlt.o
-	$(CCo) tracefield.cc -o tracefield.o
-	$(CCo) tracefieldline.cc -o tracefieldline.o
-	$(CCo) tracefootprints.cc -o tracefootprints.o
-	$(CCo) calculatehalpha.cc -o calculatehalpha.o
-	$(CCo) trace.cc -o trace.o
-	$(CCo) interptraceclosestpos.cc -o interptraceclosestpos.o
-	#$(CCo) tracerotationmatrices.cc -o tracerotationmatrices.o
+	$(CCo) converttracecoords.cc -o $(BUILDDIR)/converttracecoords.o
+	$(CCo) fieldlinedist.cc -o $(BUILDDIR)/fieldlinedist.o
+	$(CCo) fieldlinemidpoint.cc -o $(BUILDDIR)/fieldlinemidpoint.o
+	$(CCo) fieldliner.cc -o $(BUILDDIR)/fieldliner.o
+	$(CCo) fieldlinernorm.cc -o $(BUILDDIR)/fieldlinernorm.o
+	$(CCo) getmagequatorfp.cc -o $(BUILDDIR)/getmagequatorfp.o
+	$(CCo) latlonlt.cc -o $(BUILDDIR)/latlonlt.o
+	$(CCo) tracefield.cc -o $(BUILDDIR)/tracefield.o
+	$(CCo) tracefieldline.cc -o $(BUILDDIR)/tracefieldline.o
+	$(CCo) tracefootprints.cc -o $(BUILDDIR)/tracefootprints.o
+	$(CCo) calculatehalpha.cc -o $(BUILDDIR)/calculatehalpha.o
+	$(CCo) trace.cc -o $(BUILDDIR)/trace.o
+	$(CCo) interptraceclosestpos.cc -o $(BUILDDIR)/interptraceclosestpos.o
+	#$(CCo) tracerotationmatrices.cc -o $(BUILDDIR)/tracerotationmatrices.o
 		
 clean:
-	rm -v *.o
+	rm -v $(BUILDDIR)/*.o

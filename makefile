@@ -50,8 +50,7 @@ test:
 	cd test; make all
 
 clean:
-	cd test; make clean
-	-rm -v lib/$(LIBFILE)
+	-rm -v lib/libgeopack.*
 	-rm -v build/*.o
 	-rmdir -v build
 	-rm -v testinstall

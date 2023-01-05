@@ -1,8 +1,13 @@
 # CFLAGS for CC
-FCFLAGS=-w -c -fPIC -fno-automatic -std=legacy -ffree-line-length-none
+FCFLAGS=-w -c -fPIC -fno-automatic -std=legacy -ffree-line-length-none -O3
 
 # Compiler
 FF=gfortran $(FCFLAGS)
+
+# set the build directory
+ifndef BUILDDIR 
+	BUILDDIR=.
+endif
 
 all: obj
 

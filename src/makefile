@@ -10,16 +10,35 @@ CCW=x86_64-w64-mingw32-g++-win32 $(CFLAGS)
 
 FF=gfortran $(FFLAGS)
 
+ifndef BUILDDIR 
+	BUILDDIR=../build
+endif
+
+ifeq ($(OS),Windows_NT)
+#windows stuff here
+	MD=mkdir
+	LIBFILE=libgeopack.dll
+else
+#linux and mac here
+	OS=$(shell uname -s)
+	MD=mkdir -p
+	ifeq ($(OS),Linux)
+		LIBFILE=libgeopack.so
+	else
+		LIBFILE=libgeopack.dylib
+	endif
+endif
+
 all: obj lib
 
 obj:
-	cd fortran;	make all
-	cd spline; make all
-	cd libdatetime; make all
-	cd modelparams; make all
-	cd tracing; make all
-	cd tools; make all
-	#cd matrix; make all
+	cd fortran;	make obj
+	cd spline; make obj
+	cd libdatetime; make obj
+	cd modelparams; make obj
+	cd tracing; make obj
+	cd tools; make obj
+	cd matrix; make obj
 	
 	$(CCo) modelfield.cc -o $(BUILDDIR)/modelfield.o
 	$(CCo) withinmp.cc -o $(BUILDDIR)/withinmp.o
@@ -29,29 +48,8 @@ obj:
 	$(CCo) recalc.cc -o $(BUILDDIR)/recalc.o
 	
 lib:
-	gfortran -fPIC -fno-automatic -ffree-line-length-none -shared -o libgeopack.so -lm \
-		fortran/*.o \
-		spline/*.o \
-		libdatetime/*.o \
-		modelparams/*.o \
-		tools/*.o \
-		tracing/*.o \
-		*.o -lstdc++ -lgomp
+	gfortran -fPIC -fno-automatic -ffree-line-length-none -shared -o ../lib/$(LIBFILE) -lm \
+		$(BUILDDIR)/*.o -lstdc++ -lgomp
 		#matrix/*.o \
 		
 
-tests:
-	cd test; make all
-	
-
-clean:
-	cd fortran;	make clean
-	cd spline; make clean
-	cd libdatetime; make clean
-	cd modelparams; make clean
-	cd tracing; make clean
-	cd tools; make clean
-	cd matrix; make clean
-	cd test; make clean
-	rm *.o
-	rm -v  *.so
