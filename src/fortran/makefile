@@ -1,18 +1,17 @@
 # CFLAGS for CC
-FCFLAGS=-w -c -fPIC -fno-automatic -std=legacy
+FCFLAGS=-w -c -fPIC -fno-automatic -std=legacy -ffree-line-length-none
 
 # Compiler
-FC=gfortran $(FCFLAGS)
+FF=gfortran $(FCFLAGS)
 
 all: obj
 
 obj:
-	$(FC) -o T89c.o T89c.f
-	$(FC) -o T96.o  T96.f
-	$(FC) -o T01_01.o  T01_01.f
-	$(FC) -o TS04c.o  TS04c.f
-	$(FC) -o wparams.o  wparams.f95
-	$(FC) -ffree-line-length-none -o Geopack-2008_mkj_dp.o Geopack-2008_mkj_dp.f
+	$(FF) -o $(BUILDDIR)/T89c.o T89c.f
+	$(FF) -o $(BUILDDIR)/T96.o  T96.f
+	$(FF) -o $(BUILDDIR)/T01_01.o  T01_01.f
+	$(FF) -o $(BUILDDIR)/TS04c.o  TS04c.f
+	$(FF) -o $(BUILDDIR)/wparams.o  wparams.f95
+	$(FF) -o $(BUILDDIR)/Geopack-2008_mkj_dp.o Geopack-2008_mkj_dp.f
 	
-clean:
-	rm -v *.o
+

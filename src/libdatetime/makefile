@@ -1,28 +1,31 @@
-all: o lib
+# CFLAGS for CC
+CFLAGS=-lm -g -O3 -std=c++17 -Wextra -fPIC
 
-o:
-	g++ -c -fPIC hhmm.cc
-	g++ -c -fPIC LeapYear.cc
-	g++ -c -fPIC DateSplit.cc
-	g++ -c -fPIC DateJoin.cc
-	g++ -c -fPIC DayNo.cc
-	g++ -c -fPIC PlusDay.cc
-	g++ -c -fPIC MinusDay.cc
-	g++ -c -fPIC DateDifference.cc
-	g++ -c -fPIC TimeDifference.cc
-	g++ -c -fPIC MidTime.cc
-	#g++ -c -fPIC WhereEq.cc
-	#g++ -c -fPIC BubbleSort.cc
-	g++ -c -fPIC ContUT.cc 
-	g++ -c -fPIC  UnixTime.cc
-	#g++ -c -fPIC Unique.cc
-	g++ -c -fPIC NearestTimeIndex.cc
-	g++ -c -fPIC WithinTimeRange.cc
-	g++ -c -fPIC JulDay.cc
-	g++ -c -fPIC JulDaytoDate.cc
+# Compiler
+CCo=g++ -c $(CFLAGS)
+CC=g++ $(CFLAGS)
+CCWo=x86_64-w64-mingw32-g++-win32 -c $(CFLAGS)
+CCW=x86_64-w64-mingw32-g++-win32 $(CFLAGS)
+
+# list of files
+SRC=$(wildcard *.cc)
+OBJ=$(SRC:.cc=.o)
+
+# set the build directory
+ifndef BUILDDIR 
+	BUILDDIR=.
+endif
+
+all: obj lib
+
+%.o : %.cc
+	$(CC) $(CFLAGS) -c $< -o $(BUILDDIR)/$@
+
+obj: $(OBJ)
+#$(CCo) -o $(BUILDDIR)/$@ $^ 
 
 lib: 
-	g++ -shared -fPIC -o libdatetime.so *.o -Wall
+	g++ -shared -fPIC -o libdatetime.so $(BUILDDIR)/*.o -Wall
 
 clean:
 	rm -v *.o *.so
