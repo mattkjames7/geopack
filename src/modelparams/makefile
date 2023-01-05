@@ -1,5 +1,5 @@
 # CFLAGS for CC
-CFLAGS=-lm -g -O3 -std=c++17 -Wextra -fPIC 
+CFLAGS=-g -O3 -std=c++17 -Wextra -fPIC 
 
 # Compiler
 CCo=g++ -c $(CFLAGS)
@@ -19,5 +19,6 @@ obj:
 	$(CCo) modelparams.cc -o $(BUILDDIR)/modelparams.o
 	$(CCo) checkv.cc -o $(BUILDDIR)/checkv.o
 	$(CCo) fillinkp.cc -o $(BUILDDIR)/fillinkp.o
+
 clean:
 	rm -v $(BUILDDIR)/*.o

@@ -1,5 +1,6 @@
 # CFLAGS for CC
-CFLAGS=-lm -g -O3 -std=c++17 -Wextra -fPIC
+CFLAGS=-g -O3 -std=c++17 -Wextra -fPIC
+LDFLAGS=-lm 
 
 # Compiler
 CCo=g++ -c $(CFLAGS)
@@ -22,7 +23,7 @@ obj:
 
 
 lib: 
-	$(CC) -shared -o libmatrix.so $(BUILDDIR)/*.o
+	$(CC) -shared -o libmatrix.so $(BUILDDIR)/*.o $(LDFLAGS)
 
 clean:
 	rm -v $(BUILDDIR)/*.o

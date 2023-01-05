@@ -1,5 +1,7 @@
 # CFLAGS for CC
-CFLAGS=-lm -g -O3 -std=c++17 -Wextra -fPIC
+CFLAGS=-g -O3 -std=c++17 -Wextra -fPIC
+LDFLAGS=-lm
+
 
 # Compiler
 CCo=g++ -c $(CFLAGS)
@@ -22,10 +24,9 @@ all: obj lib
 	$(CC) $(CFLAGS) -c $< -o $(BUILDDIR)/$@
 
 obj: $(OBJ)
-#$(CCo) -o $(BUILDDIR)/$@ $^ 
 
 lib: 
-	g++ -shared -fPIC -o libdatetime.so $(BUILDDIR)/*.o -Wall
+	$(CC) -shared -o libdatetime.so $(BUILDDIR)/*.o $(LDFLAGS)
 
 clean:
 	rm -v *.o *.so

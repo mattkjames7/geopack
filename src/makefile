@@ -1,6 +1,7 @@
 # CFLAGS for CC
-CFLAGS=-lm -g -O3 -std=c++17 -Wextra -fPIC
-FFLAGS=-fPIC -fno-automatic -ffree-line-length-none -lm -lstdc++ -lgomp
+CFLAGS=-g -O3 -std=c++17 -Wextra -fPIC
+FFLAGS=-fPIC -fno-automatic -ffree-line-length-none
+LDFLAGS=-lm -lstdc++ -lgomp
 
 # Compiler
 CCo=g++ -c $(CFLAGS)
@@ -48,8 +49,6 @@ obj:
 	$(CCo) recalc.cc -o $(BUILDDIR)/recalc.o
 	
 lib:
-	gfortran -fPIC -fno-automatic -ffree-line-length-none -shared -o ../lib/$(LIBFILE) -lm \
-		$(BUILDDIR)/*.o -lstdc++ -lgomp
-		#matrix/*.o \
+	$(FF) -shared -o ../lib/$(LIBFILE) $(BUILDDIR)/*.o $(LDFLAGS)
 		
 
