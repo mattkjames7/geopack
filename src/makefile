@@ -34,8 +34,6 @@ all: obj lib
 
 obj:
 	cd fortran;	make obj
-	cd spline; make obj
-	cd libdatetime; make obj
 	cd modelparams; make obj
 	cd tracing; make obj
 	cd tools; make obj

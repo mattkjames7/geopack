@@ -2,7 +2,7 @@
 #define __INTERPTRACECLOSESTPOS_H__
 #include <stdio.h>
 #include <stdlib.h>
-#include "../spline/spline.h"
+#include "../../lib/libspline/include/spline.h"
 #include <math.h>
 #endif
 void interptraceClosestPos(	int n, double *x, double *y, double *z,

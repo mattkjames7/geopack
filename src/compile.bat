@@ -18,19 +18,11 @@ cd fortran
 call compile.bat
 cd ..
 
-cd libdatetime
-call compile.bat
-cd ..
-
 cd matrix
 call compile.bat
 cd ..
 
 cd modelparams
-call compile.bat
-cd ..
-
-cd spline
 call compile.bat
 cd ..
 

@@ -33,6 +33,8 @@ windows: winobj winlib
 
 obj:
 	$(MD) $(BUILDDIR)
+	cd lib/libspline; make obj
+	cd lib/datetime; make obj
 	cd src; make obj
 
 lib:
@@ -40,6 +42,8 @@ lib:
 
 winobj:
 	$(MD) $(BUILDDIR)
+	cd lib/libspline; make obj
+	cd lib/datetime; make obj
 	cd src; make winobj
 
 winlib: 
@@ -57,7 +61,6 @@ clean:
 
 install:
 	cp -v include/geopack.h $(PREFIX)/include
-	cp -v include/geopackc.h $(PREFIX)/include
 
 	cp -v lib/$(LIBFILE) $(PREFIX)/lib
 	chmod 0775 $(PREFIX)/lib/$(LIBFILE)
@@ -68,7 +71,6 @@ endif
 
 uninstall:
 	rm -v $(PREFIX)/include/geopack.h
-	rm -v $(PREFIX)/include/geopackc.h
 	rm -v $(PREFIX)/lib/$(LIBFILE)
 ifeq ($(OS),Linux)
 	ldconfig

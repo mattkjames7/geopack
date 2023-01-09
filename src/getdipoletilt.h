@@ -4,8 +4,7 @@
 #include <stdlib.h>
 #include "modelparams/modelparams.h"
 #include "fortran/geopack.h"
-#include "libdatetime/hhmm.h"
-#include "libdatetime/DayNo.h"
+#include "../lib/datetime/include/datetime.h"
 #endif
 using namespace std;
 

@@ -5,8 +5,7 @@
 #include "libgeopack.h"
 #include "modelparams/modelparams.h"
 #include "modelparams/checkv.h"
-#include "libdatetime/DayNo.h"
-#include "libdatetime/hhmm.h"
+#include "../lib/datetime/include/datetime.h"
 #include "fortran/geopack.h"
 
 /* this will be used as a pointer to each of the ***to***UT functions*/

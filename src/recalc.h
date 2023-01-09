@@ -3,8 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "fortran/geopack.h"
-#include "libdatetime/DayNo.h"
-#include "libdatetime/hhmm.h"
+#include "../lib/datetime/include/datetime.h"
 #endif
 using namespace std;
 

@@ -6,7 +6,7 @@
 #include "../matrix/matrixarray.h"
 #include "../matrix/rotmatrix.h"
 #include "../matrix/matrix.h"
-#include "../spline/spline.h"
+#include "../../lib/libspline/include/spline.h"
 
 #endif
 class Trace;

@@ -4,8 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "../fortran/geopack.h"
-#include "../libdatetime/hhmm.h"
-#include "../libdatetime/DayNo.h"
+#include "../../lib/datetime/include/datetime.h"
 #include "../withinmp.h"
 #include "tracefieldline.h"
 #include "../modelfield.h"
