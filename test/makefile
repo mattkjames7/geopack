@@ -1,15 +1,25 @@
 # CFLAGS for CC
-CFLAGS=-lm -Wall -g
+CFLAGS=-g -O3 -Wextra -fPIC -I../include
+CXXFLAGS=-g -O3 -std=c++17 -Wextra -fPIC -I../include
+
+OS=$(shell uname -s)
+ifeq ($(OS),Linux)
+	LDFLAGS=-lm -Wl,-rpath='$$ORIGIN/../lib' -L ../lib -lgeopack -lgfortran
+else
+	LDFLAGS=-lm -L../lib -lgeopack -lgfortran
+endif
+
 
 # Compiler
-CC=g++  -fPIC $(CFLAGS) 
-
+CC=gcc $(CFLAGS)
+CXX=g++ $(CXXFLAGS)
 
 all:
-	$(CC) test.cc ../*.o ../*/*.o -o test  -lgfortran
-	#$(CC) testrotate.cc ../*.o ../*/*.o -o testrotate  -lgfortran
-	$(CC) testswitchmodel.cc ../*.o ../*/*.o -o testswitchmodel -lgfortran
-
+	$(CC) -o testc test.c $(LDFLAGS)
+	$(CXX) -o testcc test.cc $(LDFLAGS)
+	./testc
+	./testcc
 
 clean:
-	rm -v test
+	-rm -v testc
+	-rm -v testcc

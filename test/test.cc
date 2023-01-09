@@ -1,4 +1,6 @@
-#include "test.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <geopack.h>
 
 int main(int argc, char *argv[]) {
 	
@@ -6,7 +8,8 @@ int main(int argc, char *argv[]) {
 	
 	/* intialize the parameters for the model */
 	//InitParams(argv[argc-1]);
-	
+	printf("Testing C++...\n");
+
 	/* set up the initial tracing position etc. */
 	int Date[] = {20120101};
 	float ut[] = {12.0};
@@ -66,4 +69,5 @@ int main(int argc, char *argv[]) {
 	
 	/* free params */
 	//FreeParams();
+	printf("Done\n");
 }

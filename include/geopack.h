@@ -1195,6 +1195,9 @@ bool WithinMP(double x, double y, double z, double Bz, double Pdyn);
 #ifdef __cplusplus
 	}
 
+typedef void (*ModelFuncPtr)(int*,double*,double*,double*,double*,double*,double*,double*,double*);
+typedef void (*InternalFuncPtr) (double*,double*,double*,double*,double*,double*);
+
 typedef struct ModelCFG{
 	int n;
 	int *Date;

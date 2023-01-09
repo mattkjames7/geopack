@@ -77,6 +77,9 @@ ifeq ($(OS),Linux)
 endif
 
 testinstall:
-	g++ -std=c++17 test/testc_installed.cc -o testinstall -lgeopack
-	./testinstall
-	rm -v testinstall
+	g++ test/test.cc -o testcc -lgeopack
+	gcc test/test.c -o testc -lgeopack
+	./testcc
+	./testc
+	rm -v testcc
+	rm -v testc
