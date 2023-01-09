@@ -3,5 +3,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "math.h"
+
+extern "C" {
+	bool WithinMP(double x, double y, double z, double Bz, double Pdyn);
+}
+
 #endif
-bool WithinMP(double x, double y, double z, double Bz, double Pdyn);

@@ -2,7 +2,6 @@
 #define __CONVCOORDS_H__
 #include <stdio.h>
 #include <math.h>
-#include "libgeopack.h"
 #include "modelparams/modelparams.h"
 #include "modelparams/checkv.h"
 #include "../lib/datetime/include/datetime.h"
