@@ -1190,13 +1190,42 @@ bool WithinMP(double x, double y, double z, double Bz, double Pdyn);
 					double **s, double **r, double **rnorm, double **FP,
 					int nalpha, double *alpha, double *halpha);
 
+typedef void (*ModelFuncPtr)(int*,double*,double*,double*,double*,double*,double*,double*,double*);
+typedef void (*InternalFuncPtr) (double*,double*,double*,double*,double*,double*);
+
+
+/* function prototypes for coordinate system conversion */
+	void geigeo_08_(double *xgei, double *ygei, double *zgei, double *xgeo, double *ygeo, double *zgeo, int *j);
+	void geomag_08_(double *xgeo, double *ygeo, double *zgeo, double *xmag, double *ymag, double *zmag, int *j);
+	void gswgse_08_(double *xgsw, double *ygsw, double *zgsw, double *xgse, double *ygse, double *zgse, int *j);
+	void smgsw_08_(double *xsm, double *ysm, double *zsm, double *xgsw, double *ygsw, double *zgsw, int *j);
+	void magsm_08_(double *xmag, double *ymag, double *zmag, double *xsm, double *ysm, double *zsm, int *j);
+	void geogsw_08_(double *xgeo, double *ygeo, double *zgeo, double *xgsw, double *ygsw, double *zgsw, int *j);
+
+/* prototype for initializing model parameters and rotation matrices */
+	void recalc_08_(int *iyear, int *iday, int *ihour, int *min, int *isec, double *vgsex, double *vgsey, double *vgsez);
+
+/* The trace wrapper function */
+	void trace_08_(double *xi, double *yi, double *zi, double *dir, double *dsmax, double *err, double *rlim, double *r0, int *iopt, double *parmod, ModelFuncPtr ModelFunc, InternalFuncPtr IntFunc, double *xf, double *yf, double *zf, double *xx, double *yy, double *zz, int *L, int *Lmax);
+
+/* IGRF Model function */
+	void igrf_gsw_08_(double *xgsw, double *ygsw, double *zgsw, double *hxgsw, double *hygsw, double *hzgsw);
+
+/* a function to returnt he dipole tilt */
+	double getpsi_();
+
+/* different model functions */
+
+	void t89c_(int *iopt, double *parmod, double *ps, double *x, double *y, double *z, double *bx, double *by, double *bz);
+	void t96_(int *iopt, double *parmod, double *ps, double *x, double *y, double *z, double *bx, double *by, double *bz);
+	void t01_01_(int *iopt, double *parmod, double *ps, double *x, double *y, double *z, double *bx, double *by, double *bz);
+	void t04_s_(int *iopt, double *parmod, double *ps, double *x, double *y, double *z, double *bx, double *by, double *bz);
+
 
 /* stuff below this is C++ only */
 #ifdef __cplusplus
 	}
 
-typedef void (*ModelFuncPtr)(int*,double*,double*,double*,double*,double*,double*,double*,double*);
-typedef void (*InternalFuncPtr) (double*,double*,double*,double*,double*,double*);
 
 typedef struct ModelCFG{
 	int n;
