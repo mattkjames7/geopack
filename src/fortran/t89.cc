@@ -188,3 +188,32 @@ the tail closure current sheets at z = +/- 30 R_E in
 equations 18 and 19 */
 
 }
+
+void mpClosureCurrent(	double x, double y, double z, double deltax,
+						double C6, double C7, double C8, double C9,
+						double C10, double C11, double C12, double C13,
+						double C14, double C15, double cps, double sps,
+						double *Bx, double *By, double *Bz) {
+
+	/* calculate the missing coefficients */
+	double C16 = -0.5*(C6/deltax + C10);
+	double C17 = -(C7/deltax + C11);
+	double C18 = -(C8/deltax + 3*C12);
+	double C19 = -(C9/deltax + C13)/3.0;
+
+	/* get a few of the terms that we need */
+	double exdx = exp(x/deltax);
+	double y2 = y*y;
+	double y3 = y*y2;
+	double z2 = z*z;
+	double z3 = z*z3;
+	double yz2 = y*z2;
+	double zcosp = z*cps;
+	double yzcosp = y*zcosp;
+
+	/* now equations 20 */
+	*Bx = exdx*(C6*zcosp + (C7 + C8*y2 + C9*z2)*sps));
+	*By = exdx*(C10*yzcosp + (C11*y + C12*y3 + C13*yz2)*sps);
+	*Bz = exdx*((C14 + C15*y2 + C16*z2)*cps + (C17*z + C18*zy2 + C19*z3)*sps);
+
+}
