@@ -182,14 +182,62 @@ void ringCurrentComps(	double x, double y, double z,
 }
 
 
+void tailCurrentField() {
+
+	/* this uses equations 13,14 and 15*/
+	double x2 = x*x;
+	double y2 = y*y;
+	double rho2 = x2 + y2;
+	double zr = z - zs;
+	double L2 = 40.0;
+	double x2L2 = x*x + L2;
+	double rtx2L2 = sqrt(x2L2);
+
+	/* h_T and its derivatives */
+	double h = 0.5*(1 + x/rtx2L2);
+	double dhdx = 0.5*L2/(x2L2*rtx2L2);
+
+	/* D_T and its derivatives */
+	double D = D_0 + delta*y2 + gamma_T*h;
+	double dDdx = gamma_T*dhdx;
+	double dDdy = 2*delta*y;
+
+	/* xi_T and S_T */
+	double xi = sqrt(zr*zr + D*D);
+	double atxi = a_T + xi;
+	double S = sqrt(rho2 + atxi*atxi);
+
+	/* W(x,y) and its derivatives */
+	double xx0 = x - x_0;
+	double xx02 = xx0*xx0;
+	double Dx2 = 170.0;
+	double x2D2 = xx02 + Dx2;
+	double rtx2D2 = sqrt(x2D2);
+	double Dy2 = D_y*D_y;
+	double y2D21 = 1 + y2/Dy2;
+	double W = 0.5*(1 - xx0/rtx2D2)/y2D21;
+	double dWdx = -Dx2/(2*y2D21*rtx2D2*x2D2);
+	double dWdy = -0.5*(1-xx0/rtx2D2)*(2*y)/(Dy2*y2D21*y2D21);
+
+	/* Q_T, equation 15 */
+	double Q = (W/(xi*S))*((C1/(S + a_T + xi)) + (C2/(S*S)));
+
+	/* the field components in SM */
+
+
+
+}
+
 void tailClosureCurrent() {
 /* it appears that lines 398-428 and 468-470 correspond to
 the tail closure current sheets at z = +/- 30 R_E in 
 equations 18 and 19 */
 
+
+
 }
 
-void mpClosureCurrent(	double x, double y, double z, double deltax,
+void cfClosureCurrent(	double x, double y, double z, double deltax,
 						double C6, double C7, double C8, double C9,
 						double C10, double C11, double C12, double C13,
 						double C14, double C15, double cps, double sps,
@@ -217,3 +265,5 @@ void mpClosureCurrent(	double x, double y, double z, double deltax,
 	*Bz = exdx*((C14 + C15*y2 + C16*z2)*cps + (C17*z + C18*zy2 + C19*z3)*sps);
 
 }
+
+
