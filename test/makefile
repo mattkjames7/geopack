@@ -19,6 +19,7 @@ all:
 	$(CXX) -o testcc test.cc $(LDFLAGS)
 	./testc
 	./testcc
+	cd fortran; make all
 
 clean:
 	-rm -v testc

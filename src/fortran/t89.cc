@@ -1,4 +1,4 @@
-#include "header.h"
+#include "t89.h"
 
 /* these parameters appear in Tsyganenko's original Fortran code, I have
  * attempted to work out how they correspond to the T89 paper  
@@ -78,21 +78,50 @@ void t89(	int iopt, double *parmod, double psi,
 
 	/* get SM coordinates using dipole tilt */
 	double tps, sps, cps, xsm, zsm;
-	smCoords(x,z,psi,&sps,&cps,&tps,&xsm,&zsm);
+	t89smCoords(x,z,psi,&sps,&cps,&tps,&xsm,&zsm);
+//	printf("C++ SM: %f %f\n",xsm,zsm);
  
 	/* get the tail current sheet shape */
-	double zs, double dzsdx, double dzszy;
-	tailCurrentSheetShape(xsm,y,sps,tps,R_c,G,&zs,&dzsdx,&dzsdy);
+	double zs, dzsdx, dzsdy;
+	t89tailCurrentSheetShape(xsm,y,sps,tps,R_c,G,&zs,&dzsdx,&dzsdy);
+//	printf("C: %f %f %f %f %f %f %f\n",zs,dzsdx,dzsdy,sps,tps,R_c,G);
 
 	/* get the ring current contribution to the field */
-	double BxRC, double ByRC, double BzRC;
-	ringCurrentComps(xsm,y,zsm,cps,sps,zs,dzsdx,dzsdy,D_0,
+	double BxRC, ByRC, BzRC;
+	t89ringCurrentComps(xsm,y,zsm,cps,sps,zs,dzsdx,dzsdy,D_0,
 						gamma_RC,a_RC,AmpRC,
 						&BxRC,&ByRC,&BzRC);
+
+	/* tail current field*/
+	double BxT, ByT, BzT;
+	t89tailCurrentField(xsm,y,zsm,cps,sps,zs,dzsdx,dzsdy,D_0,
+						delta,gamma_T,a_T,X_0,D_y,Tail0,Tail1,
+						&BxT,&ByT,&BzT);
+
+	/* tail closure current */
+	double BxTc, ByTc, BzTc;
+	t89tailClosureCurrent(x,y,z,AmpClsSym,AmpClsAsym,sps,
+						&BxTc,&ByTc,&BzTc);
+
+	/* other closure currents (C-F)*/
+	double BxCF, ByCF, BzCF;
+	t89cfClosureCurrent(x,y,z,deltax,C6,C7,C8,C9,C10,C11,C12,C13,
+						C14,C15,cps,sps,&BxCF,&ByCF,&BzCF);
+
+	/* sum them all together */
+	*bx = BxRC + BxT + BxTc + BxCF;
+	*by = ByRC + ByT + ByTc + ByCF;
+	*bz = BzRC + BzT + BzTc + BzCF;
+
+	printf("C++ Tail: %f %f %f\n",BxT,ByT,BzT);
+	//printf("C++ Ring: %f %f %f\n",BxRC,ByRC,BzRC);
+	//printf("C++ C-F: %f %f %f\n",BxCF,ByCF,BzCF);
+	//printf("C++ Tail-Closure: %f %f %f\n",BxTc,ByTc,BzTc);
+
 }
 
 
-void smCoords(	double x, double z, double psi,
+void t89smCoords(	double x, double z, double psi,
 				double *sps, double *cps, double *tps,
 				double *xsm, double *zsm) {
 
@@ -105,7 +134,7 @@ void smCoords(	double x, double z, double psi,
 
 }
 
-void tailCurrentSheetShape(	double xsm, double ysm, 
+void t89tailCurrentSheetShape(	double xsm, double ysm, 
 							double sps, double tps,
 							double R_c, double G,
 							double *Zs, double *dZsdx, double *dZsdy) {
@@ -126,11 +155,11 @@ void tailCurrentSheetShape(	double xsm, double ysm,
 }
 
 
-void ringCurrentComps(	double x, double y, double z,
+void t89ringCurrentComps(	double x, double y, double z,
 						double cps, double sps,
 						double zs, double dzsdx, double dzsdy,
 						double D_0, double gamma_RC, 
-						double a_RC, double C_3,
+						double a_RC, double C3,
 						double *Bx, double *By, double *Bz) {
 	/* ring current contribution from eqs 13, 16 and 17
 	* the output needs to be multiplied by C_3, I think
@@ -175,14 +204,20 @@ void ringCurrentComps(	double x, double y, double z,
 	double Bzsm = (2*a_xi2 - rho2)/S5 + Bxsm*dzsdx + (*By)*dzsdy - Q*D*x*dDdx;
 
 	/* convert to GSM and multiply by ring current amplitude, I think*/
-	*Bx = C_3*(Bxsm*cps + Bzsm*sps);
-	*By = (*By)*C_3;
-	*Bz = C_3*(Bzsm*cps - Bxsm*sps);
+	*Bx = C3*(Bxsm*cps + Bzsm*sps);
+	*By = (*By)*C3;
+	*Bz = C3*(Bzsm*cps - Bxsm*sps);
 
 }
 
 
-void tailCurrentField() {
+void t89tailCurrentField(	double x, double y, double z,
+						double cps, double sps,
+						double zs, double dzsdx, double dzsdy,
+						double D_0, double delta, double gamma_T,
+						double a_T, double x_0, double D_y,
+						double C1, double C2,
+						double *Bx, double *By, double *Bz) {
 
 	/* this uses equations 13,14 and 15*/
 	double x2 = x*x;
@@ -201,11 +236,13 @@ void tailCurrentField() {
 	double D = D_0 + delta*y2 + gamma_T*h;
 	double dDdx = gamma_T*dhdx;
 	double dDdy = 2*delta*y;
+//	printf("C: %f %f %f \n",D,dDdx,dDdy);
 
 	/* xi_T and S_T */
 	double xi = sqrt(zr*zr + D*D);
 	double atxi = a_T + xi;
 	double S = sqrt(rho2 + atxi*atxi);
+	double S2 = S*S;
 
 	/* W(x,y) and its derivatives */
 	double xx0 = x - x_0;
@@ -218,26 +255,82 @@ void tailCurrentField() {
 	double W = 0.5*(1 - xx0/rtx2D2)/y2D21;
 	double dWdx = -Dx2/(2*y2D21*rtx2D2*x2D2);
 	double dWdy = -0.5*(1-xx0/rtx2D2)*(2*y)/(Dy2*y2D21*y2D21);
+//	printf("C: %f %f %f\n",W,dWdx,dWdy);
 
 	/* Q_T, equation 15 */
-	double Q = (W/(xi*S))*((C1/(S + a_T + xi)) + (C2/(S*S)));
+	double Q = (W/(xi*S))*((C1/(S + a_T + xi)) + (C2/(S2)));
 
 	/* the field components in SM */
+	double Bxsm = Q*x*zr;
+	*By = Q*y*zr;
+	double term0 = (W/S)*(C1 + C2*(a_T + xi)/(S2));
+	double term1 = ((x*dWdx + y*dWdy)/(S + a_T + xi))*(C1 + C2/S);
+	double term2 = Bxsm*dzsdx + (*By)*dzsdy;
+	double term3 = -Q*D*(x*dDdx + y*dDdy);
+	double Bzsm = term0 + term1 + term2 + term3;
+
+	/* convert to GSM */
+	*Bx = Bxsm*cps + Bzsm*sps;
+	*Bz = Bzsm*cps - Bxsm*sps;
+
+	/* add the new term which was added later on*/
 
 
 
 }
 
-void tailClosureCurrent() {
+void t89tailClosureCurrent(double x, double y, double z,
+						double C4, double C5, double sps,
+						double *Bx, double *By, double *Bz) {
 /* it appears that lines 398-428 and 468-470 correspond to
 the tail closure current sheets at z = +/- 30 R_E in 
 equations 18 and 19 */
 
+	double Rt = 30.0;
+	double zprt = z + Rt;
+	double zmrt = z - Rt;
+	double zprt2 = zprt*zprt;
+	double zmrt2 = zmrt*zmrt;
+	double x2 = x*x;
+	double y2 = y*y;
+	double z2 = z*z;
+	double x0 = 4.0;
+	double L2 = 50.0;
+	double D = 20.0;
+	double D2 = D*D;
+	double xx0 = x - x0;
+	double xx02 = xx0*xx0;
+	double x2L2 = xx02 + L2;
+	double rtx2L2 = sqrt(x2L2);
+	double y2D21 = 1 + y2/D2;
 
+	/* Wc (equation 19) */
+	double W = 0.5*(1 - xx0/rtx2L2)/y2D21;
+	double dWdx = ((-0.5*L2)/(rtx2L2*x2L2))/y2D21;
+	double dWdy = -(1 - xx0/rtx2L2)*y/(D2*y2D21*y2D21);
+
+	/* S (equation 19) */
+	double Sp = sqrt(zprt2 + x2 + y2);
+	double Sm = sqrt(zmrt2 + x2 + y2);
+
+	/* F (equation 19) */
+	double SSzRp = Sp*(Sp + zprt);
+	double SSzRm = Sm*(Sm - zmrt);
+	double Fxp = x*W/SSzRp;
+	double Fxm = -x*W/SSzRm;
+	double Fyp = y*W/SSzRp;
+	double Fym = -y*W/SSzRm;
+	double Fzp = W/Sp + (x*dWdx + y*dWdy)/(Sp+zprt);
+	double Fzm = W/Sm + (x*dWdx + y*dWdy)/(Sm-zmrt);
+
+	/* B in GSM */
+	*Bx = C4*(Fxp + Fxm) + C5*(Fxp - Fxm)*sps;
+	*By = C4*(Fyp + Fym) + C5*(Fyp - Fym)*sps;
+	*Bz = C4*(Fzp + Fzm) + C5*(Fzp - Fzm)*sps;
 
 }
 
-void cfClosureCurrent(	double x, double y, double z, double deltax,
+void t89cfClosureCurrent(	double x, double y, double z, double deltax,
 						double C6, double C7, double C8, double C9,
 						double C10, double C11, double C12, double C13,
 						double C14, double C15, double cps, double sps,
@@ -260,9 +353,9 @@ void cfClosureCurrent(	double x, double y, double z, double deltax,
 	double yzcosp = y*zcosp;
 
 	/* now equations 20 */
-	*Bx = exdx*(C6*zcosp + (C7 + C8*y2 + C9*z2)*sps));
+	*Bx = exdx*(C6*zcosp + (C7 + C8*y2 + C9*z2)*sps);
 	*By = exdx*(C10*yzcosp + (C11*y + C12*y3 + C13*yz2)*sps);
-	*Bz = exdx*((C14 + C15*y2 + C16*z2)*cps + (C17*z + C18*zy2 + C19*z3)*sps);
+	*Bz = exdx*((C14 + C15*y2 + C16*z2)*cps + (C17*z + C18*yz2 + C19*z3)*sps);
 
 }
 

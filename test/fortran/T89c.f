@@ -284,7 +284,6 @@ C
        GSP=G*SPS
        XSM=X*CPS-Z*SPS
        ZSM=X*SPS+Z*CPS
-C      WRITE(*,*) "F SM: ",XSM,ZSM
 C
 C   CALCULATE THE FUNCTION ZS DEFINING THE SHAPE OF THE TAIL CURRENT SHEET
 C    AND ITS SPATIAL DERIVATIVES:
@@ -301,7 +300,6 @@ C
        ZS=ZS1-GSY4*Y4
        D2ZSGY=-SY4/Y410*4.D4*Y2*Y
        DZSY=G*D2ZSGY
-C       WRITE(*,*) "F: ",ZS,DZSX,DZSY,SPS,TPS,RC,G
 C
 C   CALCULATE THE COMPONENTS OF THE RING CURRENT CONTRIBUTION:
 C
@@ -364,7 +362,6 @@ C
        DWX=DVX*FY+FYDY*Q*OMSV
        YDWY=-V*YFY1*FY
        DDY=DBLDEL*Y
-C       WRITE(*,*) "F: ",D,(GAM*HS),DDY
        ATT=AT+T
        S1=DSQRT(ATT**2+RO2)
        F5=1.D0/S1
@@ -380,7 +377,6 @@ C       WRITE(*,*) "F: ",D,(GAM*HS),DDY
        BRRZ2=WT*F3
        DBXC1=BRRZ1*XZR
        DBXC2=BRRZ2*XZR
-C       WRITE(*,*) W,DWX,(YDWY/Y)
        DER(2,1)=BRRZ1*YZR
        DER(2,2)=BRRZ2*YZR
           DER(2,16)=DER(2,1)*TLT2
@@ -475,17 +471,9 @@ C
        BXT=AK1*DER(1,1)+AK2*DER(1,2)+BXCL +AK16*DER(1,16)+AK17*DER(1,17)
        BYT=AK1*DER(2,1)+AK2*DER(2,2)+BYCL +AK16*DER(2,16)+AK17*DER(2,17)
        BZT=AK1*DER(3,1)+AK2*DER(3,2)+BZCL +AK16*DER(3,16)+AK17*DER(3,17)
-       BXCF=AK5*DER(1,5)
-       BXCF=AK5*DER(2,5)
-       BXCF=AK5*DER(3,5)
        F(1)=BXT+AK5*DER(1,5)+SX1+SXA
        F(2)=BYT+AK5*DER(2,5)+SY1+SYA
        F(3)=BZT+AK5*DER(3,5)+SZ1+SZA
-
-       WRITE (*,*) "Fortran Tail: ",BXT, BYT, BZT
-C       WRITE (*,*) "Fortran Ring: ",BXCF,BYCF,BZCF
-C       WRITE (*,*) "Fortran C-F: ",SX1, SY1, SZ1
-C       WRITE (*,*) "Fortran Tail-Closure: ",BXCL, BYCL, BZCL
 C
        RETURN
        END

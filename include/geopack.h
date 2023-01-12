@@ -1226,6 +1226,7 @@ typedef void (*InternalFuncPtr) (double*,double*,double*,double*,double*,double*
 #ifdef __cplusplus
 	}
 
+	void t89(int iopt, double *parmod, double psi, double x, double y, double z, double *Bx, double *By, double *Bz);
 
 typedef struct ModelCFG{
 	int n;
