@@ -94,8 +94,9 @@ void t89(	int iopt, double *parmod, double psi,
 
 	/* tail current field*/
 	double BxT, ByT, BzT;
-	t89tailCurrentField(xsm,y,zsm,cps,sps,zs,dzsdx,dzsdy,D_0,
+	t89tailCurrentField(xsm,y,zsm,cps,sps,psi,zs,dzsdx,dzsdy,D_0,
 						delta,gamma_T,a_T,X_0,D_y,Tail0,Tail1,
+						TailTilt0,TailTilt1,
 						&BxT,&ByT,&BzT);
 
 	/* tail closure current */
@@ -113,8 +114,8 @@ void t89(	int iopt, double *parmod, double psi,
 	*by = ByRC + ByT + ByTc + ByCF;
 	*bz = BzRC + BzT + BzTc + BzCF;
 
-	printf("C++ Tail: %f %f %f\n",BxT,ByT,BzT);
-	//printf("C++ Ring: %f %f %f\n",BxRC,ByRC,BzRC);
+	//printf("C++ Tail: %f %f %f\n",BxT,ByT,BzT);
+	printf("C++ Ring: %f %f %f\n",BxRC,ByRC,BzRC);
 	//printf("C++ C-F: %f %f %f\n",BxCF,ByCF,BzCF);
 	//printf("C++ Tail-Closure: %f %f %f\n",BxTc,ByTc,BzTc);
 
@@ -212,13 +213,14 @@ void t89ringCurrentComps(	double x, double y, double z,
 
 
 void t89tailCurrentField(	double x, double y, double z,
-						double cps, double sps,
+						double cps, double sps, double psi,
 						double zs, double dzsdx, double dzsdy,
 						double D_0, double delta, double gamma_T,
 						double a_T, double x_0, double D_y,
-						double C1, double C2,
+						double A1, double A2, double A16, double A17,
 						double *Bx, double *By, double *Bz) {
-
+	
+	
 	/* this uses equations 13,14 and 15*/
 	double x2 = x*x;
 	double y2 = y*y;
@@ -243,6 +245,7 @@ void t89tailCurrentField(	double x, double y, double z,
 	double atxi = a_T + xi;
 	double S = sqrt(rho2 + atxi*atxi);
 	double S2 = S*S;
+	double S3 = S2*S;
 
 	/* W(x,y) and its derivatives */
 	double xx0 = x - x_0;
@@ -257,24 +260,64 @@ void t89tailCurrentField(	double x, double y, double z,
 	double dWdy = -0.5*(1-xx0/rtx2D2)*(2*y)/(Dy2*y2D21*y2D21);
 //	printf("C: %f %f %f\n",W,dWdx,dWdy);
 
-	/* Q_T, equation 15 */
-	double Q = (W/(xi*S))*((C1/(S + a_T + xi)) + (C2/(S2)));
+	// /* Q_T, equation 15 */
+	// double Q = (W/(xi*S))*((C1/(S + a_T + xi)) + (C2/(S2)));
 
-	/* the field components in SM */
-	double Bxsm = Q*x*zr;
-	*By = Q*y*zr;
-	double term0 = (W/S)*(C1 + C2*(a_T + xi)/(S2));
-	double term1 = ((x*dWdx + y*dWdy)/(S + a_T + xi))*(C1 + C2/S);
-	double term2 = Bxsm*dzsdx + (*By)*dzsdy;
-	double term3 = -Q*D*(x*dDdx + y*dDdy);
-	double Bzsm = term0 + term1 + term2 + term3;
+	// /* the field components in SM */
+	// double Bxsm = Q*x*zr;
+	// *By = Q*y*zr;
+	// double term0 = (W/S)*(C1 + C2*(a_T + xi)/(S2));
+	// double term1 = ((x*dWdx + y*dWdy)/(S + a_T + xi))*(C1 + C2/S);
+	// double term2 = Bxsm*dzsdx + (*By)*dzsdy;
+	// double term3 = -Q*D*(x*dDdx + y*dDdy);
+	// double Bzsm = term0 + term1 + term2 + term3;
 
-	/* convert to GSM */
-	*Bx = Bxsm*cps + Bzsm*sps;
-	*Bz = Bzsm*cps - Bxsm*sps;
+	// /* convert to GSM */
+	// *Bx = Bxsm*cps + Bzsm*sps;
+	// *Bz = Bzsm*cps - Bxsm*sps;
 
-	/* add the new term which was added later on*/
+	/* This bit appears to be slightly different to what is done in the paper 
+	 * at least at a first glance any way*/
 
+	/* split Q into two parts - one for the bit which uses C1 and the other for C2*/
+	double saxi = S + atxi;
+	double ssatxi = S*saxi;
+	double Qc1 = W/(xi*ssatxi);
+	double Qc2 = W/(xi*S3);
+
+	/* now the  pairs of field components in SM*/
+	double xzr = x*zr;
+	double yzr = y*zr;
+	double Bx1sm = Qc1*xzr;
+	double Bx2sm = Qc2*xzr; 
+	double By1 = Qc1*yzr;
+	double By2 = Qc2*yzr;
+	double xdwydw = x*dWdx + y*dWdy;
+	double xddydd = x*dDdx + y*dDdy;
+//	printf("%f %f %f\n",xdwydw,x*dWdx,y*dWdy);
+//	printf("C: %f %f\n",xdwydw,xddydd);
+	double Bz1sm = W/S + xdwydw/saxi + Bx1sm*dzsdx + By1*dzsdy - Qc1*D*xddydd;
+	double Bz2sm = W*atxi/S3 + xdwydw/ssatxi + Bx2sm*dzsdx + By2*dzsdy - Qc2*D*xddydd;
+
+//	printf("C: %f %f %f %f\n",Bx1sm,Bx2sm,Bz1sm,Bz2sm);
+
+	/* convert the pairs to GSM */
+	double Bx1 = Bx1sm*cps + Bz1sm*sps;
+	double Bx2 = Bx2sm*cps + Bz2sm*sps;
+	double Bz1 = Bz1sm*cps - Bx1sm*sps;
+	double Bz2 = Bz2sm*cps - Bx2sm*sps;
+
+	/* now sum the components together and scale */
+	double psi2 = psi*psi;
+	double A116p = A1 + A16*psi2;
+	double A217p = A2 + A17*psi2;
+	*Bx = A116p*Bx1 + A217p*Bx2;
+	*By = A116p*By1 + A217p*By2;
+	*Bz = A116p*Bz1 + A217p*Bz2;
+
+//	printf("Bx: %f %f %f %f\n",A1*Bx1,A2*Bx2,A16*psi2*Bx1,A17*psi2*Bx2);
+//	printf("By: %f %f %f %f\n",A1*By1,A2*By2,A16*psi2*By1,A17*psi2*By2);
+//	printf("Bz: %f %f %f %f\n",A1*Bz1,A2*Bz2,A16*psi2*Bz1,A17*psi2*Bz2);
 
 
 }

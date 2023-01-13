@@ -325,6 +325,7 @@ C
        DBXDP=FACXY*XZR
        DER(2,5)=FACXY*YZR
        XZYZ=XSM*DZSX+Y*DZSY
+	   
        FAQ=ZR*XZYZ-DDR*DD*DFA0*XSM
        DBZDP=FC*(2.D0*ADRT2-RO2)+FACXY*FAQ
        DER(1,5)=DBXDP*CPS+DBZDP*SPS
@@ -374,12 +375,14 @@ C       WRITE(*,*) "F: ",D,(GAM*HS),DDY
        F9=ATT*F3
        FS=ZR*XZYZ-D*Y*DDY+ADSL
        XDWX=XSM*DWX+YDWY
+c	   WRITE(*,*) XDWX,(XSM*DWX),YDWY
        RTT=1.D0/T
        WT=W*RTT
        BRRZ1=WT*F1
        BRRZ2=WT*F3
        DBXC1=BRRZ1*XZR
        DBXC2=BRRZ2*XZR
+c	   WRITE(*,*) XDWX,XZYZ
 C       WRITE(*,*) W,DWX,(YDWY/Y)
        DER(2,1)=BRRZ1*YZR
        DER(2,2)=BRRZ2*YZR
@@ -388,6 +391,7 @@ C       WRITE(*,*) W,DWX,(YDWY/Y)
        WTFS=WT*FS
        DBZC1=W*F5+XDWX*F7+WTFS*F1
        DBZC2=W*F9+XDWX*F1+WTFS*F3
+c	   WRITE(*,*) DBXC1,DBXC2,DBZC1,DBZC2
        DER(1,1)=DBXC1*CPS+DBZC1*SPS
        DER(1,2)=DBXC2*CPS+DBZC2*SPS
        DER(3,1)=DBZC1*CPS-DBXC1*SPS
@@ -482,8 +486,25 @@ C
        F(2)=BYT+AK5*DER(2,5)+SY1+SYA
        F(3)=BZT+AK5*DER(3,5)+SZ1+SZA
 
-       WRITE (*,*) "Fortran Tail: ",BXT, BYT, BZT
-C       WRITE (*,*) "Fortran Ring: ",BXCF,BYCF,BZCF
+		bxt1 = (AK1*DER(1,1))
+		bxt2 = (AK2*DER(1,2))
+		bxt3 = (AK16*DER(1,16))
+		bxt4 = (AK17*DER(1,17))
+
+		byt1 = (AK1*DER(2,1))
+		byt2 = (AK2*DER(2,2))
+		byt3 = (AK16*DER(2,16))
+		byt4 = (AK17*DER(2,17))
+
+		bzt1 = (AK1*DER(3,1))
+		bzt2 = (AK2*DER(3,2))
+		bzt3 = (AK16*DER(3,16))
+		bzt4 = (AK17*DER(3,17))
+c		WRITE(*,*) "Bx: ",bxt1,bxt2,bxt3,bxt4
+c		WRITE(*,*) "By: ",byt1,byt2,byt3,byt4
+c		WRITE(*,*) "Bz: ",bzt1,bzt2,bzt3,bzt4
+c      WRITE (*,*) "Fortran Tail: ",(BXT-BXCL), (BYT-BYCL), (BZT-BZCL)
+       WRITE (*,*) "Fortran Ring: ",BXCF,BYCF,BZCF
 C       WRITE (*,*) "Fortran C-F: ",SX1, SY1, SZ1
 C       WRITE (*,*) "Fortran Tail-Closure: ",BXCL, BYCL, BZCL
 C

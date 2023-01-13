@@ -26,11 +26,11 @@ void t89ringCurrentComps(	double x, double y, double z,
 						double *Bx, double *By, double *Bz);
 
 void t89tailCurrentField(	double x, double y, double z,
-						double cps, double sps,
+						double cps, double sps, double psi,
 						double zs, double dzsdx, double dzsdy,
 						double D_0, double delta, double gamma_T,
 						double a_T, double x_0, double D_y,
-						double C1, double C2,
+						double A1, double A2, double A16, double A17,
 						double *Bx, double *By, double *Bz);
 
 void t89tailClosureCurrent(double x, double y, double z,
