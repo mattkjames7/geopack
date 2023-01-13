@@ -330,6 +330,7 @@ C
        DBZDP=FC*(2.D0*ADRT2-RO2)+FACXY*FAQ
        DER(1,5)=DBXDP*CPS+DBZDP*SPS
        DER(3,5)=DBZDP*CPS-DBXDP*SPS
+c       WRITE(*,*) DER(1,5),DER(2,5),DER(3,5)
 C
 C  CALCULATE THE TAIL CURRENT SHEET CONTRIBUTION:
 C
@@ -479,18 +480,14 @@ C
        BXT=AK1*DER(1,1)+AK2*DER(1,2)+BXCL +AK16*DER(1,16)+AK17*DER(1,17)
        BYT=AK1*DER(2,1)+AK2*DER(2,2)+BYCL +AK16*DER(2,16)+AK17*DER(2,17)
        BZT=AK1*DER(3,1)+AK2*DER(3,2)+BZCL +AK16*DER(3,16)+AK17*DER(3,17)
-       BXCF=AK5*DER(1,5)
-       BXCF=AK5*DER(2,5)
-       BXCF=AK5*DER(3,5)
        F(1)=BXT+AK5*DER(1,5)+SX1+SXA
        F(2)=BYT+AK5*DER(2,5)+SY1+SYA
        F(3)=BZT+AK5*DER(3,5)+SZ1+SZA
-
 c		WRITE(*,*) "Bx: ",bxt1,bxt2,bxt3,bxt4
 c		WRITE(*,*) "By: ",byt1,byt2,byt3,byt4
 c		WRITE(*,*) "Bz: ",bzt1,bzt2,bzt3,bzt4
 c      WRITE (*,*) "Fortran Tail: ",(BXT-BXCL), (BYT-BYCL), (BZT-BZCL)
-       WRITE (*,*) "Fortran Ring: ",BXCF,BYCF,BZCF
+c       WRITE (*,*) "Fortran Ring: ",BXCF,BYCF,BZCF
 C       WRITE (*,*) "Fortran C-F: ",SX1, SY1, SZ1
 C       WRITE (*,*) "Fortran Tail-Closure: ",BXCL, BYCL, BZCL
 C

@@ -115,7 +115,7 @@ void t89(	int iopt, double *parmod, double psi,
 	*bz = BzRC + BzT + BzTc + BzCF;
 
 	//printf("C++ Tail: %f %f %f\n",BxT,ByT,BzT);
-	printf("C++ Ring: %f %f %f\n",BxRC,ByRC,BzRC);
+	//printf("C++ Ring: %f %f %f\n",BxRC,ByRC,BzRC);
 	//printf("C++ C-F: %f %f %f\n",BxCF,ByCF,BzCF);
 	//printf("C++ Tail-Closure: %f %f %f\n",BxTc,ByTc,BzTc);
 
