@@ -486,20 +486,6 @@ C
        F(2)=BYT+AK5*DER(2,5)+SY1+SYA
        F(3)=BZT+AK5*DER(3,5)+SZ1+SZA
 
-		bxt1 = (AK1*DER(1,1))
-		bxt2 = (AK2*DER(1,2))
-		bxt3 = (AK16*DER(1,16))
-		bxt4 = (AK17*DER(1,17))
-
-		byt1 = (AK1*DER(2,1))
-		byt2 = (AK2*DER(2,2))
-		byt3 = (AK16*DER(2,16))
-		byt4 = (AK17*DER(2,17))
-
-		bzt1 = (AK1*DER(3,1))
-		bzt2 = (AK2*DER(3,2))
-		bzt3 = (AK16*DER(3,16))
-		bzt4 = (AK17*DER(3,17))
 c		WRITE(*,*) "Bx: ",bxt1,bxt2,bxt3,bxt4
 c		WRITE(*,*) "By: ",byt1,byt2,byt3,byt4
 c		WRITE(*,*) "Bz: ",bzt1,bzt2,bzt3,bzt4

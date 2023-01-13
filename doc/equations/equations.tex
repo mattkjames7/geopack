@@ -16,6 +16,9 @@
 	
 \section{T89}
 
+	\subsection{Ring Current}
+	
+
 	\subsection{Tail Current Sheet}
 		\begin{align}
 			B_x = A_1B_{x1} + A_2B_{x2} + A_{16}B_{x3} + A_{17}B_{x4},\\
@@ -69,8 +72,8 @@
 		\end{align}
 	
 		\begin{align}
-			B_z^{(C1)} = \frac{W(x,y)}{S_T} + \frac{x\frac{\partial W}{\partial x} + y\frac{\partial W}{\partial y}}{S_T + a_T + \xi_T} + B_x^{(C1)}\frac{\partial z_s}{\partial x} + B_y^{(C1)} \frac{\partial z_s}{\partial _y} + Q_T^{(C1)} D_T\left( x\frac{\partial D_T}{\partial x} + y\frac{\partial D_T}{\partial y}\right) \\
-			B_z^{(C2)} = \frac{W(x,y)(a_T + \xi_T)}{S_T^3} + \frac{x\frac{\partial W}{\partial x} + y\frac{\partial W}{\partial y}}{S_T(S_T + a_T + \xi_T)} + B_x^{(C2)}\frac{\partial z_s}{\partial x} + B_y^{(C2)} \frac{\partial z_s}{\partial _y} + Q_T^{(C2)} D_T\left( x\frac{\partial D_T}{\partial x} + y\frac{\partial D_T}{\partial y}\right)
+			B_z^{(C1)} = \frac{W(x,y)}{S_T} + \frac{x\frac{\partial W}{\partial x} + y\frac{\partial W}{\partial y}}{S_T + a_T + \xi_T} + B_x^{(C1)}\frac{\partial z_s}{\partial x} + B_y^{(C1)} \frac{\partial z_s}{\partial _y} - Q_T^{(C1)} D_T\left( x\frac{\partial D_T}{\partial x} + y\frac{\partial D_T}{\partial y}\right) \\
+			B_z^{(C2)} = \frac{W(x,y)(a_T + \xi_T)}{S_T^3} + \frac{x\frac{\partial W}{\partial x} + y\frac{\partial W}{\partial y}}{S_T(S_T + a_T + \xi_T)} + B_x^{(C2)}\frac{\partial z_s}{\partial x} + B_y^{(C2)} \frac{\partial z_s}{\partial _y} - Q_T^{(C2)} D_T\left( x\frac{\partial D_T}{\partial x} + y\frac{\partial D_T}{\partial y}\right)
 		\end{align}
 	
 
