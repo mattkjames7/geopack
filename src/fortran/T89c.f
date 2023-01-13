@@ -45,7 +45,7 @@ C
 C              AUTHOR:     NIKOLAI A. TSYGANENKO
 C                          HSTX CORP./NASA GSFC
 C
-        REAL*8 PARMOD(10),PS,X,Y,Z,BX,BY,BZ
+        REAL*8 PARMOD(10),PS,X,Y,Z,BX,BY,BZ,XI,A
         DIMENSION XI(4),F(3),DER(3,30),PARAM(30,7),A(30)
         DOUBLE PRECISION F,DER
         DATA PARAM/-116.53,-10719.,42.375,59.753,-11363.,1.7844,30.268,
@@ -175,7 +175,7 @@ c  - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 C
          IMPLICIT  REAL * 8  (A - H, O - Z)
 C
-         REAL  A(1), XI(1)
+         REAL*8  A(1), XI(1)
 C
          DIMENSION  F(3), DER(3,30)
 C
@@ -416,6 +416,8 @@ C
        WC=0.5D0*(1.D0-XSXC*RQC)*FYC
        DWCX=HLWC2M*RQC2*RQC*FYC
        DWCY=DRDYC2*WC*FYC*Y
+
+c       WRITE(*,'(A,3F10.6)') "F: ",WC,DWCX,DWCY 
        SZRP=1.D0/(SPL+ZPL)
        SZRM=1.D0/(SMN-ZMN)
        XYWC=X*DWCX+Y*DWCY
@@ -428,13 +430,15 @@ C
        FYPL=Y*FXYP
        FYMN=-Y*FXYM
        FZPL=WCSP+XYWC*SZRP
-       FZMN=WCSM+XYWC*SZRMheader
+       FZMN=WCSM+XYWC*SZRM
+c       WRITE(*,'( 6F9.6 )') FXPL,FXMN,FYPL,FYMN,FZPL,FZMN
        DER(1,3)=FXPL+FXMN
        DER(1,4)=(FXPL-FXMN)*SPS
        DER(2,3)=FYPL+FYMN
        DER(2,4)=(FYPL-FYMN)*SPS
        DER(3,3)=FZPL+FZMN
        DER(3,4)=(FZPL-FZMN)*SPS
+c       WRITE(*,'(AF22.16)') 'F: ',(AK3*DER(3,3) + AK4*DER(3,4))
 C
 C   NOW CALCULATE CONTRIBUTION FROM CHAPMAN-FERRARO SOURCES + ALL OTHER
 C
@@ -483,14 +487,8 @@ C
        F(1)=BXT+AK5*DER(1,5)+SX1+SXA
        F(2)=BYT+AK5*DER(2,5)+SY1+SYA
        F(3)=BZT+AK5*DER(3,5)+SZ1+SZA
-c		WRITE(*,*) "Bx: ",bxt1,bxt2,bxt3,bxt4
-c		WRITE(*,*) "By: ",byt1,byt2,byt3,byt4
-c		WRITE(*,*) "Bz: ",bzt1,bzt2,bzt3,bzt4
-c      WRITE (*,*) "Fortran Tail: ",(BXT-BXCL), (BYT-BYCL), (BZT-BZCL)
-c       WRITE (*,*) "Fortran Ring: ",BXCF,BYCF,BZCF
-C       WRITE (*,*) "Fortran C-F: ",SX1, SY1, SZ1
-C       WRITE (*,*) "Fortran Tail-Closure: ",BXCL, BYCL, BZCL
-C
+
+
        RETURN
        END
 c%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

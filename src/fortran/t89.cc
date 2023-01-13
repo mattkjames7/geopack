@@ -79,12 +79,10 @@ void t89(	int iopt, double *parmod, double psi,
 	/* get SM coordinates using dipole tilt */
 	double tps, sps, cps, xsm, zsm;
 	t89smCoords(x,z,psi,&sps,&cps,&tps,&xsm,&zsm);
-//	printf("C++ SM: %f %f\n",xsm,zsm);
  
 	/* get the tail current sheet shape */
 	double zs, dzsdx, dzsdy;
 	t89tailCurrentSheetShape(xsm,y,sps,tps,R_c,G,&zs,&dzsdx,&dzsdy);
-//	printf("C: %f %f %f %f %f %f %f\n",zs,dzsdx,dzsdy,sps,tps,R_c,G);
 
 	/* get the ring current contribution to the field */
 	double BxRC, ByRC, BzRC;
@@ -114,10 +112,6 @@ void t89(	int iopt, double *parmod, double psi,
 	*by = ByRC + ByT + ByTc + ByCF;
 	*bz = BzRC + BzT + BzTc + BzCF;
 
-	//printf("C++ Tail: %f %f %f\n",BxT,ByT,BzT);
-	//printf("C++ Ring: %f %f %f\n",BxRC,ByRC,BzRC);
-	//printf("C++ C-F: %f %f %f\n",BxCF,ByCF,BzCF);
-	//printf("C++ Tail-Closure: %f %f %f\n",BxTc,ByTc,BzTc);
 
 }
 
@@ -238,7 +232,6 @@ void t89tailCurrentField(	double x, double y, double z,
 	double D = D_0 + delta*y2 + gamma_T*h;
 	double dDdx = gamma_T*dhdx;
 	double dDdy = 2*delta*y;
-//	printf("C: %f %f %f \n",D,dDdx,dDdy);
 
 	/* xi_T and S_T */
 	double xi = sqrt(zr*zr + D*D);
@@ -258,23 +251,7 @@ void t89tailCurrentField(	double x, double y, double z,
 	double W = 0.5*(1 - xx0/rtx2D2)/y2D21;
 	double dWdx = -Dx2/(2*y2D21*rtx2D2*x2D2);
 	double dWdy = -0.5*(1-xx0/rtx2D2)*(2*y)/(Dy2*y2D21*y2D21);
-//	printf("C: %f %f %f\n",W,dWdx,dWdy);
 
-	// /* Q_T, equation 15 */
-	// double Q = (W/(xi*S))*((C1/(S + a_T + xi)) + (C2/(S2)));
-
-	// /* the field components in SM */
-	// double Bxsm = Q*x*zr;
-	// *By = Q*y*zr;
-	// double term0 = (W/S)*(C1 + C2*(a_T + xi)/(S2));
-	// double term1 = ((x*dWdx + y*dWdy)/(S + a_T + xi))*(C1 + C2/S);
-	// double term2 = Bxsm*dzsdx + (*By)*dzsdy;
-	// double term3 = -Q*D*(x*dDdx + y*dDdy);
-	// double Bzsm = term0 + term1 + term2 + term3;
-
-	// /* convert to GSM */
-	// *Bx = Bxsm*cps + Bzsm*sps;
-	// *Bz = Bzsm*cps - Bxsm*sps;
 
 	/* This bit appears to be slightly different to what is done in the paper 
 	 * at least at a first glance any way*/
@@ -294,12 +271,9 @@ void t89tailCurrentField(	double x, double y, double z,
 	double By2 = Qc2*yzr;
 	double xdwydw = x*dWdx + y*dWdy;
 	double xddydd = x*dDdx + y*dDdy;
-//	printf("%f %f %f\n",xdwydw,x*dWdx,y*dWdy);
-//	printf("C: %f %f\n",xdwydw,xddydd);
 	double Bz1sm = W/S + xdwydw/saxi + Bx1sm*dzsdx + By1*dzsdy - Qc1*D*xddydd;
 	double Bz2sm = W*atxi/S3 + xdwydw/ssatxi + Bx2sm*dzsdx + By2*dzsdy - Qc2*D*xddydd;
 
-//	printf("C: %f %f %f %f\n",Bx1sm,Bx2sm,Bz1sm,Bz2sm);
 
 	/* convert the pairs to GSM */
 	double Bx1 = Bx1sm*cps + Bz1sm*sps;
@@ -314,11 +288,6 @@ void t89tailCurrentField(	double x, double y, double z,
 	*Bx = A116p*Bx1 + A217p*Bx2;
 	*By = A116p*By1 + A217p*By2;
 	*Bz = A116p*Bz1 + A217p*Bz2;
-
-//	printf("Bx: %f %f %f %f\n",A1*Bx1,A2*Bx2,A16*psi2*Bx1,A17*psi2*Bx2);
-//	printf("By: %f %f %f %f\n",A1*By1,A2*By2,A16*psi2*By1,A17*psi2*By2);
-//	printf("Bz: %f %f %f %f\n",A1*Bz1,A2*Bz2,A16*psi2*Bz1,A17*psi2*Bz2);
-
 
 }
 
@@ -369,7 +338,7 @@ equations 18 and 19 */
 	/* B in GSM */
 	*Bx = C4*(Fxp + Fxm) + C5*(Fxp - Fxm)*sps;
 	*By = C4*(Fyp + Fym) + C5*(Fyp - Fym)*sps;
-	*Bz = C4*(Fzp + Fzm) + C5*(Fzp - Fzm)*sps;
+	*Bz = ((float) C4)*(Fzp + Fzm) + ((float) C5)*(Fzp - Fzm)*sps;
 
 }
 
@@ -390,16 +359,16 @@ void t89cfClosureCurrent(	double x, double y, double z, double deltax,
 	double y2 = y*y;
 	double y3 = y*y2;
 	double z2 = z*z;
-	double z3 = z*z3;
+	double z3 = z*z2;
 	double yz2 = y*z2;
+	double zy2 = z*y2;
 	double zcosp = z*cps;
 	double yzcosp = y*zcosp;
 
 	/* now equations 20 */
 	*Bx = exdx*(C6*zcosp + (C7 + C8*y2 + C9*z2)*sps);
 	*By = exdx*(C10*yzcosp + (C11*y + C12*y3 + C13*yz2)*sps);
-	*Bz = exdx*((C14 + C15*y2 + C16*z2)*cps + (C17*z + C18*yz2 + C19*z3)*sps);
-
+	*Bz = exdx*((C14 + C15*y2 + C16*z2)*cps + (C17*z + C18*zy2 + C19*z3)*sps);
 }
 
 

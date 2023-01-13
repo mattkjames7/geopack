@@ -7,12 +7,14 @@ bool testT89();
 
 int main() {
 
-	printf("Testing T89\n");
+	
 	testT89();
 }
 
 
 bool testT89() {
+	printf("Testing T89...");
+	bool pass = true;
 
 	/* create some test position vectors */
 	double x[] = {5.0,10.0,-10.0,-5.0};
@@ -28,6 +30,7 @@ bool testT89() {
 
 	/* get the vectors */
 	int i;
+	double dx, dy, dz;
 	for (i=0;i<4;i++) {
 		t89c_(&iopt[i],parmod,&psi[i],&x[i],&y[i],&z[i],&Bxf[i],&Byf[i],&Bzf[i]);
 		t89(iopt[i],parmod,psi[i],x[i],y[i],z[i],&Bxc[i],&Byc[i],&Bzc[i]);
@@ -35,9 +38,19 @@ bool testT89() {
 
 	/* compare them */
 	for (i=0;i<4;i++) {
-		printf("dx: %f, dy: %f, dz: %f\n",Bxf[i]-Bxc[i],Byf[i]-Byc[i],Bzf[i]-Bzc[i]);
+		dx = abs(Bxf[i]-Bxc[i]);
+		dy = abs(Byf[i]-Byc[i]);
+		dz = abs(Bzf[i]-Bzc[i]);
+		if ((dx > 1e-5) || (dy > 1e-5) || (dz > 1e-5)) {
+			pass = false;
+			break;
+		}
 	}
-
-	return true;
+	if (pass) {
+		printf(" pass\n");
+	} else {
+		printf(" fail\n");
+	}
+	return pass;
 }
 
