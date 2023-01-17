@@ -1,5 +1,12 @@
 #include "t96.h"
 
+void t96(	int iopt, double *parmod, double psi, 
+			double x, double y, double z,
+			double *Bx, double *By, double *Bz) {
+
+}
+
+
 void t96DipoleShield(double psi, double x, double y, double z,
 						double *Bx, double *By, double *Bz) {
 	
@@ -138,4 +145,98 @@ void CylHarmPara(	double x, double y, double z,
 	*By = br*cosp;
 	*Bz = br*sinp;
 
+}
+
+void t96Intercon(	double x, double y, double z,
+					double *Bx, double *By, double *Bz) {
+
+
+}
+
+void t96RingCurrent() {
+
+}
+
+void t96TailDisk() {
+
+}
+
+void t96Tail87() {
+
+}
+
+void t96CartHarmonicShield() {
+
+}
+
+void t96Region1() {
+
+}
+
+void t96DipLoop() {
+
+}
+
+void t96Circle() {
+
+}
+
+void t96CrossLoop() {
+
+}
+
+void t96Dipolesxyz() {
+
+}
+
+void t96ConDip() {
+
+}
+
+void t96Region1Shield() {
+
+}
+
+void t96Region2() {
+
+}
+
+void t96Region2Shield() {
+
+}
+
+void t96Region2Inner() {
+
+}
+
+void t96ConicalHarmonics() {
+
+}
+
+void t96DipoleDist() {
+
+}
+
+void t96Region2Outer() {
+
+}
+
+void t964CurrentLoops() {
+
+}
+
+void t96Region2Sheet() {
+
+}
+
+double xksi() {
+
+}
+
+double tksi() {
+
+}
+
+void t96Dipole() {
+	
 }
