@@ -237,6 +237,8 @@ double tksi() {
 
 }
 
-void t96Dipole() {
+void t96Dipole( double psi, double x, double y, double z, 
+				double *Bx, souble *By, double *Bz) {
+	
 	
 }
