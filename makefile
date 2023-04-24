@@ -1,7 +1,7 @@
 
 
 ifndef BUILDDIR 
-	export BUILDDIR=$(shell pwd)/build
+	BUILDDIR=$(shell pwd)/build
 endif
 
 ifeq ($(OS),Windows_NT)
@@ -29,13 +29,21 @@ endif
 
 all: obj lib
 
+datetime:
+	cd lib/datetime; make obj
+
+spline:
+	cd lib/libspline; make all
+	cp -v lib/libspline/lib/libspline.* lib/
+
+
 windows: winobj winlib
 
 obj:
 	$(MD) $(BUILDDIR)
-	cd lib/libspline; make obj
-	cd lib/datetime; make obj
+	
 	cd src; make obj
+	
 
 lib:
 	cd src; make lib
@@ -54,7 +62,6 @@ test:
 	cd test; make all
 
 clean:
-	-rm -v lib/libgeopack.*
 	-rm -v build/*.o
 	-rmdir -v build
 	-rm -v testinstall
