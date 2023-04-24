@@ -1,25 +1,29 @@
 # CFLAGS for CC
-CFLAGS=-g -O3 -Wextra -fPIC -I../../include
-CXXFLAGS=-g -O3 -std=c++17 -Wextra -fPIC -I../../include
-FCFLAGS=-w -c -fPIC -fno-automatic -std=legacy -ffree-line-length-none -O3
+CFLAGS=-fopenmp -g -O3 -Wextra -fPIC -I../../include
+CXXFLAGS=-fopenmp -g -O3 -std=c++17 -Wextra -fPIC -I../../include
+FCFLAGS=-fopenmp -w -c -fPIC -fno-automatic -std=legacy -ffree-line-length-none -O3
 
 
 OS=$(shell uname -s)
 ifeq ($(OS),Linux)
-	LDFLAGS=-lm -Wl,-rpath='$$ORIGIN/../../lib' -L ../../lib -lgeopack -lgfortran
+	CC=gcc $(CFLAGS)
+	CXX=g++ $(CXXFLAGS)
+	FF=gfortran $(FCFLAGS)
+	LDFLAGS=-lm -Wl,-rpath='$$ORIGIN/../../lib' -L ../../lib -lgeopack -lgfortran -L../../lib -ldatetime -L../../lib -lspline
 else
-	LDFLAGS=-lm -L../lib -lgeopack -lgfortran
+	CC=gcc -Xpreprocessor$(CFLAGS)
+	CXX=g++ -Xpreprocessor $(CXXFLAGS)
+	FF=gfortran -Xpreprocessor $(FCFLAGS)	
+	LDFLAGS=-lm -L../lib -lgeopack -lgfortran -L../../lib -ldatetime -L../../lib -lspline "-L/usr/local/opt/libomp/lib" -lomp
 endif
 
 
 # Compiler
-CC=gcc $(CFLAGS)
-CXX=g++ $(CXXFLAGS)
-FF=gfortran $(FCFLAGS)
+
 
 all:
 	$(FF) -o t89c.o T89c.f 
 	$(CXX) -o testfortran testfortran.cc $(LDFLAGS)
-	./testfortran
+	LD_LIBRARY_PATH=../../lib ./testfortran
 	-rm -v t89c.o
 	-rm -v testfortran

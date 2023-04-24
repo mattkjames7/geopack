@@ -1,7 +1,7 @@
 # CFLAGS for CC
 CFLAGS=-g -O3 -std=c++17 -Wextra -fPIC
 FFLAGS=-fPIC -fno-automatic -ffree-line-length-none
-LDFLAGS=-lm -lstdc++ -lgomp
+LDFLAGS=-lm -lstdc++ -L../lib -ldatetime -L../lib -lspline
 
 # Compiler
 CCo=g++ -c $(CFLAGS)
@@ -19,16 +19,26 @@ ifeq ($(OS),Windows_NT)
 #windows stuff here
 	MD=mkdir
 	LIBFILE=libgeopack.dll
+	CCo=g++ -c $(CFLAGS) -fopenmp $(IFLAGS)
+	CC=g++ $(CFLAGS) -fopenmp $(IFLAGS)
 else
 #linux and mac here
 	OS=$(shell uname -s)
 	MD=mkdir -p
 	ifeq ($(OS),Linux)
+		CCo=g++ -c $(CFLAGS) -fopenmp $(IFLAGS)
+		CC=g++ $(CFLAGS) -fopenmp $(IFLAGS)
 		LIBFILE=libgeopack.so
 	else
+		LDFLAGS=-lm -lstdc++ -L../lib -ldatetime -L../lib -lspline "-L/usr/local/opt/libomp/lib" -lomp
+		CPPFLAGS="-I/usr/local/opt/libomp/include"
+		CCo=g++ -Xpreprocessor -fopenmp -c $(CFLAGS) $(CPPFLAGS) $(IFLAGS)
+		CC=g++ -Xpreprocessor -fopenmp $(CFLAGS) $(CPPFLAGS) $(IFLAGS)
 		LIBFILE=libgeopack.dylib
 	endif
 endif
+
+
 
 all: obj lib
 

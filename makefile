@@ -27,10 +27,11 @@ endif
 
 .PHONY: all lib obj clean test install testinstall uninstall
 
-all: obj lib
+all: datetime spline obj lib
 
 datetime:
 	cd lib/datetime; make obj
+	cp -v lib/datetime/lib/libdatetime.* lib/
 
 spline:
 	cd lib/libspline; make all

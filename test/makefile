@@ -1,6 +1,6 @@
 # CFLAGS for CC
-CFLAGS=-g -O3 -Wextra -fPIC -I../include
-CXXFLAGS=-g -O3 -std=c++17 -Wextra -fPIC -I../include
+CFLAGS=-g -O3 -Wextra -fPIC -I../include -fopenmp
+CXXFLAGS=-g -O3 -std=c++17 -Wextra -fPIC -I../include -fopenmp
 
 OS=$(shell uname -s)
 ifeq ($(OS),Linux)
@@ -17,8 +17,8 @@ CXX=g++ $(CXXFLAGS)
 all:
 	$(CC) -o testc test.c $(LDFLAGS)
 	$(CXX) -o testcc test.cc $(LDFLAGS)
-	./testc
-	./testcc
+	LD_LIBRARY_PATH=../lib ./testc
+	LD_LIBRARY_PATH=../lib ./testcc
 	cd fortran; make all
 
 clean:

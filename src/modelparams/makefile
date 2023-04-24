@@ -7,7 +7,7 @@ CC=g++ $(CFLAGS)
 
 # set the build directory
 ifndef BUILDDIR 
-	BUILDDIR=.
+	BUILDDIR=../../build
 endif
 
 all: obj
