@@ -1,4 +1,6 @@
 @echo off
+mkdir build
+
 echo Compiling datetime
 cd lib\datetime
 call compile.bat
