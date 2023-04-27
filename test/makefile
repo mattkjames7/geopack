@@ -4,15 +4,18 @@ CXXFLAGS=-g -O3 -std=c++17 -Wextra -fPIC -I../include -fopenmp
 
 OS=$(shell uname -s)
 ifeq ($(OS),Linux)
+	CC=gcc $(CFLAGS)
+	CXX=g++ $(CXXFLAGS)
 	LDFLAGS=-lm -Wl,-rpath='$$ORIGIN/../lib' -L ../lib -lgeopack -lgfortran
 else
-	LDFLAGS=-lm -L../lib -lgeopack -lgfortran
+	CC=gcc -Xpreprocessor $(CFLAGS)
+	CXX=g++ -Xpreprocessor $(CXXFLAGS)
+	LDFLAGS=-lm -L../lib -lgeopack -lgfortran "-L/usr/local/opt/libomp/lib" -lomp
 endif
 
 
 # Compiler
-CC=gcc $(CFLAGS)
-CXX=g++ $(CXXFLAGS)
+
 
 all:
 	$(CC) -o testc test.c $(LDFLAGS)
