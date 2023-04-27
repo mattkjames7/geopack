@@ -2,13 +2,30 @@
 CFLAGS=-g -O3 -std=c++17 -Wextra -fPIC
 LDFLAGS=-lm 
 
-# Compiler
-CCo=g++ -c $(CFLAGS)
-CC=g++ $(CFLAGS)
 
 # set the build directory
 ifndef BUILDDIR 
 	BUILDDIR=../../build
+endif
+
+ifeq ($(OS),Windows_NT)
+#windows stuff here
+	MD=mkdir
+	CCo=g++ -c $(CFLAGS) -fopenmp 
+	CC=g++ $(CFLAGS) -fopenmp 
+else
+#linux and mac here
+	OS=$(shell uname -s)
+	MD=mkdir -p
+	ifeq ($(OS),Linux)
+		CCo=g++ -c $(CFLAGS) -fopenmp 
+		CC=g++ $(CFLAGS) -fopenmp 
+	else
+		LDFLAGS=-lm -lstdc++ "-L/usr/local/opt/libomp/lib" -lomp
+		CPPFLAGS="-I/usr/local/opt/libomp/include"
+		CCo=g++ -Xpreprocessor -fopenmp -c $(CFLAGS) $(CPPFLAGS) 
+		CC=g++ -Xpreprocessor -fopenmp $(CFLAGS) $(CPPFLAGS) 
+	endif
 endif
 
 all: obj lib
