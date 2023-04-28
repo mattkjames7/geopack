@@ -1,7 +1,7 @@
 # CFLAGS for CC
 CFLAGS=-g -O3 -std=c++17 -Wextra -fPIC
 FFLAGS=-fPIC -fno-automatic -ffree-line-length-none
-LDFLAGS=-lm -lstdc++ -L../lib -ldatetime -L../lib -lspline
+LDFLAGS=-lm -lstdc++ -L../lib -ldatetime -L../lib -lspline -Wl,-rpath='$$ORIGIN/../lib'
 
 # Compiler
 CCo=g++ -c $(CFLAGS)
@@ -9,7 +9,6 @@ CC=g++ $(CFLAGS)
 CCWo=x86_64-w64-mingw32-g++-win32 -c $(CFLAGS)
 CCW=x86_64-w64-mingw32-g++-win32 $(CFLAGS)
 
-FF=gfortran $(FFLAGS)
 
 ifndef BUILDDIR 
 	BUILDDIR=../build
@@ -21,6 +20,7 @@ ifeq ($(OS),Windows_NT)
 	LIBFILE=libgeopack.dll
 	CCo=g++ -c $(CFLAGS) -fopenmp $(IFLAGS)
 	CC=g++ $(CFLAGS) -fopenmp $(IFLAGS)
+	FF=gfortran $(FFLAGS) -fopenmp
 else
 #linux and mac here
 	OS=$(shell uname -s)
@@ -29,12 +29,14 @@ else
 		CCo=g++ -c $(CFLAGS) -fopenmp $(IFLAGS)
 		CC=g++ $(CFLAGS) -fopenmp $(IFLAGS)
 		LIBFILE=libgeopack.so
+		FF=gfortran $(FFLAGS) -fopenmp
 	else
 		LDFLAGS=-lm -lstdc++ -L../lib -ldatetime -L../lib -lspline "-L/usr/local/opt/libomp/lib" -lomp
 		CPPFLAGS="-I/usr/local/opt/libomp/include"
 		CCo=g++ -Xpreprocessor -fopenmp -c $(CFLAGS) $(CPPFLAGS) $(IFLAGS)
 		CC=g++ -Xpreprocessor -fopenmp $(CFLAGS) $(CPPFLAGS) $(IFLAGS)
 		LIBFILE=libgeopack.dylib
+		FF=gfortran $(FFLAGS)
 	endif
 endif
 
