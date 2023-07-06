@@ -25,7 +25,7 @@ cd ..
 
 call compileobj.bat
 
-gfortran -fPIC -fno-automatic -ffree-line-length-none -shared -o ..\lib\libgeopack.dll -lm ..\build\*.o -lstdc++ -lgomp -L..\lib -ldatetime -lspline
+gfortran -fPIC -fno-automatic -ffree-line-length-none -shared -o ..\lib\libgeopack.dll -lm ..\build\*.o -lstdc++ -lgomp -L../lib -ldatetime -L../lib -lspline -Wl,-rpath='$$ORIGIN/../lib'
 echo Compiled libgeopack.dll
 
 echo Done
