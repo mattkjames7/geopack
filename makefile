@@ -66,6 +66,7 @@ clean:
 	-rm -v build/*.o
 	-rmdir -v build
 	-rm -v testinstall
+	-rm lib/$(LIBFILE)
 
 install:
 	cp -v include/geopack.h $(PREFIX)/include
