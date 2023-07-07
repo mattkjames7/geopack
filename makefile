@@ -30,7 +30,7 @@ endif
 all: datetime spline obj lib
 
 datetime:
-	cd lib/datetime; make obj
+	cd lib/datetime; make all
 	cp -v lib/datetime/lib/libdatetime.* lib/
 
 spline:
@@ -63,10 +63,13 @@ test:
 	cd test; make all
 
 clean:
+	cd lib/libspline; make clean
+	cd lib/datetime; make clean
 	-rm -v build/*.o
 	-rmdir -v build
 	-rm -v testinstall
-	-rm lib/$(LIBFILE)
+	-rm lib/*.so
+	-rm lib/*.dll
 
 install:
 	cp -v include/geopack.h $(PREFIX)/include
