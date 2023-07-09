@@ -177,7 +177,9 @@ C           V.99, P. 199, 1994.
 C
 c----------------------------------------------------------------------
 
+      
       IMPLICIT REAL*8 (A-H,O-Z)
+      INTEGER IOPT
       REAL*8 PDYN,DST,BYIMF,BZIMF,PS,X,Y,Z,BX,BY,BZ,QX,QY,QZ,PARMOD(10),
      *   A(9)
 c
