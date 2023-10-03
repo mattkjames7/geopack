@@ -2707,7 +2707,7 @@ C                           RUSSIA
 C
       IMPLICIT NONE
 C
-      REAL PS,X,Y,Z,BX,BY,BZ,PSI,SPS,CPS,P,U,V,T,Q
+      REAL*8 PS,X,Y,Z,BX,BY,BZ,PSI,SPS,CPS,P,U,V,T,Q
       INTEGER M
 
       DATA M,PSI/0,5./
