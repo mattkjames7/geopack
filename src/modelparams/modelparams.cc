@@ -1,15 +1,32 @@
 #include "modelparams.h"
 TsygData *TData;
 
+bool checkWarning() {
+    const char* warnVar = std::getenv("GEOPACK_NOWARN"); // Get environment variable
+    if (warnVar != nullptr) { // Check if the environment variable is set
+        std::string warnVarStr = warnVar; // Convert to std::string for easier manipulation
+        // Convert to lower case for case-insensitive comparison
+        std::transform(warnVarStr.begin(), warnVarStr.end(), warnVarStr.begin(), ::tolower);
+        if (warnVarStr == "true" || warnVarStr == "1") {
+            return false; // Do not show warnings
+        }
+    }
+    return true; // Show warnings
+}
+
 void InitParams(const char *fname) {
 	/* init the parameter object by loading saved file */
-	printf("Loading Model Parameter File:\n");
-	printf("%s\n",fname);
+	if (checkWarning()) {
+		printf("Loading Model Parameter File:\n");
+		printf("%s\n",fname);
+	}
 	TData = new TsygData(fname);
 }
 
 void FreeParams() {
-	printf("Unloading Model Parameters\n");
+	if (checkWarning()) {
+		printf("Unloading Model Parameters\n");
+	}
 	delete TData;
 }
 

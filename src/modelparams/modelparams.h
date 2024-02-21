@@ -4,6 +4,10 @@
 #include <stdlib.h>
 #include "tsygdata.h"
 #include "../../lib/datetime/include/datetime.h"
+#include <cstdlib>
+#include <string>
+#include <algorithm>
+#include <cctype>
 
 #endif
 /***********************************************************************
