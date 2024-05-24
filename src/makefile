@@ -1,6 +1,6 @@
 # CFLAGS for CC
-CFLAGS=-g -O3 -std=c++17 -Wextra -fPIC
-FFLAGS=-fPIC -fno-automatic -ffree-line-length-none
+CFLAGS=-g -O3 -std=c++17 -Wextra -fPIC #-stdlib=libc++
+FFLAGS=-fPIC -fno-automatic -ffree-line-length-none -lstdc++ 
 LDFLAGS=-lm -lstdc++ -L../lib -ldatetime -L../lib -lspline -Wl,-rpath='$$ORIGIN/../lib'
 
 # Compiler
@@ -31,7 +31,7 @@ else
 		LIBFILE=libgeopack.so
 		FF=gfortran $(FFLAGS) -fopenmp
 	else
-		LDFLAGS=-lm -lstdc++ -L../lib -ldatetime -L../lib -lspline "-L/usr/local/opt/libomp/lib" -lomp
+		LDFLAGS=-lm -lstdc++ -L../lib -ldatetime -L$(shell dirname `locate libgfortran.a | head -n 1`) -lgfortran  -L../lib -lspline "-L/usr/local/opt/libomp/lib" -lomp
 		CPPFLAGS="-I/usr/local/opt/libomp/include"
 		CCo=g++ -Xpreprocessor -fopenmp -c $(CFLAGS) $(CPPFLAGS) $(IFLAGS)
 		CC=g++ -Xpreprocessor -fopenmp $(CFLAGS) $(CPPFLAGS) $(IFLAGS)
@@ -59,6 +59,6 @@ obj:
 	$(CCo) recalc.cc -o $(BUILDDIR)/recalc.o
 	
 lib:
-	$(FF) -shared -o ../lib/$(LIBFILE) $(BUILDDIR)/*.o $(LDFLAGS)
+	$(CC) -shared -o ../lib/$(LIBFILE) $(BUILDDIR)/*.o $(LDFLAGS)
 		
 

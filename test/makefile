@@ -23,8 +23,9 @@ all:
 	LD_LIBRARY_PATH=$LD_LIBRARY_PATH:../lib 
 	./testc
 	./testcc
+ifeq ($(OS),Linux)
 	cd fortran; make all
-
+endif
 clean:
 	-rm -v testc
 	-rm -v testcc
