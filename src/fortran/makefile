@@ -1,5 +1,5 @@
 # CFLAGS for CC
-CFLAGS=-g -O3 -std=c++17 -Wextra -fPIC -stdlib=libc++
+CFLAGS=-g -O3 -std=c++17 -Wextra -fPIC# -stdlib=libc++
 FCFLAGS=-w -c -fPIC -fno-automatic -std=legacy -ffree-line-length-none -O3
 
 # Compiler

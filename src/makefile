@@ -1,5 +1,5 @@
 # CFLAGS for CC
-CFLAGS=-g -O3 -std=c++17 -Wextra -fPIC -stdlib=libc++
+CFLAGS=-g -O3 -std=c++17 -Wextra -fPIC #-stdlib=libc++
 FFLAGS=-fPIC -fno-automatic -ffree-line-length-none -lstdc++ 
 LDFLAGS=-lm -lstdc++ -L../lib -ldatetime -L../lib -lspline -Wl,-rpath='$$ORIGIN/../lib'
 
