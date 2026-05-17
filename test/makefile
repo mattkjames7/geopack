@@ -3,6 +3,7 @@ CFLAGS=-fopenmp -g -O3 -Wextra -fPIC -I../include
 CXXFLAGS=-fopenmp -g -O3 -std=c++17 -Wextra -fPIC -I../include
 
 OS=$(shell uname -s)
+.PHONY: all clean savetestdata unit
 ifeq ($(OS),Linux)
 	CC=gcc $(CFLAGS)
 	CXX=g++ $(CXXFLAGS)
@@ -26,6 +27,15 @@ all:
 ifeq ($(OS),Linux)
 	cd fortran; make all
 endif
+
+savetestdata:
+	cd savetestdata; make all
+	cd savetestdata; make run
+
+unit:
+	cd unit; make all
+	cd unit; make run
+
 clean:
 	-rm -v testc
 	-rm -v testcc
