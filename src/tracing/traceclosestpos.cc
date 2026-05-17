@@ -1,5 +1,8 @@
 #include "traceclosestpos.h"
 
+namespace geopack {
+
+
 
 
 void TraceClosestPos(	MatrixArray &R,
@@ -241,4 +244,6 @@ void _ClosestPosSpline(int nc, double *cx, double *cy, double *cz,
 
 void dbg() {
 	printf("Debug?\n");
+}
+
 }

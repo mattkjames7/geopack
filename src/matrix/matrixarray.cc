@@ -1,5 +1,8 @@
 #include "matrixarray.h"
 
+namespace geopack {
+
+
 
 
 /***********************************************************************
@@ -136,4 +139,6 @@ void MatrixArray::RandomInit(float Range) {
 			}
 		}
 	}
+}
+
 }

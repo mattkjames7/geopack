@@ -6,7 +6,8 @@
 #include "../tools/argmax.h"
 #include "../fortran/geopack.h"
 #include "fieldlinemidpoint.h"
-#endif
+
+namespace geopack {
 
 
 
@@ -19,3 +20,6 @@ void GetMagEquatorFPSM(	double *xsm, double *ysm, double *zsm,
 						double *s, double *R, int n,
 						double *xfe, double *yfe, double *zfe, 
 						double *Lshell, double *MltE);
+}
+
+#endif

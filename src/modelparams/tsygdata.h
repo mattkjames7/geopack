@@ -6,7 +6,8 @@
 #include <math.h>
 #include <datetime.h>
 #include "../tools/BubbleArgSort.h"
-#endif
+
+namespace geopack {
 
 
 class TsygData {
@@ -63,4 +64,6 @@ class TsygData {
 						double t1, double x1,
 						double fillval);
 };
+}
 
+#endif

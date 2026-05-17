@@ -1,5 +1,8 @@
 #include "identity.h"
 
+namespace geopack {
+
+
 Matrix Identity(int n) {
 	
 	Matrix I = Matrix(n,n);
@@ -10,4 +13,6 @@ Matrix Identity(int n) {
 	}
 	return I;
 	
+}
+
 }

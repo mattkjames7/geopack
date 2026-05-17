@@ -3,6 +3,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#endif
+
+namespace geopack {
 
 void FieldLineDist(int n, double *x, double *y, double *z, double *s);
+}
+
+#endif

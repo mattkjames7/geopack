@@ -4,10 +4,14 @@
 #include <stdlib.h>
 #include "fortran/geopack.h"
 #include <datetime.h>
-#endif
+
+namespace geopack {
 using namespace std;
 
 
 
 bool Recalc(int Date, float ut, double Vx, double Vy, double Vz, bool force);
 bool Recalc(int Date, float ut, double Vx, double Vy, double Vz);
+}
+
+#endif

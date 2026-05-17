@@ -3,5 +3,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#endif
+namespace geopack {
+
 void ReverseElements(double *x, int n);
+}
+
+#endif

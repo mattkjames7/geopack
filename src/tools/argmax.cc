@@ -1,5 +1,8 @@
 #include "argmax.h"
 
+namespace geopack {
+
+
 void argmax(double *x, int n, double *xmx, int *Imx) {
 	/*finds the index of the maximum within an array*/
 	int i;
@@ -11,4 +14,6 @@ void argmax(double *x, int n, double *xmx, int *Imx) {
 			Imx[0] = i;
 		}
 	}
+}
+
 }

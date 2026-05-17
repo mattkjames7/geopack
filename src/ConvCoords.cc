@@ -1,8 +1,14 @@
 #include "ConvCoords.h"
 
+using namespace geopack;
+
+namespace geopack {
+
 ConvFunc ConvFuncs[6][6];
 bool ConvFuncsLoaded = false;
 const char *CoordAbr[6];
+
+}
 /***********************************************************************
  * NAME : 			void GSEtoGSM(	Xin, Yin, Zin, Vx, Vy, Vz, recalc,
  *									Year, DyNo, Hr, Mn, Sc, 
@@ -2343,6 +2349,8 @@ void SMtoMAGUT(		double *Xin, double *Yin, double *Zin, int n,
 
 }
 
+namespace geopack {
+
 void XXXtoYYYUT(	double *Xin, double *Yin, double *Zin, int n, 
 					double *Vx, double *Vy, double *Vz, 
 					int *Date, float *ut, ConvFuncHMS CF,
@@ -2445,6 +2453,8 @@ void _PopulateConvFuncs() {
 	}
 	
 	ConvFuncsLoaded = true;
+
+}
 
 }
 

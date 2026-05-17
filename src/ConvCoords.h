@@ -7,6 +7,8 @@
 #include <datetime.h>
 #include "fortran/geopack.h"
 
+namespace geopack {
+
 /* this will be used as a pointer to each of the ***to***UT functions*/
 typedef void (*ConvFunc) (double*,double*,double*,int,double*,double*,double*,
 						int*,float*,double*,double*,double*);
@@ -37,6 +39,8 @@ void _PopulateConvFuncs();
 
 /* array of coordinate system abbreviations */
 extern const char *CoordAbr[6];
+
+}
 #endif
 
 extern "C" {

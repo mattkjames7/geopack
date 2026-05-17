@@ -1,5 +1,8 @@
 #include "trace.h"
 
+namespace geopack {
+
+
 Trace::Trace() {
 	/* initialize all of the boolean parameters */
 	inputPos_ = false;
@@ -1131,4 +1134,6 @@ void Trace::GetTraceNstep(int *nstep) {
 	for (i=0;i<n_;i++) {
 		nstep[i] = nstep_[i];
 	}
+}
+
 }

@@ -1,5 +1,8 @@
 #include "rotmatrix.h"
 
+namespace geopack {
+
+
 /***********************************************************************
  * NAME : 			GetRotationMatrix(A,B,R)
  * 
@@ -89,4 +92,6 @@ void GetRotationMatrices(int n, double *Ax, double *Ay, double *Az,
 		GetRotationMatrix(Ax[i],Ay[i],Az[i],Bx[i],By[i],Bz[i],*R.matrix[i]);	
 	}
 	
+}
+
 }

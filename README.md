@@ -20,6 +20,11 @@ ctest --test-dir build-cmake --output-on-failure
 
 Dependencies (`datetime`, `libspline`) are fetched with CMake and configured so their own tests are not built.
 
+## API
+
+The C API is exposed as global `extern "C"` functions through `geopack.h`.
+C++ classes and helper functions are in the `geopack::` namespace, for example `geopack::Trace`.
+
 ## Install
 
 ```bash

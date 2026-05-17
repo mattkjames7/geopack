@@ -4,7 +4,8 @@
 #include <stdlib.h>
 #include "../fortran/geopack.h"
 #include <string.h>
-#endif
+
+namespace geopack {
 
 
 void ConvertTraceCoords(int nstep, const char *CoordOut, 
@@ -16,3 +17,6 @@ void ConvertTraceCoords(int nstep, const char *CoordOut,
 						double *x1, double *y1, double *z1, 
 						double *Bx0, double *By0, double *Bz0,
 						double *Bx1, double *By1, double *Bz1);
+}
+
+#endif

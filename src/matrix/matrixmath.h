@@ -5,6 +5,9 @@
 #include <stdlib.h>
 #include "matrix.h"
 #include "openmp_compat.h"
+
+namespace geopack {
+
 //#include "activationfunctions.h"
 using namespace std;
 
@@ -128,4 +131,6 @@ void ApplyFunctionToMatrix(Matrix &a, DblFunc AF);
  *
  * ********************************************************************/
 void AddBiasVectorToMatrix(Matrix &a, Matrix &b);
+}
+
 #endif

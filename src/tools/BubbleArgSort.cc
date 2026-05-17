@@ -1,5 +1,8 @@
 #include "BubbleArgSort.h"
 
+namespace geopack {
+
+
 
 
 /***********************************************************************
@@ -60,3 +63,5 @@ void BubbleArgSort(int n, double *x, int *I) {
 	delete[] y;
 }
 
+
+}

@@ -8,7 +8,8 @@
 #include "../matrix/matrix.h"
 #include <spline.h>
 
-#endif
+namespace geopack {
+
 class Trace;
 
 void dbg();
@@ -43,3 +44,6 @@ void _Closest4Pos(	double Prx, double Pry, double Prz,
 
 void _ClosestPosSpline(int nc, double *cx, double *cy, double *cz,
 						double *xc, double *yc, double *zc);
+}
+
+#endif

@@ -3,6 +3,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#endif
+namespace geopack {
+
 
 void argmax(double *x, int n, double *xmx, int *Imx);
+}
+
+#endif

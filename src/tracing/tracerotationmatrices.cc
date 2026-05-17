@@ -1,5 +1,8 @@
 #include "tracerotationmatrices.h"
 
+namespace geopack {
+
+
 
 MatrixArray TraceRotationMatrices(int n, double *xin, double *yin, double *zin) {
 
@@ -49,4 +52,6 @@ MatrixArray TraceRotationMatrices(int n, double *xin, double *yin, double *zin) 
 	
 	return R;
 	
+}
+
 }

@@ -3,8 +3,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#endif
+namespace geopack {
+
 
 void DummyFunc(	int *iopt, double *parmod, double *ps, 
 				double *x, double *y, double *z, 
 				double *bx, double *by, double *bz);
+}
+
+#endif

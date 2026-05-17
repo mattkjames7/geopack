@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
 	
 	/* create the trace object */
 	printf("Creating trace object \n");
-	Trace T;
+	geopack::Trace T;
 	
 	/* input stuff */
 	printf("Input position and model \n");

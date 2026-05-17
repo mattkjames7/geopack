@@ -1,5 +1,8 @@
 #include "interptraceclosestpos.h"
 
+namespace geopack {
+
+
 void interptraceClosestPos(	int n, double *x, double *y, double *z,
 						double *bx, double *by, double *bz,
 						int n0, double *x0, double *y0, double *z0, double *s0,
@@ -323,4 +326,6 @@ bool OptimizePos(	double x, double y, double z,
 	//printf("scnt: %f, n: %d, f: [%f,%f], s0: %f, d: %f\n",scnt,n,f[0],f[1],s0,d);	
 	//printf("s0: %f, scnt: %f, niter %d, d90: %f, da: %f, dot: %f, angle: %f\n",s0,scnt,n,fabs(0.5*(f[1]+f[0])),fabs(f[1]-f[0]),a,b);
 	return succ;
+}
+
 }

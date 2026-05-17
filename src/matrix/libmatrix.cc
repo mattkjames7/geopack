@@ -1,5 +1,7 @@
 #include "libmatrix.h"
 
+using namespace geopack;
+
 void RotMatrix(double *A, double *B, double *R) {
 	
 	Matrix r = Matrix(3,3);

@@ -3,6 +3,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#endif
+namespace geopack {
+
 
 double linterp(double x0, double x1, double y0, double y1, const double xt);
+}
+
+#endif

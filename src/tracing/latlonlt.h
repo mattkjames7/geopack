@@ -5,7 +5,8 @@
 #include <math.h>
 #include "../fortran/geopack.h"
 #include "../tools/carttospherical.h"
-#endif
+
+namespace geopack {
 using namespace std;
 
 
@@ -13,4 +14,6 @@ void MagLatLonLT(	double x, double y, double z,
 					double *lat, double *lon, double *lt);
 void GeoLatLonLT(	float ut, double x, double y, double z, 
 					double *lat, double *lon, double *lt);
+}
 
+#endif

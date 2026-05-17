@@ -3,6 +3,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+namespace geopack {
+
+
 using namespace std;
 
 /***********************************************************************
@@ -46,4 +49,6 @@ void BubbleArgSort(int n, T *x, int *I);
 
 
 #include "BubbleSort.cc"
+}
+
 #endif

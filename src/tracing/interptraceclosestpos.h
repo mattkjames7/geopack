@@ -4,7 +4,8 @@
 #include <stdlib.h>
 #include <spline.h>
 #include <math.h>
-#endif
+
+namespace geopack {
 void interptraceClosestPos(	int n, double *x, double *y, double *z,
 						double *bx, double *by, double *bz,
 						int n0, double *x0, double *y0, double *z0, double *s0,
@@ -33,3 +34,6 @@ bool OptimizePos(	double x, double y, double z,
 					double s0, 
 					spline::Spline Sx, spline::Spline Sy, spline::Spline Sz,
 					double *xc, double *yc, double *zc);
+}
+
+#endif

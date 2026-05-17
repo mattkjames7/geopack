@@ -9,14 +9,13 @@
 #include <algorithm>
 #include <cctype>
 
-#endif
 /***********************************************************************
  * This folder should contain the code to calculate, load and interpolate
  * the model parameters.
  * 
  * 
  * ********************************************************************/
-extern TsygData *TData;
+extern geopack::TsygData *TData;
 
 
 extern "C" {
@@ -63,3 +62,5 @@ extern "C" {
 							double *W4, double *W5, double *W6,
 							double *tilt, int *iopt, double **parmod);
 }
+
+#endif

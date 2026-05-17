@@ -1,5 +1,7 @@
 #include "getdipoletilt.h"
 
+namespace geopack {
+
 double GetDipoleTilt(int Year, int Doy, int Hr, int Mn, double Vx, double Vy, double Vz) {
 	double psi;
 	int Sc = 0;
@@ -8,6 +10,8 @@ double GetDipoleTilt(int Year, int Doy, int Hr, int Mn, double Vx, double Vy, do
 
 	psi = getpsi_();
 	return psi;
+}
+
 }
 
 double GetDipoleTiltUT(int Date, float ut, double Vx, double Vy, double Vz) {
@@ -31,6 +35,6 @@ double GetDipoleTiltUT(int Date, float ut, double Vx, double Vy, double Vz) {
 	/*convert decimal UT to Hr, Mn, Sc*/
 	DectoHHMM(1,&utd,&Hr,&Mn,&Sc,&Ms);	
 		
-	return GetDipoleTilt(Year,Doy,Hr,Mn,vx,vy,vz);
+	return geopack::GetDipoleTilt(Year,Doy,Hr,Mn,vx,vy,vz);
 		
 }

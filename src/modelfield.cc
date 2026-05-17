@@ -1,5 +1,6 @@
 #include "modelfield.h"
 
+using namespace geopack;
 
 void ModelField(	int n, double *Xin, double *Yin, double *Zin,  
 					int *Date, float *ut, bool SameTime,
@@ -106,6 +107,8 @@ void ModelField(	int n, double *Xin, double *Yin, double *Zin,
 }
 
 
+namespace geopack {
+
 ModelCFG GetModelCFG(	int n, int *Date, float *ut, bool SameTime,
 						const char *Model, int *iopt, double **parmod,
 						double *Vx, double *Vy, double *Vz,
@@ -137,3 +140,4 @@ ModelCFG GetModelCFG(	int n, int *Date, float *ut, bool SameTime,
 	
 }
 
+}

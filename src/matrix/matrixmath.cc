@@ -1,5 +1,8 @@
 #include "matrixmath.h"
 
+namespace geopack {
+
+
 /***********************************************************************
  * NAME : 			_Multab(a,b,out)
  * 
@@ -759,4 +762,6 @@ void AddBiasVectorToMatrix(Matrix &a, Matrix &b) {
 			}
 		}
 	}		
+}
+
 }

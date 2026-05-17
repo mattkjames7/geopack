@@ -10,6 +10,8 @@
 #include "recalc.h"
 using namespace std;
 
+namespace geopack {
+
 typedef struct ModelCFG{
 	int n;
 	int *Date;
@@ -25,6 +27,16 @@ typedef struct ModelCFG{
 	const char *CoordOut;
 	bool WithinMPOnly;
 } ModelCFG;
+
+ModelCFG GetModelCFG(	int n, int *Date, float *ut, bool SameTime,
+						const char *Model, int *iopt, double **parmod,
+						double *Vx, double *Vy, double *Vz,
+						const char *CoordIn, const char *CoordOut, bool WithinMPOnly); 
+
+void ModelFieldNew(	int n, double *Xin, double *Yin, double *Zin, 
+					ModelCFG cfg,double *Bx, double *By, double *Bz);
+
+}
 #endif
 
 /***********************************************************************
@@ -50,11 +62,3 @@ extern "C" {
 	
 	
 }
-
-ModelCFG GetModelCFG(	int n, int *Date, float *ut, bool SameTime,
-						const char *Model, int *iopt, double **parmod,
-						double *Vx, double *Vy, double *Vz,
-						const char *CoordIn, const char *CoordOut, bool WithinMPOnly); 
-
-void ModelFieldNew(	int n, double *Xin, double *Yin, double *Zin, 
-					ModelCFG cfg,double *Bx, double *By, double *Bz);

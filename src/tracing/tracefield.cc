@@ -1,5 +1,7 @@
 #include "tracefield.h"
 
+using namespace geopack;
+
 /* this could be come a wrapper function where I/O is converted to
  * a few typedefs */
 void TraceField(int n, double *xin, double *yin, double *zin,

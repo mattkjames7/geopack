@@ -4,7 +4,11 @@
 #include <stdlib.h>
 #include "matrix.h"
 
-#endif
+namespace geopack {
+
 
 
 Matrix Identity(int n);
+}
+
+#endif

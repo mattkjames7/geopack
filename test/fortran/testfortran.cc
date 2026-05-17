@@ -33,7 +33,7 @@ bool testT89() {
 	double dx, dy, dz;
 	for (i=0;i<4;i++) {
 		t89c_(&iopt[i],parmod,&psi[i],&x[i],&y[i],&z[i],&Bxf[i],&Byf[i],&Bzf[i]);
-		t89(iopt[i],parmod,psi[i],x[i],y[i],z[i],&Bxc[i],&Byc[i],&Bzc[i]);
+		geopack::t89(iopt[i],parmod,psi[i],x[i],y[i],z[i],&Bxc[i],&Byc[i],&Bzc[i]);
 	}
 
 	/* compare them */
@@ -53,4 +53,3 @@ bool testT89() {
 	}
 	return pass;
 }
-

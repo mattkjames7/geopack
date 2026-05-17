@@ -1,5 +1,8 @@
 #include "tracefootprints.h"
 
+namespace geopack {
+
+
 
 
 void TraceFootprints(	int nstep, float ut, 
@@ -157,5 +160,7 @@ void TraceFootprintsSM(	int nstep, float ut,
 	FP[12] = Lshell;
 	FP[13] = MltE;
 	FP[14] = FlLen;
+
+}
 
 }
