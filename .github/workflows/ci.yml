@@ -37,8 +37,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - name: Install GCC (gfortran)
-        run: brew install gcc
+      - name: Set Fortran compiler
+        shell: bash
+        run: |
+          if command -v gfortran >/dev/null 2>&1; then
+            echo "FC=$(command -v gfortran)" >> "$GITHUB_ENV"
+          else
+            gfortran_path="$(ls /opt/homebrew/bin/gfortran* /usr/local/bin/gfortran* 2>/dev/null | head -n 1)"
+            test -n "$gfortran_path"
+            echo "FC=$gfortran_path" >> "$GITHUB_ENV"
+          fi
       - name: Configure
         run: cmake -S . -B build -G Ninja -DGEOPACK_BUILD_TESTS=ON
       - name: Build
@@ -59,10 +67,21 @@ jobs:
       - name: Test
         shell: pwsh
         run: |
+          $compilerPaths = Select-String -Path build/CMakeCache.txt -Pattern '^CMAKE_(C|CXX|Fortran)_COMPILER:FILEPATH=' |
+            ForEach-Object {
+              Split-Path ($_.Line -replace '^[^=]+=', '')
+            } |
+            Sort-Object -Unique
+
           $dllPaths = @(
             "$PWD/build/src",
+            "$PWD/build/lib",
+            "$PWD/build/bin",
+            "$PWD/build/_deps/datetime-build/src",
             "$PWD/build/_deps/datetime-build/lib",
+            "$PWD/build/_deps/libspline-build/src",
             "$PWD/build/_deps/libspline-build/lib"
           )
-          $env:PATH = ($dllPaths -join ';') + ';' + $env:PATH
+
+          $env:PATH = (($dllPaths + $compilerPaths) -join ';') + ';' + $env:PATH
           ctest --test-dir build --output-on-failure
