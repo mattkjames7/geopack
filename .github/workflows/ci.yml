@@ -40,8 +40,23 @@ jobs:
       - name: Set Fortran compiler
         shell: bash
         run: |
-          command -v gfortran >/dev/null 2>&1 || brew install gcc
-          echo "FC=$(command -v gfortran)" >> "$GITHUB_ENV"
+          brew_prefix="$(brew --prefix)"
+          echo "$brew_prefix/bin" >> "$GITHUB_PATH"
+
+          if ! command -v gfortran >/dev/null 2>&1; then
+            brew install gcc
+          fi
+
+          gfortran_path="$(command -v gfortran || true)"
+          if [ -z "$gfortran_path" ]; then
+            gfortran_path="$(find "$brew_prefix/bin" -maxdepth 1 -name 'gfortran*' -type f | sort -V | tail -n 1)"
+          fi
+          if [ -z "$gfortran_path" ]; then
+            echo "Could not find gfortran after installing gcc" >&2
+            exit 1
+          fi
+
+          echo "FC=$gfortran_path" >> "$GITHUB_ENV"
       - name: Configure
         run: cmake -S . -B build -G Ninja -DGEOPACK_BUILD_TESTS=ON
       - name: Build
