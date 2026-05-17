@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
-#include <omp.h>
+#include "openmp_compat.h"
 
 using namespace std;
 

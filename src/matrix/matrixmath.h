@@ -4,7 +4,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include "matrix.h"
-#include <omp.h>
+#include "openmp_compat.h"
 //#include "activationfunctions.h"
 using namespace std;
 
