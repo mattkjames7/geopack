@@ -8,3 +8,4 @@
    - `cd test && make unit`
 
 Golden files are written to `test/data/*.json` by `test/savetestdata/savetestdata`.
+`googletest` and `nlohmann/json` are fetched from git on first build of the relevant targets.

@@ -1,16 +1,41 @@
 #include <cmath>
+#include <fstream>
 #include <string>
 #include <vector>
 
 #include <geopack.h>
 #include <gtest/gtest.h>
+#include <nlohmann/json.hpp>
 
-#include "minijson.h"
+using json = nlohmann::json;
 
 namespace {
 
 constexpr double kAbsTol = 1e-7;
 constexpr double kRelTol = 1e-6;
+
+json loadJson(const std::string &path) {
+    std::ifstream f(path);
+    return json::parse(f);
+}
+
+double jnum(const json &v) {
+    return v.is_null() ? NAN : v.get<double>();
+}
+
+std::vector<double> jvecd(const json &v) {
+    std::vector<double> out;
+    out.reserve(v.size());
+    for (const auto &x : v) out.push_back(jnum(x));
+    return out;
+}
+
+std::vector<int> jveci(const json &v) {
+    std::vector<int> out;
+    out.reserve(v.size());
+    for (const auto &x : v) out.push_back(x.get<int>());
+    return out;
+}
 
 void expectNear(double actual, double expected) {
     if (!std::isfinite(expected)) {
@@ -21,58 +46,34 @@ void expectNear(double actual, double expected) {
     EXPECT_LE(std::fabs(actual - expected), lim);
 }
 
-double num(const minijson::Object &o, const std::string &k) { return o.at(k).asNumber(); }
-std::string str(const minijson::Object &o, const std::string &k) { return o.at(k).asString(); }
-
-std::vector<double> vecnum(const minijson::Object &o, const std::string &k) {
-    std::vector<double> out;
-    for (const auto &v : o.at(k).asArray()) out.push_back(v.isNull() ? NAN : v.asNumber());
-    return out;
-}
-
-std::vector<int> vecint(const minijson::Object &o, const std::string &k) {
-    std::vector<int> out;
-    for (const auto &v : o.at(k).asArray()) out.push_back(static_cast<int>(v.asNumber()));
-    return out;
-}
-
 TEST(Golden, GetDipoleTiltUT) {
-    const auto root = minijson::parseFile("../data/getdipoletiltut.json").asObject();
-    for (const auto &c : root.at("cases").asArray()) {
-        const auto &o = c.asObject();
-        const int date = static_cast<int>(num(o, "date"));
-        const float ut = static_cast<float>(num(o, "ut"));
-        const double vx = num(o, "vx");
-        const double vy = num(o, "vy");
-        const double vz = num(o, "vz");
-        const double expected = num(o, "tilt");
-        const double actual = GetDipoleTiltUT(date, ut, vx, vy, vz);
-        expectNear(actual, expected);
+    const auto root = loadJson("../data/getdipoletiltut.json");
+    for (const auto &c : root.at("cases")) {
+        const int date = c.at("date").get<int>();
+        const float ut = c.at("ut").get<float>();
+        const double vx = c.at("vx").get<double>();
+        const double vy = c.at("vy").get<double>();
+        const double vz = c.at("vz").get<double>();
+        const double expected = c.at("tilt").get<double>();
+        expectNear(GetDipoleTiltUT(date, ut, vx, vy, vz), expected);
     }
 }
 
 TEST(Golden, ConvCoords) {
-    const auto root = minijson::parseFile("../data/convcoords.json").asObject();
-    for (const auto &c : root.at("cases").asArray()) {
-        const auto &o = c.asObject();
-        const int n = static_cast<int>(num(o, "n"));
-        auto xin = vecnum(o, "xin");
-        auto yin = vecnum(o, "yin");
-        auto zin = vecnum(o, "zin");
-        auto datei = vecint(o, "date");
-        auto utf = vecnum(o, "ut");
-        auto vx = vecnum(o, "vx");
-        auto vy = vecnum(o, "vy");
-        auto vz = vecnum(o, "vz");
-        auto ex = vecnum(o, "xout");
-        auto ey = vecnum(o, "yout");
-        auto ez = vecnum(o, "zout");
+    const auto root = loadJson("../data/convcoords.json");
+    for (const auto &c : root.at("cases")) {
+        const int n = c.at("n").get<int>();
+        auto xin = jvecd(c.at("xin")), yin = jvecd(c.at("yin")), zin = jvecd(c.at("zin"));
+        auto date = jveci(c.at("date"));
+        auto utd = jvecd(c.at("ut"));
         std::vector<float> ut(n);
-        for (int i = 0; i < n; i++) ut[i] = static_cast<float>(utf[i]);
+        for (int i = 0; i < n; i++) ut[i] = static_cast<float>(utd[i]);
+        auto vx = jvecd(c.at("vx")), vy = jvecd(c.at("vy")), vz = jvecd(c.at("vz"));
+        auto ex = jvecd(c.at("xout")), ey = jvecd(c.at("yout")), ez = jvecd(c.at("zout"));
         std::vector<double> xout(n), yout(n), zout(n);
         ConvCoords(xin.data(), yin.data(), zin.data(), n, vx.data(), vy.data(), vz.data(),
-                   datei.data(), ut.data(), xout.data(), yout.data(), zout.data(),
-                   str(o, "coord_in").c_str(), str(o, "coord_out").c_str());
+                   date.data(), ut.data(), xout.data(), yout.data(), zout.data(),
+                   c.at("coord_in").get<std::string>().c_str(), c.at("coord_out").get<std::string>().c_str());
         for (int i = 0; i < n; i++) {
             expectNear(xout[i], ex[i]);
             expectNear(yout[i], ey[i]);
@@ -82,38 +83,31 @@ TEST(Golden, ConvCoords) {
 }
 
 TEST(Golden, ModelField) {
-    const auto root = minijson::parseFile("../data/modelfield.json").asObject();
-    for (const auto &c : root.at("cases").asArray()) {
-        const auto &o = c.asObject();
-        const int n = static_cast<int>(num(o, "n"));
-        const bool sameTime = o.at("same_time").asNumber() != 0.0;
-        auto xin = vecnum(o, "xin");
-        auto yin = vecnum(o, "yin");
-        auto zin = vecnum(o, "zin");
-        auto date = vecint(o, "date");
-        auto utd = vecnum(o, "ut");
-        auto vx = vecnum(o, "vx");
-        auto vy = vecnum(o, "vy");
-        auto vz = vecnum(o, "vz");
-        auto iopt = vecint(o, "iopt");
+    const auto root = loadJson("../data/modelfield.json");
+    for (const auto &c : root.at("cases")) {
+        const int n = c.at("n").get<int>();
+        const bool sameTime = c.at("same_time").get<bool>();
+        auto xin = jvecd(c.at("xin")), yin = jvecd(c.at("yin")), zin = jvecd(c.at("zin"));
+        auto date = jveci(c.at("date"));
+        auto utd = jvecd(c.at("ut"));
         std::vector<float> ut(utd.size());
         for (size_t i = 0; i < utd.size(); i++) ut[i] = static_cast<float>(utd[i]);
-        const auto &pmArr = o.at("parmod").asArray();
+        auto vx = jvecd(c.at("vx")), vy = jvecd(c.at("vy")), vz = jvecd(c.at("vz"));
+        auto iopt = jveci(c.at("iopt"));
+
+        const auto &pmArr = c.at("parmod");
         std::vector<std::vector<double>> pm(pmArr.size(), std::vector<double>(10, 0.0));
         std::vector<double *> pmPtrs(pmArr.size(), nullptr);
         for (size_t i = 0; i < pmArr.size(); i++) {
-            for (size_t j = 0; j < pmArr[i].asArray().size(); j++) {
-                pm[i][j] = pmArr[i].asArray()[j].asNumber();
-            }
+            for (size_t j = 0; j < pmArr[i].size(); j++) pm[i][j] = pmArr[i][j].get<double>();
             pmPtrs[i] = pm[i].data();
         }
-        auto ex = vecnum(o, "bx");
-        auto ey = vecnum(o, "by");
-        auto ez = vecnum(o, "bz");
+
+        auto ex = jvecd(c.at("bx")), ey = jvecd(c.at("by")), ez = jvecd(c.at("bz"));
         std::vector<double> bx(n), by(n), bz(n);
         ModelField(n, xin.data(), yin.data(), zin.data(), date.data(), ut.data(), sameTime,
-                   str(o, "model").c_str(), iopt.data(), pmPtrs.data(), vx.data(), vy.data(),
-                   vz.data(), "GSM", "GSM", false, bx.data(), by.data(), bz.data());
+                   c.at("model").get<std::string>().c_str(), iopt.data(), pmPtrs.data(),
+                   vx.data(), vy.data(), vz.data(), "GSM", "GSM", false, bx.data(), by.data(), bz.data());
         for (int i = 0; i < n; i++) {
             expectNear(bx[i], ex[i]);
             expectNear(by[i], ey[i]);
@@ -123,23 +117,18 @@ TEST(Golden, ModelField) {
 }
 
 TEST(Golden, TraceField) {
-    const auto root = minijson::parseFile("../data/tracefield.json").asObject();
-    for (const auto &c : root.at("cases").asArray()) {
-        const auto &o = c.asObject();
+    const auto root = loadJson("../data/tracefield.json");
+    for (const auto &c : root.at("cases")) {
         int n = 1;
-        int date[] = {static_cast<int>(num(o, "date"))};
-        float ut[] = {static_cast<float>(num(o, "ut"))};
-        double xin[] = {num(o, "x0")};
-        double yin[] = {num(o, "y0")};
-        double zin[] = {num(o, "z0")};
-        int iopt[] = {static_cast<int>(num(o, "iopt"))};
-        double vx[] = {-359.0};
-        double vy[] = {11.0};
-        double vz[] = {-17.4};
-        auto pm = vecnum(o, "parmod");
+        int date[] = {c.at("date").get<int>()};
+        float ut[] = {c.at("ut").get<float>()};
+        double xin[] = {c.at("x0").get<double>()}, yin[] = {c.at("y0").get<double>()}, zin[] = {c.at("z0").get<double>()};
+        int iopt[] = {c.at("iopt").get<int>()};
+        double vx[] = {-359.0}, vy[] = {11.0}, vz[] = {-17.4};
+        auto pm = jvecd(c.at("parmod"));
         double *parmod[] = {pm.data()};
-        int maxLen = 256;
-        int nstep = 0;
+
+        int maxLen = 256, nstep = 0;
         double *xgsm = static_cast<double *>(malloc(maxLen * sizeof(double)));
         double *ygsm = static_cast<double *>(malloc(maxLen * sizeof(double)));
         double *zgsm = static_cast<double *>(malloc(maxLen * sizeof(double)));
@@ -166,16 +155,13 @@ TEST(Golden, TraceField) {
         double alpha[] = {0.0, 90.0};
         double halpha[512] = {0.0};
 
-        TraceField(n, xin, yin, zin, date, ut, str(o, "model").c_str(), iopt, parmod, vx, vy,
+        TraceField(n, xin, yin, zin, date, ut, c.at("model").get<std::string>().c_str(), iopt, parmod, vx, vy,
                    vz, 100.0, maxLen, 1.0, false, 0, "GSM", &nstep, &xgsm, &ygsm, &zgsm,
                    &bxgsm, &bygsm, &bzgsm, &xgse, &ygse, &zgse, &bxgse, &bygse, &bzgse, &xsm,
                    &ysm, &zsm, &bxsm, &bysm, &bzsm, &s, &r, &rnorm, &fp, nalpha, alpha, halpha);
 
-        EXPECT_EQ(nstep, static_cast<int>(num(o, "nstep")));
-        auto exgsm = vecnum(o, "xgsm");
-        auto eygsm = vecnum(o, "ygsm");
-        auto ezgsm = vecnum(o, "zgsm");
-        auto es = vecnum(o, "s");
+        EXPECT_EQ(nstep, c.at("nstep").get<int>());
+        auto exgsm = jvecd(c.at("xgsm")), eygsm = jvecd(c.at("ygsm")), ezgsm = jvecd(c.at("zgsm")), es = jvecd(c.at("s"));
         for (int i = 0; i < nstep; i++) {
             expectNear(xgsm[i], exgsm[i]);
             expectNear(ygsm[i], eygsm[i]);
@@ -183,12 +169,9 @@ TEST(Golden, TraceField) {
             expectNear(s[i], es[i]);
         }
 
-        free(xgsm); free(ygsm); free(zgsm);
-        free(bxgsm); free(bygsm); free(bzgsm);
-        free(xgse); free(ygse); free(zgse);
-        free(bxgse); free(bygse); free(bzgse);
-        free(xsm); free(ysm); free(zsm);
-        free(bxsm); free(bysm); free(bzsm);
+        free(xgsm); free(ygsm); free(zgsm); free(bxgsm); free(bygsm); free(bzgsm);
+        free(xgse); free(ygse); free(zgse); free(bxgse); free(bygse); free(bzgse);
+        free(xsm); free(ysm); free(zsm); free(bxsm); free(bysm); free(bzsm);
         free(s); free(r); free(rnorm); free(fp);
     }
 }
