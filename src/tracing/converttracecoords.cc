@@ -1,5 +1,8 @@
 #include "converttracecoords.h"
 
+namespace geopack {
+
+
 void ConvertTraceCoords(int nstep, const char *CoordOut, 
 						double *x, double *y, double *z, 
 						double *Bx, double *By, double *Bz) {
@@ -72,5 +75,7 @@ void ConvertTraceCoords(int nstep, const char *CoordOut,
 	} else {
 			printf("Output coordinate type not recognised\n");
 	}	
+
+}
 
 }

@@ -1,5 +1,7 @@
 #include "dummyfunc.h"
 
+namespace geopack {
+
 void DummyFunc(	int *iopt, double *parmod, double *ps, 
 				double *x, double *y, double *z, 
 				double *bx, double *by, double *bz) {
@@ -7,4 +9,6 @@ void DummyFunc(	int *iopt, double *parmod, double *ps,
 	by[0] = 0.0;
 	bz[0] = 0.0;
 	return;
+}
+
 }

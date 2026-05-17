@@ -1,5 +1,8 @@
 #include "tracefieldline.h"
 
+namespace geopack {
+
+
 void TraceFieldLine(double x0, double y0, double z0, 
 					int iopt, double *parmod, 
 					ModelFuncPtr ModelFunc,
@@ -68,4 +71,6 @@ void TraceFieldLine(double x0, double y0, double z0,
 	}
 	
 	nstep[0] = N + M;
+}
+
 }

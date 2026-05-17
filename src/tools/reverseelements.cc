@@ -1,5 +1,8 @@
 #include "reverseelements.h"
 
+namespace geopack {
+
+
 
 void ReverseElements(double *x, int n) {
 	double tmp[n];
@@ -11,4 +14,6 @@ void ReverseElements(double *x, int n) {
 		x[i] = tmp[n-i-1];
 	}
 	return;
+}
+
 }

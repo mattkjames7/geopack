@@ -3,7 +3,10 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
-#include <omp.h>
+#include "openmp_compat.h"
+
+namespace geopack {
+
 
 using namespace std;
 
@@ -75,5 +78,7 @@ class Matrix {
 		bool DeleteData;
 		
 };
+
+}
 
 #endif

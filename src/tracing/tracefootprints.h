@@ -6,8 +6,9 @@
 #include "getmagequatorfp.h"
 #include "latlonlt.h"
 
+namespace geopack {
 
-#endif
+
 using namespace std;
 
 
@@ -26,3 +27,6 @@ void TraceFootprintsSM(	int nstep, float ut,
 						double xfs, double yfs, double zfs, 
 						double *xfe, double *yfe, double *zfe, 
 						double alt, double *FP, int MaxLen, int TraceDir);
+}
+
+#endif

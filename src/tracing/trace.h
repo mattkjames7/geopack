@@ -18,6 +18,8 @@
 #include "interptraceclosestpos.h"
 //#include "tracerotationmatrices.h"
 
+namespace geopack {
+
 
 
 /***********************************************************************
@@ -208,5 +210,6 @@ class Trace {
 
 
 
-#endif
+}
 
+#endif

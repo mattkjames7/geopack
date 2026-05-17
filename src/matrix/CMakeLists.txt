@@ -1,0 +1,9 @@
+set(GEOPACK_MATRIX_SOURCES
+  ${CMAKE_CURRENT_SOURCE_DIR}/matrix.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/matrixarray.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/matrixmath.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/identity.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/rotmatrix.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/libmatrix.cc
+  PARENT_SCOPE
+)

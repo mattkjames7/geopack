@@ -5,6 +5,9 @@
 #include <ctime>
 #include <cstdlib>
 #include "matrix.h"
+
+namespace geopack {
+
 using namespace std;
 
 /***********************************************************************
@@ -37,5 +40,7 @@ class MatrixArray {
 	private:
 
 };
+
+}
 
 #endif

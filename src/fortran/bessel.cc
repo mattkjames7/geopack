@@ -1,5 +1,8 @@
 #include "bessel.h"
 
+namespace geopack {
+
+
 
 /* J0 polynomials as defined in the Cephes library */
 static double PP0[7] = {
@@ -301,4 +304,6 @@ void j1(int n, double *x, double multx, double *j) {
 	for (i=0;i<n;i++) {
 		j[i] = j1(multx*x[i]);
 	}
+}
+
 }

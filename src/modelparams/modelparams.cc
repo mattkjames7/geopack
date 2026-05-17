@@ -1,5 +1,5 @@
 #include "modelparams.h"
-TsygData *TData;
+geopack::TsygData *TData;
 
 bool checkWarning() {
     const char* warnVar = std::getenv("GEOPACK_NOWARN"); // Get environment variable
@@ -20,7 +20,7 @@ void InitParams(const char *fname) {
 		printf("Loading Model Parameter File:\n");
 		printf("%s\n",fname);
 	}
-	TData = new TsygData(fname);
+	TData = new geopack::TsygData(fname);
 }
 
 void FreeParams() {

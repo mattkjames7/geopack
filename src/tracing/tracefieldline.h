@@ -4,7 +4,8 @@
 #include <stdlib.h>
 #include "../fortran/geopack.h"
 #include "../tools/reverseelements.h"
-#endif
+
+namespace geopack {
 
 void TraceFieldLine(double x0, double y0, double z0, 
 					int iopt, double *parmod, 
@@ -14,3 +15,6 @@ void TraceFieldLine(double x0, double y0, double z0,
 					double *xfs, double *yfs, double *zfs, 
 					double *x, double *y, double *z, 
 					int *nstep);
+}
+
+#endif

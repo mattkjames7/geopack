@@ -1,5 +1,8 @@
 #include "matrix.h"
 
+namespace geopack {
+
+
 /***********************************************************************
  * NAME : 			Matrix::Matrix(inshape)
  * 
@@ -429,4 +432,6 @@ void Matrix::ReturnMatrix(float **outdata) {
 			}
 		}
 	}
+}
+
 }

@@ -5,6 +5,8 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
+namespace geopack {
+
 void t89(	int iopt, double *parmod, double psi,
 			double x, double y, double z, 
 			double *bx, double *by, double *bz);
@@ -43,5 +45,7 @@ void t89cfClosureCurrent(	double x, double y, double z, double deltax,
 						double C14, double C15, double cps, double sps,
 						double *Bx, double *By, double *Bz);
 
+
+}
 
 #endif

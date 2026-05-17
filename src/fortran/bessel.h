@@ -1,6 +1,9 @@
 #ifndef __BESSEL_H__
 #define __BESSEL_H__
 #include <stdio.h>
+
+namespace geopack {
+
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include "polyeval.h"
@@ -108,5 +111,7 @@ void j0(int n, double *x, double multx, double *j);
 void j1(int n, double *x, double multx, double *j);
 
 
+
+}
 
 #endif

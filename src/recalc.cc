@@ -1,5 +1,8 @@
 #include "recalc.h"
 
+namespace geopack {
+
+
 
 typedef struct RecalcGlobs {
 	int Date;
@@ -51,4 +54,6 @@ bool Recalc(int Date, float ut, double Vx, double Vy, double Vz, bool force) {
 		recalc_08_(&Year,&DyNo,&Hr,&Mn,&Sc,&Vx,&Vy,&Vz);
 	}
 	return recalc;
+}
+
 }

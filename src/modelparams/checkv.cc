@@ -1,5 +1,8 @@
 #include "checkv.h"
 
+namespace geopack {
+
+
 void CheckV(int Date, float ut, double Vxin, double Vyin, double Vzin,
 				double *Vx, double *Vy, double *Vz) {
 	
@@ -18,4 +21,6 @@ void CheckV(int Date, float ut, double Vxin, double Vyin, double Vzin,
 	} else {
 		Vz[0] = Vzin;
 	}	
+}
+
 }

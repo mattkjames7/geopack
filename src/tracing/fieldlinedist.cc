@@ -1,5 +1,8 @@
 #include "fieldlinedist.h"
 
+namespace geopack {
+
+
 
 void FieldLineDist(int n, double *x, double *y, double *z, double *s) {
 	/*******************************************************************
@@ -16,4 +19,6 @@ void FieldLineDist(int n, double *x, double *y, double *z, double *s) {
 		ds = sqrt(dx*dx + dy*dy + dz*dz);
 		s[i] = s[i-1] + ds;
 	}
+}
+
 }

@@ -1,5 +1,8 @@
 #include "carttospherical.h"
 
+namespace geopack {
+
+
 /*convert cartesian to spherical polar coordinates*/	
 void CartToSpherical(	double x, double y, double z, 
 						double *r, double *theta, double *phi) {
@@ -19,4 +22,6 @@ void CartToSpherical(	double x, double y, double z,
 		}
 	}		
 	return;
+}
+
 }

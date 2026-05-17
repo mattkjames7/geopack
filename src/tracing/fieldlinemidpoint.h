@@ -4,6 +4,10 @@
 #include <stdlib.h>
 #include "../tools/linterp.h"
 
-#endif
+namespace geopack {
+
 void FieldLineMidPoint(double *x, double *y, double *z, double *s, int n, 
 	double *xm, double *ym, double *zm) ;
+}
+
+#endif

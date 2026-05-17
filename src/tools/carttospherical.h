@@ -3,6 +3,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#endif
+
+namespace geopack {
 void CartToSpherical(	double x, double y, double z, 
 						double *r, double *theta, double *phi);
+}
+
+#endif

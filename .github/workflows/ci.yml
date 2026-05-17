@@ -1,0 +1,115 @@
+name: CI
+
+on:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      run_ubuntu:
+        description: "Run Ubuntu job"
+        type: boolean
+        default: true
+      run_macos:
+        description: "Run macOS job"
+        type: boolean
+        default: true
+      run_windows:
+        description: "Run Windows job"
+        type: boolean
+        default: true
+
+jobs:
+  build-and-test-ubuntu:
+    if: ${{ github.event_name == 'pull_request' || github.event.inputs.run_ubuntu == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Configure
+        run: cmake -S . -B build -G Ninja -DGEOPACK_BUILD_TESTS=ON
+      - name: Build
+        run: cmake --build build
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
+
+  build-and-test-macos:
+    if: ${{ github.event_name == 'pull_request' || github.event.inputs.run_macos == 'true' }}
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Set Fortran compiler
+        shell: bash
+        run: |
+          brew_prefix="$(brew --prefix)"
+          echo "$brew_prefix/bin" >> "$GITHUB_PATH"
+
+          if ! command -v gfortran-15 >/dev/null 2>&1 && \
+             ! command -v gfortran-14 >/dev/null 2>&1 && \
+             ! command -v gfortran-13 >/dev/null 2>&1 && \
+             ! command -v gfortran >/dev/null 2>&1; then
+            brew install gcc
+          fi
+
+          gfortran_path=""
+          for compiler in gfortran-15 gfortran-14 gfortran-13 gfortran; do
+            if command -v "$compiler" >/dev/null 2>&1; then
+              gfortran_path="$(command -v "$compiler")"
+              break
+            fi
+          done
+
+          if [ -z "$gfortran_path" ]; then
+            gcc_prefix="$(brew --prefix gcc)"
+            for compiler in "$gcc_prefix"/bin/gfortran-15 "$gcc_prefix"/bin/gfortran-14 "$gcc_prefix"/bin/gfortran-13 "$gcc_prefix"/bin/gfortran; do
+              if [ -x "$compiler" ]; then
+                gfortran_path="$compiler"
+                break
+              fi
+            done
+          fi
+
+          if [ -z "$gfortran_path" ]; then
+            echo "Could not find a Homebrew gfortran compiler" >&2
+            exit 1
+          fi
+
+          echo "FC=$gfortran_path" >> "$GITHUB_ENV"
+          "$gfortran_path" --version
+      - name: Configure
+        run: cmake -S . -B build -G Ninja -DGEOPACK_BUILD_TESTS=ON
+      - name: Build
+        run: cmake --build build
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
+
+  build-and-test-windows:
+    if: ${{ github.event_name == 'pull_request' || github.event.inputs.run_windows == 'true' }}
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Configure
+        run: cmake -S . -B build -G Ninja -DGEOPACK_BUILD_TESTS=ON
+      - name: Build
+        run: cmake --build build
+      - name: Test
+        shell: pwsh
+        run: |
+          $compilerPaths = Select-String -Path build/CMakeCache.txt -Pattern '^CMAKE_(C|CXX|Fortran)_COMPILER:FILEPATH=' |
+            ForEach-Object {
+              Split-Path ($_.Line -replace '^[^=]+=', '')
+            } |
+            Sort-Object -Unique
+
+          $dllPaths = @(
+            "$PWD/build/src",
+            "$PWD/build/lib",
+            "$PWD/build/bin",
+            "$PWD/build/_deps/datetime-build/src",
+            "$PWD/build/_deps/datetime-build/lib",
+            "$PWD/build/_deps/libspline-build/src",
+            "$PWD/build/_deps/libspline-build/lib"
+          )
+
+          $env:PATH = (($dllPaths + $compilerPaths) -join ';') + ';' + $env:PATH
+          ctest --test-dir build --output-on-failure

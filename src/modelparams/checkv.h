@@ -4,8 +4,12 @@
 #include <stdlib.h>
 #include "modelparams.h"
 
-#endif
+namespace geopack {
+
 using namespace std;
 
 void CheckV(int Date, float ut, double Vxin, double Vyin, double Vzin,
 				double *Vx, double *Vy, double *Vz) ;
+}
+
+#endif

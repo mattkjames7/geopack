@@ -1,5 +1,8 @@
 #include "tsygdata.h"
 
+namespace geopack {
+
+
 TsygData::TsygData(const char *fname) {
 	
 	/* initialize the number of elements */
@@ -592,3 +595,5 @@ void TsygData::GetParameter(int n, int *Date, float *ut,
 	}
 }
 	
+
+}

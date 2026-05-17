@@ -3,7 +3,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#endif
+namespace geopack {
+
 
 
 void FieldLineRnorm(int n, double *R, double Lshell, double *Rnorm);
+}
+
+#endif

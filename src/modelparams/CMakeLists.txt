@@ -1,0 +1,9 @@
+set(GEOPACK_MODELPARAM_SOURCES
+  ${CMAKE_CURRENT_SOURCE_DIR}/calculatew.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/calculateg.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/tsygdata.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/modelparams.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/checkv.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/fillinkp.cc
+  PARENT_SCOPE
+)

@@ -1,5 +1,8 @@
 #include "t89.h"
 
+namespace geopack {
+
+
 /* these parameters appear in Tsyganenko's original Fortran code, I have
  * attempted to work out how they correspond to the T89 paper  
  * (https://doi.org/10.1016/0032-0633(89)90066-4) */
@@ -372,3 +375,5 @@ void t89cfClosureCurrent(	double x, double y, double z, double deltax,
 }
 
 
+
+}

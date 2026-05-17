@@ -5,7 +5,8 @@
 #include <math.h>
 #include "../fortran/geopack.h"
 #include "tracefieldline.h"
-#endif
+
+namespace geopack {
 using namespace std;
 
 
@@ -24,3 +25,6 @@ void CalculateHalpha(	double alpha, int nstep,
 						double alt, int MaxLen, double DSMax, 
 						double xfe, double yfe, double zfe,
 						double *halpha);
+}
+
+#endif

@@ -4,12 +4,17 @@
 #include <stdlib.h>
 #include "modelparams/modelparams.h"
 #include "fortran/geopack.h"
-#include "../lib/datetime/include/datetime.h"
-#endif
+#include <datetime.h>
+
+namespace geopack {
 using namespace std;
 
 double GetDipoleTilt(int Year, int Doy, int Hr, int Mn, double Vx, double Vy, double Vz);
 
+}
+
 extern "C" {
 	double GetDipoleTiltUT(int Date, float ut, double Vx, double Vy, double Vz);
 }
+
+#endif

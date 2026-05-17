@@ -1,5 +1,8 @@
 #include "latlonlt.h"
 
+namespace geopack {
+
+
 
 void MagLatLonLT(double x, double y, double z, double *lat, double *lon, double *lt) {
 	int dirp = 1;
@@ -49,3 +52,5 @@ void GeoLatLonLT(float ut, double x, double y, double z, double *lat, double *lo
 	lt[0] = fmod(ut + lon[0]/15.0 + 24.0,24.0);
 }
 
+
+}

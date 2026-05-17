@@ -1,5 +1,8 @@
 #include "fieldlinernorm.h"
 
+namespace geopack {
+
+
 
 void FieldLineRnorm(int n, double *R, double Lshell, double *Rnorm) {
 	/*******************************************************************
@@ -12,4 +15,6 @@ void FieldLineRnorm(int n, double *R, double Lshell, double *Rnorm) {
 		Rnorm[i] = R[i]/Lshell;
 	}
 	
+}
+
 }

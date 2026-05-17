@@ -1,5 +1,8 @@
 #include "calculatehalpha.h"
 
+namespace geopack {
+
+
 
 void CalculateHalphas(	int nalpha, double *alpha, int nstep,
 						double *x, double *y, double *z,
@@ -88,4 +91,6 @@ void CalculateHalpha(	double alpha, int nstep,
 	double d0[nstep], d1[nstep];
 	
 	//printf("%d %d %d\n",nstep,ns0,ns1);
+}
+
 }

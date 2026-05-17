@@ -1,5 +1,8 @@
 #include "getmagequatorfp.h"
 
+namespace geopack {
+
+
 void GetMagEquatorFP(	double *x, double *y, double *z, 
 						double *s, double *R, int n,
 						double *xfe, double *yfe, double *zfe, 
@@ -94,4 +97,6 @@ void GetMagEquatorFPSM(	double *xsm, double *ysm, double *zsm,
 			MltE[0] = fmod(atan2(-yfe[0],-xfe[0])*12.0/M_PI + 24.0,24.0);	
 		}
 	}
+}
+
 }

@@ -6,7 +6,8 @@
 #include "matrixmath.h"
 #include "matrixarray.h"
 #include "identity.h"
-#endif
+
+namespace geopack {
 
 /***********************************************************************
  * NAME : 			GetRotationMatrix(A,B,R)
@@ -47,3 +48,6 @@ void GetRotationMatrix(double Ax, double Ay, double Az,
 
 void GetRotationMatrices(int n, double *Ax, double *Ay, double *Az,
 				double *Bx, double *By, double *Bz, MatrixArray &R);
+}
+
+#endif

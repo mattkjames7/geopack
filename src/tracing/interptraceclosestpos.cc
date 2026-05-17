@@ -1,5 +1,8 @@
 #include "interptraceclosestpos.h"
 
+namespace geopack {
+
+
 void interptraceClosestPos(	int n, double *x, double *y, double *z,
 						double *bx, double *by, double *bz,
 						int n0, double *x0, double *y0, double *z0, double *s0,
@@ -11,12 +14,12 @@ void interptraceClosestPos(	int n, double *x, double *y, double *z,
 	 * are the closest points to each element of the original field line */
 	
 	/* get a couple of splines (one for each field line) */
-	Spline Sx0(n0,s0,x0);
-	Spline Sy0(n0,s0,y0);
-	Spline Sz0(n0,s0,z0);
-	Spline Sx1(n1,s1,x1);
-	Spline Sy1(n1,s1,y1);
-	Spline Sz1(n1,s1,z1);
+	spline::Spline Sx0(n0,s0,x0);
+	spline::Spline Sy0(n0,s0,y0);
+	spline::Spline Sz0(n0,s0,z0);
+	spline::Spline Sx1(n1,s1,x1);
+	spline::Spline Sy1(n1,s1,y1);
+	spline::Spline Sz1(n1,s1,z1);
 	bool success;
 
 	/* find the closest position along the splines for each position */
@@ -47,7 +50,7 @@ void interptraceClosestPos(	int n, double *x, double *y, double *z,
 void interpOptimum(	double x, double y, double z,
 					double bx, double by, double bz,
 					int is0, 
-					Spline Sx, Spline Sy, Spline Sz,
+					spline::Spline Sx, spline::Spline Sy, spline::Spline Sz,
 					double *xc, double *yc, double *zc) {
 
 	/* B unit vector */
@@ -124,7 +127,7 @@ int ClosestS(double x, double y, double z,
 }
 
 double AngleDiff( 	double s,								/* current position along the field line */
-					Spline Sx, Spline Sy, Spline Sz,	/* Splines converting s to a  vector */
+					spline::Spline Sx, spline::Spline Sy, spline::Spline Sz,	/* Splines converting s to a  vector */
 					double x, double y, double z,		/* this is the position along the original field line */
 					double bx, double by, double bz) {	/* B field unit vector */
 
@@ -156,7 +159,7 @@ double AngleDiff( 	double s,								/* current position along the field line */
 bool OptimizePos(	double x, double y, double z,
 					double bx, double by, double bz,
 					double s0, 
-					Spline Sx, Spline Sy, Spline Sz,
+					spline::Spline Sx, spline::Spline Sy, spline::Spline Sz,
 					double *xc, double *yc, double *zc) {
 
 	/* Nelder-Mead settings */
@@ -323,4 +326,6 @@ bool OptimizePos(	double x, double y, double z,
 	//printf("scnt: %f, n: %d, f: [%f,%f], s0: %f, d: %f\n",scnt,n,f[0],f[1],s0,d);	
 	//printf("s0: %f, scnt: %f, niter %d, d90: %f, da: %f, dot: %f, angle: %f\n",s0,scnt,n,fabs(0.5*(f[1]+f[0])),fabs(f[1]-f[0]),a,b);
 	return succ;
+}
+
 }

@@ -1,5 +1,8 @@
 #include "t96.h"
 
+namespace geopack {
+
+
 void t96(	int iopt, double *parmod, double psi, 
 			double x, double y, double z,
 			double *Bx, double *By, double *Bz) {
@@ -241,4 +244,5 @@ void t96Dipole( double psi, double x, double y, double z,
 				double *Bx, souble *By, double *Bz) {
 	
 	
+}
 }

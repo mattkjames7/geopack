@@ -1,5 +1,8 @@
 #include "fieldlinemidpoint.h"
 
+namespace geopack {
+
+
 void FieldLineMidPoint(double *x, double *y, double *z, double *s, int n, 
 	double *xm, double *ym, double *zm) {
 	/*******************************************************************
@@ -25,3 +28,5 @@ void FieldLineMidPoint(double *x, double *y, double *z, double *s, int n,
 	
 
 } 
+
+}
