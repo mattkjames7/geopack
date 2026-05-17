@@ -53,6 +53,30 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(datetime libspline)
 
+if(WIN32)
+  function(geopack_disable_pic_for_target _tgt)
+    if(TARGET "${_tgt}")
+      get_target_property(_aliased_target "${_tgt}" ALIASED_TARGET)
+      if(_aliased_target)
+        set_property(TARGET "${_aliased_target}" PROPERTY POSITION_INDEPENDENT_CODE OFF)
+      else()
+        set_property(TARGET "${_tgt}" PROPERTY POSITION_INDEPENDENT_CODE OFF)
+      endif()
+    endif()
+  endfunction()
+
+  foreach(_dep_tgt
+    datetime_shared DateTime::datetime_shared
+    datetime_static DateTime::datetime_static
+    datetime DateTime::datetime
+    libspline_shared spline::spline_shared
+    libspline_static spline::spline_static
+    libspline spline::spline
+  )
+    geopack_disable_pic_for_target("${_dep_tgt}")
+  endforeach()
+endif()
+
 if(_geopack_had_build_testing_cache)
   set(BUILD_TESTING "${_geopack_saved_build_testing_cache}" CACHE BOOL "Restored BUILD_TESTING value" FORCE)
 else()
