@@ -2,7 +2,7 @@
 #define __INTERPTRACECLOSESTPOS_H__
 #include <stdio.h>
 #include <stdlib.h>
-#include "../../lib/libspline/include/spline.h"
+#include <spline.h>
 #include <math.h>
 #endif
 void interptraceClosestPos(	int n, double *x, double *y, double *z,
@@ -15,7 +15,7 @@ void interptraceClosestPos(	int n, double *x, double *y, double *z,
 void interpOptimum(	double x, double y, double z,
 					double bx, double by, double bz,
 					int is0, 
-					Spline Sx, Spline Sy, Spline Sz,
+					spline::Spline Sx, spline::Spline Sy, spline::Spline Sz,
 					double *xc, double *yc, double *zc);
 						
 int ClosestS(double x, double y, double z,
@@ -23,7 +23,7 @@ int ClosestS(double x, double y, double z,
 				double *st);
 				
 double AngleDiff( 	double s,								/* current position along the field line */
-					Spline Sx, Spline Sy, Spline Sz,	/* Splines converting s to a  vector */
+					spline::Spline Sx, spline::Spline Sy, spline::Spline Sz,	/* Splines converting s to a  vector */
 					double x, double y, double z,		/* this is the position along the original field line */
 					double bx, double by, double bz);
 					
@@ -31,5 +31,5 @@ double AngleDiff( 	double s,								/* current position along the field line */
 bool OptimizePos(	double x, double y, double z,
 					double bx, double by, double bz,
 					double s0, 
-					Spline Sx, Spline Sy, Spline Sz,
+					spline::Spline Sx, spline::Spline Sy, spline::Spline Sz,
 					double *xc, double *yc, double *zc);

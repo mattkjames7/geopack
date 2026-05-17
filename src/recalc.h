@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "fortran/geopack.h"
-#include "../lib/datetime/include/datetime.h"
+#include <datetime.h>
 #endif
 using namespace std;
 

@@ -4,7 +4,7 @@
 #include <math.h>
 #include "modelparams/modelparams.h"
 #include "modelparams/checkv.h"
-#include "../lib/datetime/include/datetime.h"
+#include <datetime.h>
 #include "fortran/geopack.h"
 
 /* this will be used as a pointer to each of the ***to***UT functions*/

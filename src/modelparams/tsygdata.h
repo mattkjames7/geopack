@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include "../../lib/datetime/include/datetime.h"
+#include <datetime.h>
 #include "../tools/BubbleArgSort.h"
 #endif
 
@@ -63,5 +63,4 @@ class TsygData {
 						double t1, double x1,
 						double fillval);
 };
-
 

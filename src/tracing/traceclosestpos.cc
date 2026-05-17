@@ -228,8 +228,8 @@ void _ClosestPosSpline(int nc, double *cx, double *cy, double *cz,
 						double *xc, double *yc, double *zc) {
 	
 	/* create some splines*/
-	Spline Sx(nc,cz,cx);
-	Spline Sy(nc,cz,cy);
+	spline::Spline Sx(nc,cz,cx);
+	spline::Spline Sy(nc,cz,cy);
 	
 	/* interpolate */
 	double z0 = 0.0;

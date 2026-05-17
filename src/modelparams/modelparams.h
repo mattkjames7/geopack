@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "tsygdata.h"
-#include "../../lib/datetime/include/datetime.h"
+#include <datetime.h>
 #include <cstdlib>
 #include <string>
 #include <algorithm>

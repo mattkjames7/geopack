@@ -1,0 +1,8 @@
+set(GEOPACK_TOOL_SOURCES
+  ${CMAKE_CURRENT_SOURCE_DIR}/argmax.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/carttospherical.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/linterp.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/reverseelements.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/BubbleArgSort.cc
+  PARENT_SCOPE
+)

@@ -1,0 +1,16 @@
+set(GEOPACK_TRACING_SOURCES
+  ${CMAKE_CURRENT_SOURCE_DIR}/converttracecoords.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/fieldlinedist.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/fieldlinemidpoint.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/fieldliner.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/fieldlinernorm.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/getmagequatorfp.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/latlonlt.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/tracefield.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/tracefieldline.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/tracefootprints.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/calculatehalpha.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/trace.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/interptraceclosestpos.cc
+  PARENT_SCOPE
+)
