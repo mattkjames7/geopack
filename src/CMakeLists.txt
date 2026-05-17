@@ -35,7 +35,8 @@ set_source_files_properties(
 
 target_compile_options(geopack PRIVATE
   $<$<COMPILE_LANGUAGE:CXX>:-O3 -Wextra>
-  $<$<COMPILE_LANGUAGE:Fortran>:-fno-automatic -ffree-line-length-none>
+  $<$<COMPILE_LANGUAGE:Fortran>:-fno-automatic>
+  $<$<COMPILE_LANG_AND_ID:Fortran,GNU>:-ffree-line-length-none>
 )
 
 target_include_directories(geopack
