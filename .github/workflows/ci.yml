@@ -40,13 +40,8 @@ jobs:
       - name: Set Fortran compiler
         shell: bash
         run: |
-          if command -v gfortran >/dev/null 2>&1; then
-            echo "FC=$(command -v gfortran)" >> "$GITHUB_ENV"
-          else
-            gfortran_path="$(ls /opt/homebrew/bin/gfortran* /usr/local/bin/gfortran* 2>/dev/null | head -n 1)"
-            test -n "$gfortran_path"
-            echo "FC=$gfortran_path" >> "$GITHUB_ENV"
-          fi
+          command -v gfortran >/dev/null 2>&1 || brew install gcc
+          echo "FC=$(command -v gfortran)" >> "$GITHUB_ENV"
       - name: Configure
         run: cmake -S . -B build -G Ninja -DGEOPACK_BUILD_TESTS=ON
       - name: Build
