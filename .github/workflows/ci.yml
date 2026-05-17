@@ -37,6 +37,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Install GCC (gfortran)
+        run: brew install gcc
       - name: Configure
         run: cmake -S . -B build -G Ninja -DGEOPACK_BUILD_TESTS=ON
       - name: Build
@@ -55,4 +57,12 @@ jobs:
       - name: Build
         run: cmake --build build
       - name: Test
-        run: ctest --test-dir build --output-on-failure
+        shell: pwsh
+        run: |
+          $dllPaths = @(
+            "$PWD/build/src",
+            "$PWD/build/_deps/datetime-build/lib",
+            "$PWD/build/_deps/libspline-build/lib"
+          )
+          $env:PATH = ($dllPaths -join ';') + ';' + $env:PATH
+          ctest --test-dir build --output-on-failure
