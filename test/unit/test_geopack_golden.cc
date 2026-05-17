@@ -1,5 +1,6 @@
 #include <cmath>
 #include <fstream>
+#include <map>
 #include <string>
 #include <vector>
 
@@ -51,41 +52,47 @@ void expectNear(double actual, double expected) {
 }
 
 Scalar3Fn scalarConvFn(const std::string &name) {
-    if (name == "GSEtoGSM") return GSEtoGSM; if (name == "GSMtoGSE") return GSMtoGSE;
-    if (name == "GSMtoSM") return GSMtoSM; if (name == "SMtoGSM") return SMtoGSM;
-    if (name == "GSEtoSM") return GSEtoSM; if (name == "SMtoGSE") return SMtoGSE;
-    if (name == "GSEtoMAG") return GSEtoMAG; if (name == "MAGtoGSE") return MAGtoGSE;
-    if (name == "GEOtoMAG") return GEOtoMAG; if (name == "MAGtoGEO") return MAGtoGEO;
-    if (name == "GEItoGEO") return GEItoGEO; if (name == "GEOtoGEI") return GEOtoGEI;
-    if (name == "GSMtoGEO") return GSMtoGEO; if (name == "GEOtoGSM") return GEOtoGSM;
-    if (name == "GSEtoGEO") return GSEtoGEO; if (name == "GEOtoGSE") return GEOtoGSE;
-    if (name == "SMtoGEO") return SMtoGEO; if (name == "GEOtoSM") return GEOtoSM;
-    if (name == "GSEtoGEI") return GSEtoGEI; if (name == "GEItoGSE") return GEItoGSE;
-    if (name == "GSMtoGEI") return GSMtoGEI; if (name == "GEItoGSM") return GEItoGSM;
-    if (name == "SMtoGEI") return SMtoGEI; if (name == "GEItoSM") return GEItoSM;
-    if (name == "MAGtoGEI") return MAGtoGEI; if (name == "GEItoMAG") return GEItoMAG;
-    if (name == "MAGtoGSM") return MAGtoGSM; if (name == "GSMtoMAG") return GSMtoMAG;
-    if (name == "MAGtoSM") return MAGtoSM; if (name == "SMtoMAG") return SMtoMAG;
-    return nullptr;
+    static const std::map<std::string, Scalar3Fn> kFn = {
+        {"GSEtoGSM", GSEtoGSM}, {"GSMtoGSE", GSMtoGSE},
+        {"GSMtoSM", GSMtoSM}, {"SMtoGSM", SMtoGSM},
+        {"GSEtoSM", GSEtoSM}, {"SMtoGSE", SMtoGSE},
+        {"GSEtoMAG", GSEtoMAG}, {"MAGtoGSE", MAGtoGSE},
+        {"GEOtoMAG", GEOtoMAG}, {"MAGtoGEO", MAGtoGEO},
+        {"GEItoGEO", GEItoGEO}, {"GEOtoGEI", GEOtoGEI},
+        {"GSMtoGEO", GSMtoGEO}, {"GEOtoGSM", GEOtoGSM},
+        {"GSEtoGEO", GSEtoGEO}, {"GEOtoGSE", GEOtoGSE},
+        {"SMtoGEO", SMtoGEO}, {"GEOtoSM", GEOtoSM},
+        {"GSEtoGEI", GSEtoGEI}, {"GEItoGSE", GEItoGSE},
+        {"GSMtoGEI", GSMtoGEI}, {"GEItoGSM", GEItoGSM},
+        {"SMtoGEI", SMtoGEI}, {"GEItoSM", GEItoSM},
+        {"MAGtoGEI", MAGtoGEI}, {"GEItoMAG", GEItoMAG},
+        {"MAGtoGSM", MAGtoGSM}, {"GSMtoMAG", GSMtoMAG},
+        {"MAGtoSM", MAGtoSM}, {"SMtoMAG", SMtoMAG},
+    };
+    const auto it = kFn.find(name);
+    return (it == kFn.end()) ? nullptr : it->second;
 }
 
 UT3Fn utConvFn(const std::string &name) {
-    if (name == "GSEtoGSM") return GSEtoGSMUT; if (name == "GSMtoGSE") return GSMtoGSEUT;
-    if (name == "GSMtoSM") return GSMtoSMUT; if (name == "SMtoGSM") return SMtoGSMUT;
-    if (name == "GSEtoSM") return GSEtoSMUT; if (name == "SMtoGSE") return SMtoGSEUT;
-    if (name == "GSEtoMAG") return GSEtoMAGUT; if (name == "MAGtoGSE") return MAGtoGSEUT;
-    if (name == "GEOtoMAG") return GEOtoMAGUT; if (name == "MAGtoGEO") return MAGtoGEOUT;
-    if (name == "GEItoGEO") return GEItoGEOUT; if (name == "GEOtoGEI") return GEOtoGEIUT;
-    if (name == "GSMtoGEO") return GSMtoGEOUT; if (name == "GEOtoGSM") return GEOtoGSMUT;
-    if (name == "GSEtoGEO") return GSEtoGEOUT; if (name == "GEOtoGSE") return GEOtoGSEUT;
-    if (name == "SMtoGEO") return SMtoGEOUT; if (name == "GEOtoSM") return GEOtoSMUT;
-    if (name == "GSEtoGEI") return GSEtoGEIUT; if (name == "GEItoGSE") return GEItoGSEUT;
-    if (name == "GSMtoGEI") return GSMtoGEIUT; if (name == "GEItoGSM") return GEItoGSMUT;
-    if (name == "SMtoGEI") return SMtoGEIUT; if (name == "GEItoSM") return GEItoSMUT;
-    if (name == "MAGtoGEI") return MAGtoGEIUT; if (name == "GEItoMAG") return GEItoMAGUT;
-    if (name == "MAGtoGSM") return MAGtoGSMUT; if (name == "GSMtoMAG") return GSMtoMAGUT;
-    if (name == "MAGtoSM") return MAGtoSMUT; if (name == "SMtoMAG") return SMtoMAGUT;
-    return nullptr;
+    static const std::map<std::string, UT3Fn> kFn = {
+        {"GSEtoGSM", GSEtoGSMUT}, {"GSMtoGSE", GSMtoGSEUT},
+        {"GSMtoSM", GSMtoSMUT}, {"SMtoGSM", SMtoGSMUT},
+        {"GSEtoSM", GSEtoSMUT}, {"SMtoGSE", SMtoGSEUT},
+        {"GSEtoMAG", GSEtoMAGUT}, {"MAGtoGSE", MAGtoGSEUT},
+        {"GEOtoMAG", GEOtoMAGUT}, {"MAGtoGEO", MAGtoGEOUT},
+        {"GEItoGEO", GEItoGEOUT}, {"GEOtoGEI", GEOtoGEIUT},
+        {"GSMtoGEO", GSMtoGEOUT}, {"GEOtoGSM", GEOtoGSMUT},
+        {"GSEtoGEO", GSEtoGEOUT}, {"GEOtoGSE", GEOtoGSEUT},
+        {"SMtoGEO", SMtoGEOUT}, {"GEOtoSM", GEOtoSMUT},
+        {"GSEtoGEI", GSEtoGEIUT}, {"GEItoGSE", GEItoGSEUT},
+        {"GSMtoGEI", GSMtoGEIUT}, {"GEItoGSM", GEItoGSMUT},
+        {"SMtoGEI", SMtoGEIUT}, {"GEItoSM", GEItoSMUT},
+        {"MAGtoGEI", MAGtoGEIUT}, {"GEItoMAG", GEItoMAGUT},
+        {"MAGtoGSM", MAGtoGSMUT}, {"GSMtoMAG", GSMtoMAGUT},
+        {"MAGtoSM", MAGtoSMUT}, {"SMtoMAG", SMtoMAGUT},
+    };
+    const auto it = kFn.find(name);
+    return (it == kFn.end()) ? nullptr : it->second;
 }
 
 TEST(Golden, GetDipoleTiltUT) {
