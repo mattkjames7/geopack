@@ -51,7 +51,30 @@ FetchContent_Declare(
   GIT_TAG ${GEOPACK_LIBSPLINE_TAG}
 )
 
-FetchContent_MakeAvailable(datetime libspline)
+FetchContent_GetProperties(datetime)
+if(NOT datetime_POPULATED)
+  FetchContent_Populate(datetime)
+  if(WIN32)
+    set(_geopack_datetime_cmakelists "${datetime_SOURCE_DIR}/CMakeLists.txt")
+    file(READ "${_geopack_datetime_cmakelists}" _geopack_datetime_cmake_text_before)
+    set(_geopack_datetime_cmake_text "${_geopack_datetime_cmake_text_before}")
+    string(REPLACE
+      "set(CMAKE_CXX_FLAGS \"\\${CMAKE_CXX_FLAGS} -fPIC\")"
+      "if(NOT WIN32)\n    set(CMAKE_CXX_FLAGS \"\\${CMAKE_CXX_FLAGS} -fPIC\")\nendif()"
+      _geopack_datetime_cmake_text
+      "${_geopack_datetime_cmake_text}"
+    )
+    if(NOT _geopack_datetime_cmake_text STREQUAL _geopack_datetime_cmake_text_before)
+      file(WRITE "${_geopack_datetime_cmakelists}" "${_geopack_datetime_cmake_text}")
+    endif()
+    unset(_geopack_datetime_cmakelists)
+    unset(_geopack_datetime_cmake_text)
+    unset(_geopack_datetime_cmake_text_before)
+  endif()
+  add_subdirectory("${datetime_SOURCE_DIR}" "${datetime_BINARY_DIR}")
+endif()
+
+FetchContent_MakeAvailable(libspline)
 
 if(WIN32)
   function(geopack_disable_pic_for_target _tgt)
