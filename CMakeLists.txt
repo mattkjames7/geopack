@@ -19,10 +19,21 @@ set(GEOPACK_LIBSPLINE_REPOSITORY "https://github.com/mattkjames7/libspline.git" 
 set(GEOPACK_LIBSPLINE_TAG "v0.3.1" CACHE STRING "libspline git tag/branch")
 
 # Temporarily disable dependency-side tests while fetching external projects.
-set(_geopack_saved_build_testing "${BUILD_TESTING}")
-set(_geopack_saved_enable_tests "${ENABLE_TESTS}")
-set(BUILD_TESTING OFF)
-set(ENABLE_TESTS OFF)
+if(DEFINED CACHE{BUILD_TESTING})
+  set(_geopack_had_build_testing_cache ON)
+  set(_geopack_saved_build_testing_cache "$CACHE{BUILD_TESTING}")
+else()
+  set(_geopack_had_build_testing_cache OFF)
+endif()
+if(DEFINED CACHE{ENABLE_TESTS})
+  set(_geopack_had_enable_tests_cache ON)
+  set(_geopack_saved_enable_tests_cache "$CACHE{ENABLE_TESTS}")
+else()
+  set(_geopack_had_enable_tests_cache OFF)
+endif()
+
+set(BUILD_TESTING OFF CACHE BOOL "Disable dependency tests while fetching" FORCE)
+set(ENABLE_TESTS OFF CACHE BOOL "Disable dependency tests while fetching" FORCE)
 
 FetchContent_Declare(
   datetime
@@ -38,10 +49,21 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(datetime libspline)
 
-set(BUILD_TESTING "${_geopack_saved_build_testing}")
-set(ENABLE_TESTS "${_geopack_saved_enable_tests}")
-unset(_geopack_saved_build_testing)
-unset(_geopack_saved_enable_tests)
+if(_geopack_had_build_testing_cache)
+  set(BUILD_TESTING "${_geopack_saved_build_testing_cache}" CACHE BOOL "Restored BUILD_TESTING value" FORCE)
+else()
+  unset(BUILD_TESTING CACHE)
+endif()
+if(_geopack_had_enable_tests_cache)
+  set(ENABLE_TESTS "${_geopack_saved_enable_tests_cache}" CACHE BOOL "Restored ENABLE_TESTS value" FORCE)
+else()
+  unset(ENABLE_TESTS CACHE)
+endif()
+
+unset(_geopack_had_build_testing_cache)
+unset(_geopack_saved_build_testing_cache)
+unset(_geopack_had_enable_tests_cache)
+unset(_geopack_saved_enable_tests_cache)
 
 function(geopack_pick_target out_var)
   foreach(_cand IN LISTS ARGN)
