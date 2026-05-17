@@ -51,7 +51,54 @@ FetchContent_Declare(
   GIT_TAG ${GEOPACK_LIBSPLINE_TAG}
 )
 
-FetchContent_MakeAvailable(datetime libspline)
+FetchContent_GetProperties(datetime)
+if(NOT datetime_POPULATED)
+  FetchContent_Populate(datetime)
+  if(WIN32)
+    set(_geopack_datetime_cmakelists "${datetime_SOURCE_DIR}/CMakeLists.txt")
+    file(READ "${_geopack_datetime_cmakelists}" _geopack_datetime_cmake_text_before)
+    set(_geopack_datetime_cmake_text "${_geopack_datetime_cmake_text_before}")
+    string(REPLACE
+      "set(CMAKE_CXX_FLAGS \"\\${CMAKE_CXX_FLAGS} -fPIC\")"
+      "if(NOT WIN32)\n    set(CMAKE_CXX_FLAGS \"\\${CMAKE_CXX_FLAGS} -fPIC\")\nendif()"
+      _geopack_datetime_cmake_text
+      "${_geopack_datetime_cmake_text}"
+    )
+    if(NOT _geopack_datetime_cmake_text STREQUAL _geopack_datetime_cmake_text_before)
+      file(WRITE "${_geopack_datetime_cmakelists}" "${_geopack_datetime_cmake_text}")
+    endif()
+    unset(_geopack_datetime_cmakelists)
+    unset(_geopack_datetime_cmake_text)
+    unset(_geopack_datetime_cmake_text_before)
+  endif()
+  add_subdirectory("${datetime_SOURCE_DIR}" "${datetime_BINARY_DIR}")
+endif()
+
+FetchContent_MakeAvailable(libspline)
+
+if(WIN32)
+  function(geopack_disable_pic_for_target _tgt)
+    if(TARGET "${_tgt}")
+      get_target_property(_aliased_target "${_tgt}" ALIASED_TARGET)
+      if(_aliased_target)
+        set_property(TARGET "${_aliased_target}" PROPERTY POSITION_INDEPENDENT_CODE OFF)
+      else()
+        set_property(TARGET "${_tgt}" PROPERTY POSITION_INDEPENDENT_CODE OFF)
+      endif()
+    endif()
+  endfunction()
+
+  foreach(_dep_tgt
+    datetime_shared DateTime::datetime_shared
+    datetime_static DateTime::datetime_static
+    datetime DateTime::datetime
+    libspline_shared spline::spline_shared
+    libspline_static spline::spline_static
+    libspline spline::spline
+  )
+    geopack_disable_pic_for_target("${_dep_tgt}")
+  endforeach()
+endif()
 
 if(_geopack_had_build_testing_cache)
   set(BUILD_TESTING "${_geopack_saved_build_testing_cache}" CACHE BOOL "Restored BUILD_TESTING value" FORCE)
