@@ -13,6 +13,10 @@ namespace {
 
 constexpr double kAbsTol = 1e-7;
 constexpr double kRelTol = 1e-6;
+using Scalar3Fn = void (*)(double, double, double, double, double, double, int, int, int, int, int, int, double *, double *, double *);
+using UT3Fn = void (*)(double *, double *, double *, int, double *, double *, double *, int *, float *, double *, double *, double *);
+using Scalar2Fn = void (*)(double, double, double, double, double, int, int, int, int, int, int, double *, double *);
+using UT2Fn = void (*)(double *, double *, int, double *, double *, double *, int *, float *, double *, double *);
 
 json loadJson(const std::string &path) {
     std::ifstream f(path);
@@ -44,6 +48,44 @@ void expectNear(double actual, double expected) {
     }
     const double lim = kAbsTol + kRelTol * std::fabs(expected);
     EXPECT_LE(std::fabs(actual - expected), lim);
+}
+
+Scalar3Fn scalarConvFn(const std::string &name) {
+    if (name == "GSEtoGSM") return GSEtoGSM; if (name == "GSMtoGSE") return GSMtoGSE;
+    if (name == "GSMtoSM") return GSMtoSM; if (name == "SMtoGSM") return SMtoGSM;
+    if (name == "GSEtoSM") return GSEtoSM; if (name == "SMtoGSE") return SMtoGSE;
+    if (name == "GSEtoMAG") return GSEtoMAG; if (name == "MAGtoGSE") return MAGtoGSE;
+    if (name == "GEOtoMAG") return GEOtoMAG; if (name == "MAGtoGEO") return MAGtoGEO;
+    if (name == "GEItoGEO") return GEItoGEO; if (name == "GEOtoGEI") return GEOtoGEI;
+    if (name == "GSMtoGEO") return GSMtoGEO; if (name == "GEOtoGSM") return GEOtoGSM;
+    if (name == "GSEtoGEO") return GSEtoGEO; if (name == "GEOtoGSE") return GEOtoGSE;
+    if (name == "SMtoGEO") return SMtoGEO; if (name == "GEOtoSM") return GEOtoSM;
+    if (name == "GSEtoGEI") return GSEtoGEI; if (name == "GEItoGSE") return GEItoGSE;
+    if (name == "GSMtoGEI") return GSMtoGEI; if (name == "GEItoGSM") return GEItoGSM;
+    if (name == "SMtoGEI") return SMtoGEI; if (name == "GEItoSM") return GEItoSM;
+    if (name == "MAGtoGEI") return MAGtoGEI; if (name == "GEItoMAG") return GEItoMAG;
+    if (name == "MAGtoGSM") return MAGtoGSM; if (name == "GSMtoMAG") return GSMtoMAG;
+    if (name == "MAGtoSM") return MAGtoSM; if (name == "SMtoMAG") return SMtoMAG;
+    return nullptr;
+}
+
+UT3Fn utConvFn(const std::string &name) {
+    if (name == "GSEtoGSM") return GSEtoGSMUT; if (name == "GSMtoGSE") return GSMtoGSEUT;
+    if (name == "GSMtoSM") return GSMtoSMUT; if (name == "SMtoGSM") return SMtoGSMUT;
+    if (name == "GSEtoSM") return GSEtoSMUT; if (name == "SMtoGSE") return SMtoGSEUT;
+    if (name == "GSEtoMAG") return GSEtoMAGUT; if (name == "MAGtoGSE") return MAGtoGSEUT;
+    if (name == "GEOtoMAG") return GEOtoMAGUT; if (name == "MAGtoGEO") return MAGtoGEOUT;
+    if (name == "GEItoGEO") return GEItoGEOUT; if (name == "GEOtoGEI") return GEOtoGEIUT;
+    if (name == "GSMtoGEO") return GSMtoGEOUT; if (name == "GEOtoGSM") return GEOtoGSMUT;
+    if (name == "GSEtoGEO") return GSEtoGEOUT; if (name == "GEOtoGSE") return GEOtoGSEUT;
+    if (name == "SMtoGEO") return SMtoGEOUT; if (name == "GEOtoSM") return GEOtoSMUT;
+    if (name == "GSEtoGEI") return GSEtoGEIUT; if (name == "GEItoGSE") return GEItoGSEUT;
+    if (name == "GSMtoGEI") return GSMtoGEIUT; if (name == "GEItoGSM") return GEItoGSMUT;
+    if (name == "SMtoGEI") return SMtoGEIUT; if (name == "GEItoSM") return GEItoSMUT;
+    if (name == "MAGtoGEI") return MAGtoGEIUT; if (name == "GEItoMAG") return GEItoMAGUT;
+    if (name == "MAGtoGSM") return MAGtoGSMUT; if (name == "GSMtoMAG") return GSMtoMAGUT;
+    if (name == "MAGtoSM") return MAGtoSMUT; if (name == "SMtoMAG") return SMtoMAGUT;
+    return nullptr;
 }
 
 TEST(Golden, GetDipoleTiltUT) {
@@ -161,18 +203,107 @@ TEST(Golden, TraceField) {
                    &ysm, &zsm, &bxsm, &bysm, &bzsm, &s, &r, &rnorm, &fp, nalpha, alpha, halpha);
 
         EXPECT_EQ(nstep, c.at("nstep").get<int>());
-        auto exgsm = jvecd(c.at("xgsm")), eygsm = jvecd(c.at("ygsm")), ezgsm = jvecd(c.at("zgsm")), es = jvecd(c.at("s"));
+        auto exgsm = jvecd(c.at("xgsm")), eygsm = jvecd(c.at("ygsm")), ezgsm = jvecd(c.at("zgsm"));
+        auto es = jvecd(c.at("s")), efp = jvecd(c.at("fp"));
         for (int i = 0; i < nstep; i++) {
             expectNear(xgsm[i], exgsm[i]);
             expectNear(ygsm[i], eygsm[i]);
             expectNear(zgsm[i], ezgsm[i]);
             expectNear(s[i], es[i]);
         }
+        ASSERT_GE(efp.size(), 15u);
+        for (int i = 0; i < 15; i++) {
+            expectNear(fp[i], efp[i]);
+        }
 
         free(xgsm); free(ygsm); free(zgsm); free(bxgsm); free(bygsm); free(bzgsm);
         free(xgse); free(ygse); free(zgse); free(bxgse); free(bygse); free(bzgse);
         free(xsm); free(ysm); free(zsm); free(bxsm); free(bysm); free(bzsm);
         free(s); free(r); free(rnorm); free(fp);
+    }
+}
+
+TEST(Golden, OtherCWrappers) {
+    const auto root = loadJson("../data/c_wrappers.json");
+    for (const auto &c : root.at("conv_scalar")) {
+        const auto fn = scalarConvFn(c.at("name").get<std::string>());
+        ASSERT_NE(fn, nullptr);
+        double xo = 0.0, yo = 0.0, zo = 0.0;
+        fn(c.at("xin").get<double>(), c.at("yin").get<double>(), c.at("zin").get<double>(),
+           -359.0, 11.0, -17.4, 1, 2012, 1, 12, 0, 0, &xo, &yo, &zo);
+        expectNear(xo, jnum(c.at("xout"))); expectNear(yo, jnum(c.at("yout"))); expectNear(zo, jnum(c.at("zout")));
+    }
+    for (const auto &c : root.at("conv_ut")) {
+        const auto fn = utConvFn(c.at("name").get<std::string>());
+        ASSERT_NE(fn, nullptr);
+        const int n = c.at("n").get<int>();
+        auto xin = jvecd(c.at("xin")), yin = jvecd(c.at("yin")), zin = jvecd(c.at("zin"));
+        auto vx = jvecd(c.at("vx")), vy = jvecd(c.at("vy")), vz = jvecd(c.at("vz"));
+        auto date = jveci(c.at("date"));
+        auto ut_d = jvecd(c.at("ut"));
+        std::vector<float> ut(n);
+        for (int i = 0; i < n; i++) ut[i] = static_cast<float>(ut_d[i]);
+        std::vector<double> xo(n), yo(n), zo(n);
+        fn(xin.data(), yin.data(), zin.data(), n, vx.data(), vy.data(), vz.data(), date.data(), ut.data(), xo.data(), yo.data(), zo.data());
+        auto ex = jvecd(c.at("xout")), ey = jvecd(c.at("yout")), ez = jvecd(c.at("zout"));
+        for (int i = 0; i < n; i++) { expectNear(xo[i], ex[i]); expectNear(yo[i], ey[i]); expectNear(zo[i], ez[i]); }
+    }
+
+    for (const auto &c : root.at("ll_scalar")) {
+        const std::string name = c.at("name").get<std::string>();
+        Scalar2Fn fn = (name == "GEOtoMAG_LL") ? GEOtoMAG_LL : MAGtoGEO_LL;
+        double ao = 0.0, bo = 0.0;
+        fn(c.at("a").get<double>(), c.at("b").get<double>(), -359.0, 11.0, -17.4, 1, 2012, 1, 12, 0, 0, &ao, &bo);
+        expectNear(ao, jnum(c.at("aout"))); expectNear(bo, jnum(c.at("bout")));
+    }
+    for (const auto &c : root.at("ll_ut")) {
+        const std::string name = c.at("name").get<std::string>();
+        UT2Fn fn = (name == "GEOtoMAG_LL") ? GEOtoMAGUT_LL : MAGtoGEOUT_LL;
+        const int n = c.at("n").get<int>();
+        auto a = jvecd(c.at("a")), b = jvecd(c.at("b"));
+        auto vx = jvecd(c.at("vx")), vy = jvecd(c.at("vy")), vz = jvecd(c.at("vz"));
+        auto date = jveci(c.at("date"));
+        auto ut_d = jvecd(c.at("ut"));
+        std::vector<float> ut(n);
+        for (int i = 0; i < n; i++) ut[i] = static_cast<float>(ut_d[i]);
+        std::vector<double> ao(n), bo(n);
+        fn(a.data(), b.data(), n, vx.data(), vy.data(), vz.data(), date.data(), ut.data(), ao.data(), bo.data());
+        auto ex = jvecd(c.at("aout")), ey = jvecd(c.at("bout"));
+        for (int i = 0; i < n; i++) { expectNear(ao[i], ex[i]); expectNear(bo[i], ey[i]); }
+    }
+
+    {
+        const auto &c0 = root.at("mlt_scalar")[0];
+        double out = 0.0;
+        MLONtoMLT(c0.at("in").get<double>(), -359.0, 11.0, -17.4, 1, 2012, 1, 12, 0, 0, &out);
+        expectNear(out, jnum(c0.at("out")));
+        const auto &c1 = root.at("mlt_scalar")[1];
+        double out2 = 0.0;
+        MLTtoMLON(c1.at("in").get<double>(), -359.0, 11.0, -17.4, 1, 2012, 1, 12, 0, 0, &out2);
+        expectNear(out2, jnum(c1.at("out")));
+    }
+    for (const auto &c : root.at("mlt_ut")) {
+        const int n = c.at("n").get<int>();
+        auto in = jvecd(c.at("in"));
+        auto vx = jvecd(c.at("vx")), vy = jvecd(c.at("vy")), vz = jvecd(c.at("vz"));
+        auto date = jveci(c.at("date"));
+        auto ut_d = jvecd(c.at("ut"));
+        std::vector<float> ut(n);
+        for (int i = 0; i < n; i++) ut[i] = static_cast<float>(ut_d[i]);
+        std::vector<double> out(n);
+        if (c.at("name").get<std::string>() == "MLONtoMLTUT") {
+            MLONtoMLTUT(in.data(), n, vx.data(), vy.data(), vz.data(), date.data(), ut.data(), out.data());
+        } else {
+            MLTtoMLONUT(in.data(), n, vx.data(), vy.data(), vz.data(), date.data(), ut.data(), out.data());
+        }
+        auto ex = jvecd(c.at("out"));
+        for (int i = 0; i < n; i++) expectNear(out[i], ex[i]);
+    }
+
+    for (const auto &c : root.at("withinmp")) {
+        const bool out = WithinMP(c.at("x").get<double>(), c.at("y").get<double>(), c.at("z").get<double>(),
+                                  c.at("bz").get<double>(), c.at("pdyn").get<double>());
+        EXPECT_EQ(out, c.at("out").get<bool>());
     }
 }
 

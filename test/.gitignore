@@ -1,1 +1,11 @@
 third_party/
+
+# Generated test executables
+savetestdata/savetestdata
+unit/test_geopack_golden
+testc
+testcc
+
+# macOS debug bundles and metadata
+*.dSYM/
+.DS_Store
