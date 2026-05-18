@@ -64,6 +64,8 @@ if(NOT datetime_POPULATED)
       _geopack_datetime_cmake_text
       "${_geopack_datetime_cmake_text}"
     )
+    string(REPLACE " -fPIC" "" _geopack_datetime_cmake_text "${_geopack_datetime_cmake_text}")
+    string(REPLACE "-fPIC" "" _geopack_datetime_cmake_text "${_geopack_datetime_cmake_text}")
     if(NOT _geopack_datetime_cmake_text STREQUAL _geopack_datetime_cmake_text_before)
       file(WRITE "${_geopack_datetime_cmakelists}" "${_geopack_datetime_cmake_text}")
     endif()

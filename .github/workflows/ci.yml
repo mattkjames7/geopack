@@ -16,6 +16,10 @@ on:
         description: "Run Windows job"
         type: boolean
         default: true
+      run_windows_arm:
+        description: "Run Windows ARM job"
+        type: boolean
+        default: false
 
 jobs:
   build-and-test-ubuntu:
@@ -85,6 +89,38 @@ jobs:
   build-and-test-windows:
     if: ${{ github.event_name == 'pull_request' || github.event.inputs.run_windows == 'true' }}
     runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Configure
+        run: cmake -S . -B build -G Ninja -DGEOPACK_BUILD_TESTS=ON
+      - name: Build
+        run: cmake --build build
+      - name: Test
+        shell: pwsh
+        run: |
+          $compilerPaths = Select-String -Path build/CMakeCache.txt -Pattern '^CMAKE_(C|CXX|Fortran)_COMPILER:FILEPATH=' |
+            ForEach-Object {
+              Split-Path ($_.Line -replace '^[^=]+=', '')
+            } |
+            Sort-Object -Unique
+
+          $dllPaths = @(
+            "$PWD/build/src",
+            "$PWD/build/lib",
+            "$PWD/build/bin",
+            "$PWD/build/_deps/datetime-build/src",
+            "$PWD/build/_deps/datetime-build/lib",
+            "$PWD/build/_deps/libspline-build/src",
+            "$PWD/build/_deps/libspline-build/lib"
+          )
+
+          $env:PATH = (($dllPaths + $compilerPaths) -join ';') + ';' + $env:PATH
+          ctest --test-dir build --output-on-failure
+
+  build-and-test-windows-arm:
+    if: ${{ github.event.inputs.run_windows_arm == 'true' }}
+    runs-on: windows-11-arm
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2

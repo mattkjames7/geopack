@@ -24,6 +24,10 @@ add_library(geopack ${_geopack_lib_type}
 )
 unset(_geopack_lib_type)
 
+if(WIN32 AND GEOPACK_BUILD_SHARED)
+  set_target_properties(geopack PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON)
+endif()
+
 set_source_files_properties(
   fortran/T89c.f
   fortran/T96.f
@@ -37,6 +41,10 @@ target_compile_options(geopack PRIVATE
   $<$<COMPILE_LANGUAGE:CXX>:-O3 -Wextra>
   $<$<COMPILE_LANGUAGE:Fortran>:-fno-automatic>
   $<$<COMPILE_LANG_AND_ID:Fortran,GNU>:-ffree-line-length-none>
+)
+
+target_compile_definitions(geopack PRIVATE
+  $<$<COMPILE_LANG_AND_ID:CXX,Clang,MSVC>:_USE_MATH_DEFINES>
 )
 
 target_include_directories(geopack
