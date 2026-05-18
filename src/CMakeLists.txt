@@ -39,6 +39,10 @@ target_compile_options(geopack PRIVATE
   $<$<COMPILE_LANG_AND_ID:Fortran,GNU>:-ffree-line-length-none>
 )
 
+target_compile_definitions(geopack PRIVATE
+  $<$<COMPILE_LANG_AND_ID:CXX,Clang,MSVC>:_USE_MATH_DEFINES>
+)
+
 target_include_directories(geopack
   PUBLIC
     ${PROJECT_SOURCE_DIR}/include
