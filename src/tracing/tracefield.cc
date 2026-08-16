@@ -35,7 +35,11 @@ void TraceField(int n, double *xin, double *yin, double *zin,
 	T.SetTraceCFG(alt,MaxLen,DSMax,Verbose,TraceDir);
 
 	/*trace then convert to GSE and SM */
-	T.TraceGSM(nstep,xgsm,ygsm,zgsm,bxgsm,bygsm,bzgsm);
+	T.TraceGSM(nstep,
+	  xgsm,ygsm,zgsm,bxgsm,bygsm,bzgsm,
+		xgse,ygse,zgse,bxgse,bygse,bzgse,
+		xsm,ysm,zsm,bxsm,bysm,bzsm
+	);
 
 	/* some other bits and bobs - the order is quite important here*/
 	T.CalculateTraceDist(s);

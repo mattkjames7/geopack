@@ -616,7 +616,11 @@ void Trace::_CalculateHalphaStartPoints(int i, int j,
 
 void Trace::TraceGSM(	int *nstep,
 						double **xgsm, double **ygsm, double **zgsm,
-						double **bxgsm, double **bygsm, double **bzgsm) {
+						double **bxgsm, double **bygsm, double **bzgsm,
+						double **xgse, double **ygse, double **zgse,
+						double **bxgse, double **bygse, double **bzgse,
+						double **xsm, double **ysm, double **zsm,
+						double **bxsm, double **bysm, double **bzsm) {
 
 	/* link the pointers within the object to those supplied by this
 	 * function					*/
@@ -627,6 +631,20 @@ void Trace::TraceGSM(	int *nstep,
 	bxgsm_ = bxgsm;
 	bygsm_ = bygsm;
 	bzgsm_ = bzgsm;
+
+	xgse_ = xgse;
+	ygse_ = ygse;
+	zgse_ = zgse;
+	bxgse_ = bxgse;
+	bygse_ = bygse;
+	bzgse_ = bzgse;
+
+	xsm_ = xsm;
+	ysm_ = ysm;
+	zsm_ = zsm;
+	bxsm_ = bxsm;
+	bysm_ = bysm;
+	bzsm_ = bzsm;
 
 	/* call the tracing code */
 	_TraceGSM();
@@ -653,6 +671,41 @@ void Trace::TraceGSM(	int *nstep) {
 	}
 	allocGSM_ = true;
 
+	/* no pointers provided: allocate them*/
+	xgse_ = new double*[n_];
+	ygse_ = new double*[n_];
+	zgse_ = new double*[n_];
+	bxgse_ = new double*[n_];
+	bygse_ = new double*[n_];
+	bzgse_ = new double*[n_];
+
+	for (i=0;i<n_;i++) {
+		xgse_[i] = new double[MaxLen_];
+		ygse_[i] = new double[MaxLen_];
+		zgse_[i] = new double[MaxLen_];
+		bxgse_[i] = new double[MaxLen_];
+		bygse_[i] = new double[MaxLen_];
+		bzgse_[i] = new double[MaxLen_];
+	}
+	allocGSE_ = true;
+
+	/* no pointers provided: allocate them*/
+	xsm_ = new double*[n_];
+	ysm_ = new double*[n_];
+	zsm_ = new double*[n_];
+	bxsm_ = new double*[n_];
+	bysm_ = new double*[n_];
+	bzsm_ = new double*[n_];
+
+	for (i=0;i<n_;i++) {
+		xsm_[i] = new double[MaxLen_];
+		ysm_[i] = new double[MaxLen_];
+		zsm_[i] = new double[MaxLen_];
+		bxsm_[i] = new double[MaxLen_];
+		bysm_[i] = new double[MaxLen_];
+		bzsm_[i] = new double[MaxLen_];
+	}
+	allocSM_ = true;
 
 	/* call the tracing code */
 	_TraceGSM();
