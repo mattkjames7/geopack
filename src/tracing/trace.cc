@@ -35,14 +35,14 @@ Trace::Trace() {
 	allocAlpha_ = false;
 	/* default trace parameters */
 	SetTraceCFG();
-	
+
 }
 
 Trace::~Trace() {
 
 	/* check for each allocated variable and delete it*/
 	int i, j, k = 0;
-	
+
 	/* starting positions */
 	if (inputPos_) {
 		delete[] x0_;
@@ -184,7 +184,7 @@ Trace::~Trace() {
 		delete[] xfs_;
 		delete[] yfs_;
 		delete[] zfs_;
-	}	
+	}
 	if (allocEqFP_) {
 		delete[] xfe_;
 		delete[] yfe_;
@@ -195,7 +195,7 @@ Trace::~Trace() {
 void Trace::InputPos(	int n, double *x, double *y, double *z,
 						int *Date, float *ut, const char *CoordIn,
 						double *Vx, double *Vy, double *Vz) {
-	
+
 
 
 	/* set the velocity vectors */
@@ -209,10 +209,10 @@ void Trace::InputPos(	int n, double *x, double *y, double *z,
 		Vz_[i] = Vz[i];
 	}
 	allocV_ = true;
-	
+
 	/* call the other overloaded function */
 	InputPos(n,x,y,z,Date,ut,CoordIn);
-	
+
 }
 
 void Trace::InputPos(	int n, double *x, double *y, double *z,
@@ -267,15 +267,15 @@ void Trace::InputPos(	int n, double *x, double *y, double *z,
 			y0_[i] = y[i];
 			z0_[i] = z[i];
 		}
-	}	
+	}
 
 	/* set the flag so we know to delete  again once the object is deleted */
 	inputPos_ = true;
-						
-}						
+
+}
 
 void Trace::SetModel(const char *Model) {
-	
+
 	/* set the external field model to use */
 	if (strcmp(Model,"T89") == 0){
 		ModelFunc_ = &t89c_;
@@ -287,50 +287,50 @@ void Trace::SetModel(const char *Model) {
 		ModelFunc_ = &t04_s_;
 	} else if (strcmp(Model,"IGRF") == 0) {
 		ModelFunc_ = &DummyFunc;
-	} else { 
+	} else {
 		printf("WARNING: Model %s not found - using T96\n",Model);
 		ModelFunc_ = &t96_;
 		return;
-	}	
+	}
 	Model_ = Model;
 	setModel_ = true;
 }
 
 void Trace::SetModelParams(int *iopt, double **parmod) {
-	
+
 	/* check that the input parameters have been provided */
 	if (!inputPos_) {
 		printf("Run 'InputPos()' function before SetModelParams\n");
 		return;
 	}
-	
+
 	/* check that the model has been set too */
 	if (!setModel_) {
 		printf("Run 'SetModel()' function before running SetModelParams()\n");
 		return;
 	}
-	
+
 	/* set the pointers to parameters provided externally */
 	iopt_ = iopt;
 	parmod_ = parmod;
-	
+
 	inputModelParams_ = true;
 }
 
 void Trace::SetModelParams() {
-	
+
 	/* check that the input parameters have been provided */
 	if (!inputPos_) {
 		printf("Run 'InputPos()' function before SetModelParams()\n");
 		return;
-	}	
-	
+	}
+
 	/* check that the model has been set too */
 	if (!setModel_) {
 		printf("Run 'SetModel()' function before running SetModelParams()\n");
 		return;
 	}
-	
+
 	/* allocate the parameters */
 	int i;
 	iopt_ = new int[n_];
@@ -338,42 +338,42 @@ void Trace::SetModelParams() {
 	for (i=0;i<n_;i++) {
 		parmod_[i] = new double[10];
 	}
-	
+
 	/* calculate them */
 	TData->GetModelParams(n_,Date_,ut_,Model_,iopt_,parmod_);
-	
+
 	allocModelParams_ = true;
 	inputModelParams_ = true;
 }
 
-void Trace::SetTraceCFG(double alt, int MaxLen, double DSMax, 
+void Trace::SetTraceCFG(double alt, int MaxLen, double DSMax,
 						bool Verbose, int TraceDir) {
-	
-	/* set all of the params */					
+
+	/* set all of the params */
 	alt_ = alt;
 	MaxLen_ = MaxLen;
 	DSMax_ = DSMax;
 	Verbose_ = Verbose;
 	TraceDir_ = TraceDir;
-	
-	
+
+
 }
 
 void Trace::SetTraceCFG() {
-	
-	/* set default params */					
+
+	/* set default params */
 	alt_ = 100.0;
 	MaxLen_ = 1000;
 	DSMax_ = 1.0;
 	Verbose_ = false;
 	TraceDir_ = 0;
-	
-	
+
+
 }
 
 void Trace::SetAlpha(int nalpha, double *alpha, double Delta) {
-	
-	/*NOTE: for each alpha, there will be two traces - one for the 
+
+	/*NOTE: for each alpha, there will be two traces - one for the
 	 * supplied value and one for alpha + 180 */
 	/* set the alpha pointer */
 	nalpha_ = nalpha;
@@ -394,27 +394,27 @@ Trace Trace::TracePosition(int i, double x, double y, double z) {
 	/* return a new trace object at the supplied position using the
 	 * parameters at time i */
 	Trace T;
-	
+
 	/* input position and time - I am pretty certain that the midpoints
 	 * of the field lines are stored in SM coords */
 	T.InputPos(1,&x,&y,&z,&Date_[i],&ut_[i],"SM",&Vx_[i],&Vy_[i],&Vz_[i]);
-	
+
 	/* set the model up */
 	T.SetModel(Model_);
 	T.SetModelParams(&iopt_[i],&parmod_[i]);
 	T.SetTraceCFG(alt_-1000.0,MaxLen_,DSMax_,false,0);
-	
+
 	/* run the GSM trace */
 	T.TraceGSM();
-	
+
 	/* now convert to SM */
 	T.TraceSM();
-	
+
 	/* calculate S*/
 	T.CalculateTraceDist();
-	
+
 	return T;
-	
+
 }
 
 
@@ -423,19 +423,19 @@ void Trace::_CalculateTraceHalpha(	int i, int j, double *halpha) {
 	/* some variables needed */
 	double xe0,ye0,ze0,xe1,ye1,ze1;
 	int k;
-	
+
 	/* get the trace starting points first */
 	_CalculateHalphaStartPoints(i,j,&xe0,&ye0,&ze0,&xe1,&ye1,&ze1);
 
 	/* calculate rotation matrices */
 	//MatrixArray R = TraceRotationMatrices(nstep_[i],bxsm_[i],bysm_[i],bzsm_[i]);
-	
+
 
 	/* do two traces */
 	Trace T0 = TracePosition(i,xe0,ye0,ze0);
 	Trace T1 = TracePosition(i,xe1,ye1,ze1);
-	
-	/* the traces above may only have 0 steps - in which case we can 
+
+	/* the traces above may only have 0 steps - in which case we can
 	 * just fill halpha with nans and leave the function */
 	if ((T0.nstep_[0] == 0) | (T1.nstep_[0] == 0)) {
 		for (k=0;k<nstep_[i];k++) {
@@ -443,7 +443,7 @@ void Trace::_CalculateTraceHalpha(	int i, int j, double *halpha) {
 		}
 		return;
 	}
-	
+
 	/* get the closest points to each step of the original trace*/
 	double *xc0 = new double[nstep_[i]];
 	double *yc0 = new double[nstep_[i]];
@@ -460,20 +460,20 @@ void Trace::_CalculateTraceHalpha(	int i, int j, double *halpha) {
 
 	/* calculate distances and then halpha */
 	double d, dx, dy, dz, h0, h1;
-	
+
 	for (k=0;k<nstep_[i];k++) {
 		dx = xsm_[i][k] - xc0[k];
 		dy = ysm_[i][k] - yc0[k];
 		dz = zsm_[i][k] - zc0[k];
 		d = sqrt(dx*dx + dy*dy + dz*dz);
 		h0 = d/Delta_;
-		
+
 		dx = xsm_[i][k] - xc1[k];
 		dy = ysm_[i][k] - yc1[k];
 		dz = zsm_[i][k] - zc1[k];
 		d = sqrt(dx*dx + dy*dy + dz*dz);
 		h1 = d/Delta_;
-		
+
 		halpha[k] = 0.5*(h0 + h1);
 		//printf("%d %5.3f %5.3f %5.3f\n",k,h0,h1,halpha[k]);
 	}
@@ -503,29 +503,29 @@ void Trace::_CalculateHalpha() {
 		}
 	}
 }
-		
+
 bool Trace::_CheckHalpha() {
-	
+
 	if (!allocAlpha_) {
 		printf("Run the 'SetAlpha()' function prior to calculating h_alpha\n");
 		return false;
 	}
-	
+
 	if (nalpha_ <= 0) {
 		printf("1 or more values of alpha must be provided to calculate h_alpha\n");
 		return false;
 	}
-	
+
 	return true;
-	
+
 }
-		
+
 void Trace::CalculateHalpha() {
 
 	if (!_CheckHalpha()) {
 		return;
 	}
-	
+
 	/* allocate both 1D and 3D arrays */
 	Halpha_ = new double[n_*nalpha_*MaxLen_];
 	Halpha3D_ = new double**[n_];
@@ -547,7 +547,7 @@ void Trace::CalculateHalpha(double *halpha) {
 	if (!_CheckHalpha()) {
 		return;
 	}
-	
+
 	/* allocate 3D array and use pointer for 1D */
 	Halpha_ = halpha;
 	Halpha3D_ = new double**[n_];
@@ -567,13 +567,13 @@ void Trace::CalculateHalpha(double ***halpha3d) {
 	if (!_CheckHalpha()) {
 		return;
 	}
-	
+
 	/* allocate 1D and use pointer for 3D array */
 	Halpha_ = new double[n_*nalpha_*MaxLen_];
 	Halpha3D_ = halpha3d;
 
 	allocHalpha_ = true;
-	
+
 	_CalculateHalpha();
 }
 
@@ -582,30 +582,30 @@ void Trace::CalculateHalpha(double *halpha, double ***halpha3d) {
 	if (!_CheckHalpha()) {
 		return;
 	}
-	
+
 	/* use pointer for both 1D and 3D arrays */
 	Halpha_ = halpha;
 	Halpha3D_ = halpha3d;
-	
+
 	_CalculateHalpha();
 }
 
 void Trace::_CalculateHalphaStartPoints(int i, int j,
 							double *xe0, double *ye0, double *ze0,
 							double *xe1, double *ye1, double *ze1) {
-	
+
 	/* calculate the tracing start points for each alpha */
 	double dt, dp, beta, dx, dy;
-	
+
 	/* dt and dp are the toroidal and poloidal components of Delta */
 	dt = Delta_*cos(alpha0_[j]); // alpha = 0.0 is toroidal
 	dp = Delta_*sin(alpha0_[j]);
-	
+
 	/* rotate based on the local time */
 	beta = atan2(-xfe_[i],-yfe_[i]);
 	dy = dp*cos(beta) - dt*sin(beta);
 	dx = dp*sin(beta) + dt*cos(beta);
-	
+
 	/* set the start points of the new field lines */
 	xe0[0] = xfe_[i] + dx;
 	ye0[0] = yfe_[i] + dy;
@@ -620,106 +620,106 @@ void Trace::_CalculateHalphaStartPoints(int i, int j,
 void Trace::TraceGSM(	int *nstep,
 						double **xgsm, double **ygsm, double **zgsm,
 						double **bxgsm, double **bygsm, double **bzgsm) {
-	
-	/* link the pointers within the object to those supplied by this 
+
+	/* link the pointers within the object to those supplied by this
 	 * function					*/
 	nstep_ = nstep;
-	xgsm_ = xgsm;					
-	ygsm_ = ygsm;					
-	zgsm_ = zgsm;					
-	bxgsm_ = bxgsm;					
-	bygsm_ = bygsm;					
-	bzgsm_ = bzgsm;		
-	
+	xgsm_ = xgsm;
+	ygsm_ = ygsm;
+	zgsm_ = zgsm;
+	bxgsm_ = bxgsm;
+	bygsm_ = bygsm;
+	bzgsm_ = bzgsm;
+
 	/* call the tracing code */
 	_TraceGSM();
 }
 void Trace::TraceGSM(	int *nstep) {
-	
-	/* link the pointers within the object to those supplied by this 
+
+	/* link the pointers within the object to those supplied by this
 	 * function					*/
 	nstep_ = nstep;
-	xgsm_ = new double*[n_];					
-	ygsm_ = new double*[n_];					
-	zgsm_ = new double*[n_];					
-	bxgsm_ = new double*[n_];					
-	bygsm_ = new double*[n_];					
+	xgsm_ = new double*[n_];
+	ygsm_ = new double*[n_];
+	zgsm_ = new double*[n_];
+	bxgsm_ = new double*[n_];
+	bygsm_ = new double*[n_];
 	bzgsm_ = new double*[n_];
 	int i;
 	for (i=0;i<n_;i++) {
-		xgsm_[i] = new double[MaxLen_];					
-		ygsm_[i] = new double[MaxLen_];					
-		zgsm_[i] = new double[MaxLen_];					
-		bxgsm_[i] = new double[MaxLen_];					
-		bygsm_[i] = new double[MaxLen_];					
-		bzgsm_[i] = new double[MaxLen_];		
-	}		
+		xgsm_[i] = new double[MaxLen_];
+		ygsm_[i] = new double[MaxLen_];
+		zgsm_[i] = new double[MaxLen_];
+		bxgsm_[i] = new double[MaxLen_];
+		bygsm_[i] = new double[MaxLen_];
+		bzgsm_[i] = new double[MaxLen_];
+	}
 	allocGSM_ = true;
-	
-	
+
+
 	/* call the tracing code */
-	_TraceGSM();	
+	_TraceGSM();
 
 }
 
 void Trace::TraceGSM() {
-	
+
 	/* no pointers provided: allocate them*/
 	if (!allocNstep_) {
 		nstep_ = new int[n_];
 		allocNstep_ = true;
 	}
-	xgsm_ = new double*[n_];					
-	ygsm_ = new double*[n_];					
-	zgsm_ = new double*[n_];					
-	bxgsm_ = new double*[n_];					
-	bygsm_ = new double*[n_];					
+	xgsm_ = new double*[n_];
+	ygsm_ = new double*[n_];
+	zgsm_ = new double*[n_];
+	bxgsm_ = new double*[n_];
+	bygsm_ = new double*[n_];
 	bzgsm_ = new double*[n_];
 	int i;
 	for (i=0;i<n_;i++) {
-		xgsm_[i] = new double[MaxLen_];					
-		ygsm_[i] = new double[MaxLen_];					
-		zgsm_[i] = new double[MaxLen_];					
-		bxgsm_[i] = new double[MaxLen_];					
-		bygsm_[i] = new double[MaxLen_];					
-		bzgsm_[i] = new double[MaxLen_];		
-	}		
+		xgsm_[i] = new double[MaxLen_];
+		ygsm_[i] = new double[MaxLen_];
+		zgsm_[i] = new double[MaxLen_];
+		bxgsm_[i] = new double[MaxLen_];
+		bygsm_[i] = new double[MaxLen_];
+		bzgsm_[i] = new double[MaxLen_];
+	}
 	allocGSM_ = true;
-	
-	
+
+
 	/* call the tracing code */
 	_TraceGSM();
-	
+
 }
 
 void Trace::_TraceGSM() {
-	
+
 	/* this function actually calls the tracing routines */
-	
+
 	/* check this hasn't already been done */
 	if (tracedGSM_) {
 		printf("Attempted to trace twice? not happening mate...\n");
 		return;
 	}
-	
+
 	/* check we have input positions */
 	if (!inputPos_) {
 		printf("Need InputPos() before trace\n");
 		return;
 	}
-	
+
 	/* check we have a model */
 	if (!setModel_) {
 		printf("Set model function with SetModel() first\n");
 		return;
 	}
-	
+
 	/* check that we have model parameters */
 	if (!inputModelParams_) {
 		printf("Run SetModelParams() before tracing\n");
 		return;
 	}
-	
+
 	/* allocate the endpoints */
 	xfn_ = new double[n_];
 	yfn_ = new double[n_];
@@ -728,7 +728,7 @@ void Trace::_TraceGSM() {
 	yfs_ = new double[n_];
 	zfs_ = new double[n_];
 	allocEndpoints_ = true;
-	
+
 	/* check if all of the starting points are within the MP */
 	inMP_ = new bool[n_];
 	allocMP_ = true;
@@ -736,8 +736,8 @@ void Trace::_TraceGSM() {
 	for (i=0;i<n_;i++) {
 		inMP_[i] = WithinMP(x0_[i],y0_[i],z0_[i],parmod_[i][3],parmod_[i][0]);
 	}
-	
-	
+
+
 	for (i=0;i<n_;i++) {
 		if (Verbose_) {
 			printf("\rTracing field line %d of %d (%6.2f)%%",i+1,n_,((float) (i+1)*100.0)/n_);
@@ -745,8 +745,8 @@ void Trace::_TraceGSM() {
 
 		/* call recalc */
 		Recalc(Date_[i],ut_[i],Vx_[i],Vy_[i],Vz_[i]);
-		
-		
+
+
 		if (inMP_[i]) {
 
 			/* perform trace */
@@ -761,13 +761,24 @@ void Trace::_TraceGSM() {
 						&Vx_[i],&Vy_[i],&Vz_[i],"GSM","GSM", false,
 						bxgsm_[i],bygsm_[i],bzgsm_[i]);
 
+			 /* fill in GSE and SM coords */
+			ConvertTraceCoords(nstep_[i],"GSE",
+								xgsm_[i],ygsm_[i],zgsm_[i],
+								xgse_[i],ygse_[i],zgse_[i],
+								bxgsm_[i],bygsm_[i],bzgsm_[i],
+								bxgse_[i],bygse_[i],bzgse_[i]);
+			ConvertTraceCoords(nstep_[i],"SM",
+								xgsm_[i],ygsm_[i],zgsm_[i],
+								xsm_[i],ysm_[i],zsm_[i],
+								bxgsm_[i],bygsm_[i],bzgsm_[i],
+								bxsm_[i],bysm_[i],bzsm_[i]);
 		} else {
 			/*fill with NaN*/
 			nstep_[i] = 0;
 		}
-							
-	}	
-	if (Verbose_) { 
+
+	}
+	if (Verbose_) {
 		printf("\n");
 	}
 }
@@ -775,43 +786,43 @@ void Trace::_TraceGSM() {
 
 void Trace::TraceGSE(	double **xgse, double **ygse, double **zgse,
 						double **bxgse, double **bygse, double **bzgse) {
-	
-	/* link the pointers within the object to those supplied by this 
+
+	/* link the pointers within the object to those supplied by this
 	 * function					*/
-	xgse_ = xgse;					
-	ygse_ = ygse;					
-	zgse_ = zgse;					
-	bxgse_ = bxgse;					
-	bygse_ = bygse;					
-	bzgse_ = bzgse;		
-	
+	xgse_ = xgse;
+	ygse_ = ygse;
+	zgse_ = zgse;
+	bxgse_ = bxgse;
+	bygse_ = bygse;
+	bzgse_ = bzgse;
+
 	/* call the tracing code */
 	_TraceGSE();
 }
 
 void Trace::TraceGSE() {
-	
+
 	/* no pointers provided: allocate them*/
-	xgse_ = new double*[n_];					
-	ygse_ = new double*[n_];					
-	zgse_ = new double*[n_];					
-	bxgse_ = new double*[n_];					
-	bygse_ = new double*[n_];					
+	xgse_ = new double*[n_];
+	ygse_ = new double*[n_];
+	zgse_ = new double*[n_];
+	bxgse_ = new double*[n_];
+	bygse_ = new double*[n_];
 	bzgse_ = new double*[n_];
 	int i;
 	for (i=0;i<n_;i++) {
-		xgse_[i] = new double[MaxLen_];					
-		ygse_[i] = new double[MaxLen_];					
-		zgse_[i] = new double[MaxLen_];					
-		bxgse_[i] = new double[MaxLen_];					
-		bygse_[i] = new double[MaxLen_];					
-		bzgse_[i] = new double[MaxLen_];		
-	}		
+		xgse_[i] = new double[MaxLen_];
+		ygse_[i] = new double[MaxLen_];
+		zgse_[i] = new double[MaxLen_];
+		bxgse_[i] = new double[MaxLen_];
+		bygse_[i] = new double[MaxLen_];
+		bzgse_[i] = new double[MaxLen_];
+	}
 	allocGSE_ = true;
-	
+
 	/* call the tracing code */
 	_TraceGSE();
-	
+
 }
 
 void Trace::_TraceGSE() {
@@ -827,43 +838,43 @@ void Trace::_TraceGSE() {
 
 void Trace::TraceSM(	double **xsm, double **ysm, double **zsm,
 						double **bxsm, double **bysm, double **bzsm) {
-	
-	/* link the pointers within the object to those supplied by this 
+
+	/* link the pointers within the object to those supplied by this
 	 * function					*/
-	xsm_ = xsm;					
-	ysm_ = ysm;					
-	zsm_ = zsm;					
-	bxsm_ = bxsm;					
-	bysm_ = bysm;					
-	bzsm_ = bzsm;		
-	
+	xsm_ = xsm;
+	ysm_ = ysm;
+	zsm_ = zsm;
+	bxsm_ = bxsm;
+	bysm_ = bysm;
+	bzsm_ = bzsm;
+
 	/* call the tracing code */
 	_TraceSM();
 }
 
 void Trace::TraceSM() {
-	
+
 	/* no pointers provided: allocate them*/
-	xsm_ = new double*[n_];					
-	ysm_ = new double*[n_];					
-	zsm_ = new double*[n_];					
-	bxsm_ = new double*[n_];					
-	bysm_ = new double*[n_];					
+	xsm_ = new double*[n_];
+	ysm_ = new double*[n_];
+	zsm_ = new double*[n_];
+	bxsm_ = new double*[n_];
+	bysm_ = new double*[n_];
 	bzsm_ = new double*[n_];
 	int i;
 	for (i=0;i<n_;i++) {
-		xsm_[i] = new double[MaxLen_];					
-		ysm_[i] = new double[MaxLen_];					
-		zsm_[i] = new double[MaxLen_];					
-		bxsm_[i] = new double[MaxLen_];					
-		bysm_[i] = new double[MaxLen_];					
-		bzsm_[i] = new double[MaxLen_];		
-	}		
+		xsm_[i] = new double[MaxLen_];
+		ysm_[i] = new double[MaxLen_];
+		zsm_[i] = new double[MaxLen_];
+		bxsm_[i] = new double[MaxLen_];
+		bysm_[i] = new double[MaxLen_];
+		bzsm_[i] = new double[MaxLen_];
+	}
 	allocSM_ = true;
-	
+
 	/* call the tracing code */
 	_TraceSM();
-	
+
 }
 
 void Trace::_TraceSM() {
@@ -884,7 +895,7 @@ void Trace::CalculateTraceDist() {
 		S_[i] = new double[MaxLen_];
 	}
 	allocDist_ = true;
-	
+
 	_CalculateTraceDist();
 }
 
@@ -920,14 +931,14 @@ void Trace::CalculateTraceR() {
 		R_[i] = new double[MaxLen_];
 	}
 	allocR_ = true;
-	
+
 	_CalculateTraceR();
 }
 
 void Trace::CalculateTraceR(double **R) {
-	
+
 	R_ = R;
-	
+
 	_CalculateTraceR();
 }
 
@@ -949,14 +960,14 @@ void Trace::CalculateTraceRnorm() {
 		Rnorm_[i] = new double[MaxLen_];
 	}
 	allocRnorm_ = true;
-	
+
 	_CalculateTraceRnorm();
 }
 
 void Trace::CalculateTraceRnorm(double **Rnorm) {
-	
+
 	Rnorm_ = Rnorm;
-	
+
 	_CalculateTraceRnorm();
 }
 
@@ -979,24 +990,24 @@ void Trace::CalculateTraceFP() {
 		FP_[i] = new double[15];
 	}
 	allocFootprints_ = true;
-	
+
 	_CalculateTraceFP();
 }
 
 void Trace::CalculateTraceFP(double **FP) {
-	
+
 	FP_ = FP;
-	
+
 	_CalculateTraceFP();
 }
 
 void Trace::_CalculateTraceFP() {
-	
+
 	xfe_ = new double[n_];
 	yfe_ = new double[n_];
 	zfe_ = new double[n_];
 	allocEqFP_ = true;
-	
+
 	int i, j;
 	for (i=0;i<n_;i++) {
 		TraceFootprintsSM(nstep_[i],ut_[i],xsm_[i],ysm_[i],zsm_[i],
@@ -1004,7 +1015,7 @@ void Trace::_CalculateTraceFP() {
 							xfs_[i],yfs_[i],zfs_[i],
 							&xfe_[i],&yfe_[i],&zfe_[i],
 							alt_,FP_[i],MaxLen_,TraceDir_);
-							
+
 	}
 	hasFootprints_ = true;
 }
@@ -1032,7 +1043,7 @@ void Trace::GetTraceGSM(	double **x,double **y, double **z,
 			Bz[i][j] = bzgsm_[i][j];
 		}
 	}
-	
+
 	/* get the position */
 	GetTraceGSM(x,y,z);
 }
@@ -1060,7 +1071,7 @@ void Trace::GetTraceGSE(	double **x,double **y, double **z,
 			Bz[i][j] = bzgse_[i][j];
 		}
 	}
-	
+
 	/* get the position */
 	GetTraceGSE(x,y,z);
 }
@@ -1088,7 +1099,7 @@ void Trace::GetTraceSM(	double **x,double **y, double **z,
 			Bz[i][j] = bzsm_[i][j];
 		}
 	}
-	
+
 	/* get the position */
 	GetTraceSM(x,y,z);
 }
@@ -1099,7 +1110,7 @@ void Trace::GetTraceDist(double **S) {
 		for (j=0;j<nstep_[i];j++) {
 			S[i][j] = S_[i][j];
 		}
-	}	
+	}
 }
 
 void Trace::GetTraceR(double **R) {
@@ -1108,7 +1119,7 @@ void Trace::GetTraceR(double **R) {
 		for (j=0;j<nstep_[i];j++) {
 			R[i][j] = R_[i][j];
 		}
-	}	
+	}
 }
 
 void Trace::GetTraceRnorm(double **Rnorm) {
@@ -1117,7 +1128,7 @@ void Trace::GetTraceRnorm(double **Rnorm) {
 		for (j=0;j<nstep_[i];j++) {
 			Rnorm[i][j] = Rnorm_[i][j];
 		}
-	}	
+	}
 }
 
 void Trace::GetTraceFootprints(double **FP) {
@@ -1126,7 +1137,7 @@ void Trace::GetTraceFootprints(double **FP) {
 		for (j=0;j<15;j++) {
 			FP[i][j] = FP_[i][j];
 		}
-	}	
+	}
 }
 
 void Trace::GetTraceNstep(int *nstep) {

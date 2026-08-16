@@ -6,20 +6,20 @@ using namespace geopack;
  * a few typedefs */
 void TraceField(int n, double *xin, double *yin, double *zin,
 				int *Date, float *ut, const char *Model,
-				int *iopt, double **parmod, 
+				int *iopt, double **parmod,
 				double *Vx, double *Vy, double *Vz,
-				double alt, int MaxLen, double DSMax, 
+				double alt, int MaxLen, double DSMax,
 				bool Verbose, int TraceDir,
 				const char *CoordIn, int *nstep,
-				double **xgsm, double **ygsm, double **zgsm, 
+				double **xgsm, double **ygsm, double **zgsm,
 				double **bxgsm, double **bygsm, double **bzgsm,
-				double **xgse, double **ygse, double **zgse, 
+				double **xgse, double **ygse, double **zgse,
 				double **bxgse, double **bygse, double **bzgse,
-				double **xsm, double **ysm, double **zsm, 
+				double **xsm, double **ysm, double **zsm,
 				double **bxsm, double **bysm, double **bzsm,
 				double **s, double **r, double **rnorm, double **FP,
 				int nalpha, double *alpha, double *halpha) {
-	
+
 
 	/* create the trace object */
 	Trace T;
@@ -36,15 +36,13 @@ void TraceField(int n, double *xin, double *yin, double *zin,
 
 	/*trace then convert to GSE and SM */
 	T.TraceGSM(nstep,xgsm,ygsm,zgsm,bxgsm,bygsm,bzgsm);
-	T.TraceGSE(xgse,ygse,zgse,bxgse,bygse,bzgse);
-	T.TraceSM(xsm,ysm,zsm,bxsm,bysm,bzsm);
 
 	/* some other bits and bobs - the order is quite important here*/
 	T.CalculateTraceDist(s);
 	T.CalculateTraceR(r);
 	T.CalculateTraceFP(FP);
 	T.CalculateTraceRnorm(rnorm);
-	
+
 	/* the probably dodgy bit...halpha*/
 	if (nalpha > 0) {
 		T.SetAlpha(nalpha,alpha,0.05);
@@ -55,17 +53,17 @@ void TraceField(int n, double *xin, double *yin, double *zin,
 }
 /* this could be come a wrapper function where I/O is converted to
  * a few typedefs */
-void TraceFieldOld(double *Xin, double *Yin, double *Zin, int n, 
-				int *Date, float *ut, const char *Model, 
-				int *iopt, double **parmod, 
+void TraceFieldOld(double *Xin, double *Yin, double *Zin, int n,
+				int *Date, float *ut, const char *Model,
+				int *iopt, double **parmod,
 				double *Vx, double *Vy, double *Vz,
-				const char *CoordIn, const char *CoordOut, 
-				double alt, int MaxLen, double DSMax, 
+				const char *CoordIn, const char *CoordOut,
+				double alt, int MaxLen, double DSMax,
 				bool Verbose, int TraceDir,
-				double **Xout, double **Yout, double **Zout, 
-				double **s, double **R, double **Rnorm, 
+				double **Xout, double **Yout, double **Zout,
+				double **s, double **R, double **Rnorm,
 				int nalpha, double *alpha, double **halpha,
-				double **Bx, double **By, double **Bz, 
+				double **Bx, double **By, double **Bz,
 				int *nstep, double **FP) {
 
 	int dirp = 1, dirn = -1;
@@ -89,7 +87,7 @@ void TraceFieldOld(double *Xin, double *Yin, double *Zin, int n,
 		ModelFunc = &t04_s_;
 	} else if (strcmp(Model,"IGRF") == 0) {
 		ModelFunc = &DummyFunc;
-	} else { 
+	} else {
 		printf("Model %s not found\n",Model);
 		return;
 	}
@@ -101,8 +99,8 @@ void TraceFieldOld(double *Xin, double *Yin, double *Zin, int n,
 
 		/* call recalc */
 		Recalc(Date[i],ut[i],Vx[i],Vy[i],Vz[i]);
-		
-			
+
+
 		/*Convert input coordinates to GSM*/
 		if (strcmp(CoordIn,"GSE") == 0) {
 			/*GSE in*/
@@ -116,10 +114,10 @@ void TraceFieldOld(double *Xin, double *Yin, double *Zin, int n,
 			Y[i] = Yin[i];
 			Z[i] = Zin[i];
 		}
-		
+
 		/*Check if the point is within the MP*/
 		inMP = WithinMP(X[i],Y[i],Z[i],parmod[i][3],parmod[i][0]);
-		
+
 		if (inMP) {
 
 			/* perform trace */
@@ -149,12 +147,12 @@ void TraceFieldOld(double *Xin, double *Yin, double *Zin, int n,
 
 			/* Get the Rnorm of each point */
 			FieldLineRnorm(nstep[i],R[i],FP[i][12],Rnorm[i]);
-			
+
 			/* now to try and calculate halpha */
 			if ((nalpha > 0) & (TraceDir == 0)) {
 				CalculateHalphas(nalpha,alpha,nstep[i],
 						Xout[i],Yout[i],Zout[i],Bx[i],By[i],Bz[i],
-						ModelFunc,iopt[i],parmod[i],alt,MaxLen,DSMax, 
+						ModelFunc,iopt[i],parmod[i],alt,MaxLen,DSMax,
 						xfe,yfe,zfe,
 						halpha[i]);
 			}
@@ -166,19 +164,19 @@ void TraceFieldOld(double *Xin, double *Yin, double *Zin, int n,
 				FP[i][j] = NAN;
 			}
 		}
-							
+
 	}
 
 
 	if (Verbose) {
 		printf("\n");
-	}	
+	}
 	/*Convert everything to the desired output coords*/
 	for (i=0;i<n;i++) {
 		ConvertTraceCoords(nstep[i],CoordOut,Xout[i],Yout[i],Zout[i],
 							Bx[i],By[i],Bz[i]);
 	}
-	
+
 
 
 }
