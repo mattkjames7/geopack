@@ -24,60 +24,53 @@ namespace geopack {
 
 /***********************************************************************
  * This object will store a bunch of field traces within it.
- * 
+ *
  * It will have the ability to either allocate and store field vectors
  * and positions, or to accept pointers which can be created externally
  * (e.g. inside Python)
- * 
- * There will be optional member functions which obtain things like 
+ *
+ * There will be optional member functions which obtain things like
  * footprints and h_alphas.
- * 
+ *
  * The basic trace will be in GSM/GSW.
- * 
+ *
  * Other coordinate systems will be calculated as needed.
- * 
+ *
  * ********************************************************************/
 class Trace {
-	
+
 	public:
 		/* initialize the object */
 		Trace();
-		
+
 		/* delete the object */
 		~Trace();
-		
+
 		/* copy constructor */
 	//	Trace(const Trace &);
-		
+
 		/* this will take in the input positions where the traces start*/
 		void InputPos(int,double*,double*,double*,int*,float*,const char*, double*, double*, double*);
 		void InputPos(int,double*,double*,double*,int*,float*,const char*);
-		
+
 		/* set model parameters */
 		void SetModelParams(int*, double**);
 		void SetModelParams();
 		void SetModel(const char *);
-		
+
 		/* set the trace configuration */
 		void SetTraceCFG(double,int,double,bool,int);
 		void SetTraceCFG();
-		
+
 		/* polarization stuff */
 		void SetAlpha(int,double*,double);
 
-			
+
 		/* trace function to do basic trace in GSW coords */
 		void TraceGSM(int*,double**,double**,double**,double**,double**,double**);
 		void TraceGSM(int*);
 		void TraceGSM();
-		
-		
-		/* these will convert to other coords */
-		void TraceGSE(double**,double**,double**,double**,double**,double**);
-		void TraceGSE();
-		void TraceSM(double**,double**,double**,double**,double**,double**);
-		void TraceSM();
-	
+
 		/* calculate trace distance,R,Rnorm */
 		void CalculateTraceDist(double**);
 		void CalculateTraceDist();
@@ -88,18 +81,18 @@ class Trace {
 		void CalculateTraceRnorm(double**);
 		void CalculateTraceRnorm();
 		void _CalculateTraceRnorm();
-	
+
 		/* Calculate footprints */
 		void CalculateTraceFP(double**);
 		void CalculateTraceFP();
 		void _CalculateTraceFP();
-		
+
 		/* calculate halpha */
 		void CalculateHalpha();
 		void CalculateHalpha(double*);
 		void CalculateHalpha(double***);
 		void CalculateHalpha(double*,double***);
-	
+
 		/* return things*/
 		void GetTraceNstep(int*);
 		void GetTraceGSM(double**,double**,double**);
@@ -114,13 +107,13 @@ class Trace {
 		void GetTraceFootprints(double**);
 		void GetTraceHalpha(double*);	/* python will use this */
 		void GetTraceHalpha(double***); /* no idea how to link this to python*/
-		
+
 		Trace TracePosition(int,double,double,double);
-	
+
 
 		/* input coords */
 		int n_;
-		double *x0_, *y0_, *z0_;  
+		double *x0_, *y0_, *z0_;
 		int *Date_;
 		float *ut_;
 
@@ -133,7 +126,7 @@ class Trace {
 		bool Verbose_;
 		double alt_;
 		int TraceDir_;
-		
+
 		/* model params */
 		int *iopt_;
 		double **parmod_;
@@ -144,7 +137,7 @@ class Trace {
 		double **xgsm_, **ygsm_, **zgsm_;
 		double **xgse_, **ygse_, **zgse_;
 		double **xsm_, **ysm_, **zsm_;
-	
+
 		/* trace fields */
 		double **bxgsm_, **bygsm_, **bzgsm_;
 		double **bxgse_, **bygse_, **bzgse_;
@@ -176,9 +169,9 @@ class Trace {
 		bool allocEqFP_;
 		bool allocMP_;
 
-		
 
-	
+
+
 		/* field length, R, Rnorm, Halpha, Footprints */
 		int nalpha_;
 		double *alpha0_, *alpha1_;
@@ -189,15 +182,13 @@ class Trace {
 		double *Halpha_;
 		double ***Halpha3D_;
 		double **FP_;
-		
+
 		/* model */
 		const char *Model_;
 		ModelFuncPtr ModelFunc_;
-	
+
 		/* hidden trace functions */
 		void _TraceGSM();
-		void _TraceGSE();
-		void _TraceSM();
 
 		/* halpha functions */
 		bool _CheckHalpha();

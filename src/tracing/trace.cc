@@ -407,9 +407,6 @@ Trace Trace::TracePosition(int i, double x, double y, double z) {
 	/* run the GSM trace */
 	T.TraceGSM();
 
-	/* now convert to SM */
-	T.TraceSM();
-
 	/* calculate S*/
 	T.CalculateTraceDist();
 
@@ -686,6 +683,41 @@ void Trace::TraceGSM() {
 	}
 	allocGSM_ = true;
 
+	/* no pointers provided: allocate them*/
+	xgse_ = new double*[n_];
+	ygse_ = new double*[n_];
+	zgse_ = new double*[n_];
+	bxgse_ = new double*[n_];
+	bygse_ = new double*[n_];
+	bzgse_ = new double*[n_];
+
+	for (i=0;i<n_;i++) {
+		xgse_[i] = new double[MaxLen_];
+		ygse_[i] = new double[MaxLen_];
+		zgse_[i] = new double[MaxLen_];
+		bxgse_[i] = new double[MaxLen_];
+		bygse_[i] = new double[MaxLen_];
+		bzgse_[i] = new double[MaxLen_];
+	}
+	allocGSE_ = true;
+
+	/* no pointers provided: allocate them*/
+	xsm_ = new double*[n_];
+	ysm_ = new double*[n_];
+	zsm_ = new double*[n_];
+	bxsm_ = new double*[n_];
+	bysm_ = new double*[n_];
+	bzsm_ = new double*[n_];
+
+	for (i=0;i<n_;i++) {
+		xsm_[i] = new double[MaxLen_];
+		ysm_[i] = new double[MaxLen_];
+		zsm_[i] = new double[MaxLen_];
+		bxsm_[i] = new double[MaxLen_];
+		bysm_[i] = new double[MaxLen_];
+		bzsm_[i] = new double[MaxLen_];
+	}
+	allocSM_ = true;
 
 	/* call the tracing code */
 	_TraceGSM();
@@ -780,111 +812,6 @@ void Trace::_TraceGSM() {
 	}
 	if (Verbose_) {
 		printf("\n");
-	}
-}
-
-
-void Trace::TraceGSE(	double **xgse, double **ygse, double **zgse,
-						double **bxgse, double **bygse, double **bzgse) {
-
-	/* link the pointers within the object to those supplied by this
-	 * function					*/
-	xgse_ = xgse;
-	ygse_ = ygse;
-	zgse_ = zgse;
-	bxgse_ = bxgse;
-	bygse_ = bygse;
-	bzgse_ = bzgse;
-
-	/* call the tracing code */
-	_TraceGSE();
-}
-
-void Trace::TraceGSE() {
-
-	/* no pointers provided: allocate them*/
-	xgse_ = new double*[n_];
-	ygse_ = new double*[n_];
-	zgse_ = new double*[n_];
-	bxgse_ = new double*[n_];
-	bygse_ = new double*[n_];
-	bzgse_ = new double*[n_];
-	int i;
-	for (i=0;i<n_;i++) {
-		xgse_[i] = new double[MaxLen_];
-		ygse_[i] = new double[MaxLen_];
-		zgse_[i] = new double[MaxLen_];
-		bxgse_[i] = new double[MaxLen_];
-		bygse_[i] = new double[MaxLen_];
-		bzgse_[i] = new double[MaxLen_];
-	}
-	allocGSE_ = true;
-
-	/* call the tracing code */
-	_TraceGSE();
-
-}
-
-void Trace::_TraceGSE() {
-	int i, j;
-	for (i=0;i<n_;i++) {
-		ConvertTraceCoords(nstep_[i],"GSE",
-							xgsm_[i],ygsm_[i],zgsm_[i],
-							xgse_[i],ygse_[i],zgse_[i],
-							bxgsm_[i],bygsm_[i],bzgsm_[i],
-							bxgse_[i],bygse_[i],bzgse_[i]);
-	}
-}
-
-void Trace::TraceSM(	double **xsm, double **ysm, double **zsm,
-						double **bxsm, double **bysm, double **bzsm) {
-
-	/* link the pointers within the object to those supplied by this
-	 * function					*/
-	xsm_ = xsm;
-	ysm_ = ysm;
-	zsm_ = zsm;
-	bxsm_ = bxsm;
-	bysm_ = bysm;
-	bzsm_ = bzsm;
-
-	/* call the tracing code */
-	_TraceSM();
-}
-
-void Trace::TraceSM() {
-
-	/* no pointers provided: allocate them*/
-	xsm_ = new double*[n_];
-	ysm_ = new double*[n_];
-	zsm_ = new double*[n_];
-	bxsm_ = new double*[n_];
-	bysm_ = new double*[n_];
-	bzsm_ = new double*[n_];
-	int i;
-	for (i=0;i<n_;i++) {
-		xsm_[i] = new double[MaxLen_];
-		ysm_[i] = new double[MaxLen_];
-		zsm_[i] = new double[MaxLen_];
-		bxsm_[i] = new double[MaxLen_];
-		bysm_[i] = new double[MaxLen_];
-		bzsm_[i] = new double[MaxLen_];
-	}
-	allocSM_ = true;
-
-	/* call the tracing code */
-	_TraceSM();
-
-}
-
-void Trace::_TraceSM() {
-	int i, j;
-	for (i=0;i<n_;i++) {
-		ConvertTraceCoords(nstep_[i],"SM",
-							xgsm_[i],ygsm_[i],zgsm_[i],
-							xsm_[i],ysm_[i],zsm_[i],
-							bxgsm_[i],bygsm_[i],bzgsm_[i],
-							bxsm_[i],bysm_[i],bzsm_[i]);
 	}
 }
 

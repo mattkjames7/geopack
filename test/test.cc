@@ -3,9 +3,9 @@
 #include <geopack.h>
 
 int main(int argc, char *argv[]) {
-	
 
-	
+
+
 	/* intialize the parameters for the model */
 	//InitParams(argv[argc-1]);
 	printf("Testing C++...\n");
@@ -32,41 +32,39 @@ int main(int argc, char *argv[]) {
 	for (i=4;i<10;i++) {
 		parmod[i] = 0.0;
 	}
-	
+
 	/* create the trace object */
 	printf("Creating trace object \n");
 	geopack::Trace T;
-	
+
 	/* input stuff */
 	printf("Input position and model \n");
 	T.InputPos(n,xin,yin,zin,Date,ut,CoordIn,&Vx,&Vy,&Vz);
 	T.SetModel(Model);
-	
+
 	printf("Setting parameters\n");
 	T.SetModelParams(&iopt,&parmod);
-	
+
 	/* do the field traces */
 	printf("Trace\n");
 	T.TraceGSM();
-	T.TraceGSE();
-	T.TraceSM();
-	
+
 	/* calculate some stuff */
 	printf("Calculating footprints etc. \n");
 	T.CalculateTraceDist();
 	T.CalculateTraceR();
 	T.CalculateTraceFP();
 	T.CalculateTraceRnorm();
-	
+
 	/* now for h alpha */
 	printf("Setting alpha\n");
 	int nalpha = 2;
 	double alpha[] = {0.0,90.0} ;
 	T.SetAlpha(nalpha,alpha,0.05);
-	
+
 	printf("Attempting to calculate h alpha\n");
 	T.CalculateHalpha();
-	
+
 	/* free params */
 	//FreeParams();
 	printf("Done\n");
