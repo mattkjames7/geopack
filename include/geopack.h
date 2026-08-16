@@ -1302,7 +1302,11 @@ class Trace {
 
 
 		/* trace function to do basic trace in GSW coords */
-		void TraceGSM(int*,double**,double**,double**,double**,double**,double**);
+		void TraceGSM(int*,
+		  double**,double**,double**,double**,double**,double**,
+			double**,double**,double**,double**,double**,double**,
+			double**,double**,double**,double**,double**,double**
+		);
 		void TraceGSM(int*);
 		void TraceGSM();
 
