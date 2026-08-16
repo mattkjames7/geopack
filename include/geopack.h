@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 /* need this if we're using C */
-#ifndef __cplusplus 
+#ifndef __cplusplus
 	#include <stdbool.h>
 #endif
 
@@ -22,7 +22,7 @@
 * DESCRIPTION : Calculates the model field at some position given a
 * 				time and model parameters.
 *
-* INPUTS : 
+* INPUTS :
 * 		int n					Number of field vectors.
 *		double *Xin				Array of x-coordinates (R_E).
 *		double *Yin				Array of y-coordinates (R_E).
@@ -60,181 +60,181 @@
 *		double *Bx				Output x-component (nT).
 *		double *By				Output y-component (nT).
 *		double *Bz				Output z-component (nT).
-*								
+*
 *
 ********************************************************************/
-void ModelField(	int n, 
-					double *Xin, 
-					double *Yin, 
-					double *Zin,  
-					int *Date, 
-					float *ut, 
+void ModelField(	int n,
+					double *Xin,
+					double *Yin,
+					double *Zin,
+					int *Date,
+					float *ut,
 					bool SameTime,
-					const char *Model, 
-					int *iopt, 
+					const char *Model,
+					int *iopt,
 					double **parmod,
-					double *Vx, 
-					double *Vy, 
+					double *Vx,
+					double *Vy,
 					double *Vz,
-					const char *CoordIn, 
-					const char *CoordOut, 
-					bool WithinMPOnly, 
-					double *Bx, 
-					double *By, 
+					const char *CoordIn,
+					const char *CoordOut,
+					bool WithinMPOnly,
+					double *Bx,
+					double *By,
 					double *Bz);
 
 double GetDipoleTiltUT(int Date, float ut, double Vx, double Vy, double Vz);
 
 	/* Coordinate conversion  function */
-	void ConvCoords(	double *Xin, double *Yin, double *Zin, int n, 
-						double *Vxin, double *Vyin, double *Vzin, 
-						int *Date, float *ut, 
+	void ConvCoords(	double *Xin, double *Yin, double *Zin, int n,
+						double *Vxin, double *Vyin, double *Vzin,
+						int *Date, float *ut,
 						double *Xout, double *Yout, double *Zout,
 						const char *CoordIn, const char *CoordOut);
 
 
 	/***********************************************************************
 	 * GSEtoGSM
-	 * 
+	 *
 	 * Wrapper for converting GSE to GSM coordinates
 	 * ********************************************************************/
 	void GSEtoGSM(	double Xin, double Yin, double Zin,
 					double Vx, double Vy, double Vz, int recalc,
-					int Year, int DayNo, int Hr, int Mn, int Sc, 
+					int Year, int DayNo, int Hr, int Mn, int Sc,
 					double *Xout, double *Yout, double *Zout);
 
 	/***********************************************************************
 	 * GSEtoGSMUT
-	 * 
+	 *
 	 * Wrapper for converting GSE to GSM coordinates
 	 * ********************************************************************/
 	void GSEtoGSMUT(	double *Xin, double *Yin, double *Zin, int n,
-						double *Vx, double *Vy, double *Vz, 
-						int *Date, float *ut, 
+						double *Vx, double *Vy, double *Vz,
+						int *Date, float *ut,
 						double *Xout, double *Yout, double *Zout);
 
 	void GSMtoGSE(	double Xin, double Yin, double Zin,
 					double Vx, double Vy, double Vz, int recalc,
 					int Year, int DayNo, int Hr, int Mn, int Sc,
 					double *Xout, double *Yout, double *Zout);
-		
+
 	void GSMtoGSEUT(	double *Xin, double *Yin, double *Zin, int n,
-						double *Vx, double *Vy, double *Vz, 
-						int *Date, float *ut, 
+						double *Vx, double *Vy, double *Vz,
+						int *Date, float *ut,
 						double *Xout, double *Yout, double *Zout);
 
-	void GSMtoSM(	double Xin, double Yin, double Zin, 
+	void GSMtoSM(	double Xin, double Yin, double Zin,
 					double Vx, double Vy, double Vz, int recalc,
-					int Year, int DayNo, int Hr, int Mn, int Sc, 
+					int Year, int DayNo, int Hr, int Mn, int Sc,
 					double *Xout, double *Yout, double *Zout);
 
 	void GSMtoSMUT(	double *Xin, double *Yin, double *Zin, int n,
 					double *Vx, double *Vy, double *Vz,
-					int *Date, float *ut, 
+					int *Date, float *ut,
 					double *Xout, double *Yout, double *Zout);
 
-	void SMtoGSM(	double Xin, double Yin, double Zin, 
+	void SMtoGSM(	double Xin, double Yin, double Zin,
 					double Vx, double Vy, double Vz, int recalc,
-					int Year, int DayNo, int Hr, int Mn, int Sc, 
+					int Year, int DayNo, int Hr, int Mn, int Sc,
 					double *Xout, double *Yout, double *Zout);
 
 	void SMtoGSMUT(	double *Xin, double *Yin, double *Zin, int n,
-					double *Vx, double *Vy, double *Vz, 
-					int *Date, float *ut, 
+					double *Vx, double *Vy, double *Vz,
+					int *Date, float *ut,
 					double *Xout, double *Yout, double *Zout);
 
 	void GSEtoSM(	double Xin, double Yin, double Zin,
 					double Vx, double Vy, double Vz, int recalc,
-					int Year, int DayNo, int Hr, int Mn, int Sc, 
+					int Year, int DayNo, int Hr, int Mn, int Sc,
 					double *Xout, double *Yout, double *Zout);
 
 	void GSEtoSMUT(	double *Xin, double *Yin, double *Zin, int n,
-					double *Vx, double *Vy, double *Vz, 
-					int *Date, float *ut, 
+					double *Vx, double *Vy, double *Vz,
+					int *Date, float *ut,
 					double *Xout, double *Yout, double *Zout);
 
-	void GSEtoMAG(	double Xin, double Yin, double Zin, 
+	void GSEtoMAG(	double Xin, double Yin, double Zin,
 					double Vx, double Vy, double Vz, int recalc,
-					int Year, int DayNo, int Hr, int Mn, int Sc, 
+					int Year, int DayNo, int Hr, int Mn, int Sc,
 					double *Xout, double *Yout, double *Zout);
 
 	void GSEtoMAGUT(	double *Xin, double *Yin, double *Zin, int n,
-						double *Vx, double *Vy, double *Vz, 
+						double *Vx, double *Vy, double *Vz,
 						int *Date, float *ut,
 						double *Xout, double *Yout, double *Zout);
 
 	void SMtoGSE(	double Xin, double Yin, double Zin,
 					double Vx, double Vy, double Vz, int recalc,
-					int Year, int DayNo, int Hr, int Mn, int Sc, 
+					int Year, int DayNo, int Hr, int Mn, int Sc,
 					double *Xout, double *Yout, double *Zout);
 
 	void SMtoGSEUT(	double *Xin, double *Yin, double *Zin, int n,
 					double *Vx, double *Vy, double *Vz,
-					int *Date, float *ut, 
+					int *Date, float *ut,
 					double *Xout, double *Yout, double *Zout);
 
-	void MAGtoGSE(	double Xin, double Yin, double Zin, 
+	void MAGtoGSE(	double Xin, double Yin, double Zin,
 					double Vx, double Vy, double Vz, int recalc,
-					int Year, int DayNo, int Hr, int Mn, int Sc, 
+					int Year, int DayNo, int Hr, int Mn, int Sc,
 					double *Xout, double *Yout, double *Zout);
 
 	void MAGtoGSEUT(	double *Xin, double *Yin, double *Zin, int n,
-						double *Vx, double *Vy, double *Vz, 
-						int *Date, float *ut, 
+						double *Vx, double *Vy, double *Vz,
+						int *Date, float *ut,
 						double *Xout, double *Yout, double *Zout);
 
 	void MLONtoMLT(	double MLon, double Vx, double Vy, double Vz, int recalc,
 					int Year, int DayNo, int Hr, int Mn, int Sc, double *MLT);
 
-	void MLONtoMLTUT(	double *MLon, int n, 
-						double *Vx, double *Vy, double *Vz, 
+	void MLONtoMLTUT(	double *MLon, int n,
+						double *Vx, double *Vy, double *Vz,
 						int *Date,float *ut, double *MLT);
 
-	void MLTtoMLON(	double MLT, double Vx, double Vy, double Vz, int recalc, 
+	void MLTtoMLON(	double MLT, double Vx, double Vy, double Vz, int recalc,
 					int Year, int DayNo, int Hr, int Mn, int Sc, double *MLon);
 
 	void MLTtoMLONUT(	double *MLT, int n,
-						double *Vx, double *Vy, double *Vz, 
+						double *Vx, double *Vy, double *Vz,
 						int *Date, float *ut, double *MLon);
 
-	void GEOtoMAG(	double Xin, double Yin, double Zin, 
+	void GEOtoMAG(	double Xin, double Yin, double Zin,
 					double Vx, double Vy, double Vz, int recalc,
-					int Year, int DayNo, int Hr, int Mn, int Sc, 
+					int Year, int DayNo, int Hr, int Mn, int Sc,
 					double *Xout, double *Yout, double *Zout);
 
-	void GEOtoMAGUT(	double *Xin, double *Yin, double *Zin, int n, 
-						double *Vx, double *Vy, double *Vz, 
-						int *Date, float *ut, 
+	void GEOtoMAGUT(	double *Xin, double *Yin, double *Zin, int n,
+						double *Vx, double *Vy, double *Vz,
+						int *Date, float *ut,
 						double *Xout, double *Yout, double *Zout);
 
-	void GEOtoMAG_LL(	double Lon, double Lat, 
+	void GEOtoMAG_LL(	double Lon, double Lat,
 						double Vx, double Vy, double Vz, int recalc,
-						int Year, int DayNo, int Hr, int Mn, int Sc, 
+						int Year, int DayNo, int Hr, int Mn, int Sc,
 						double *MLon, double *MLat);
 
-	void GEOtoMAGUT_LL(	double *Lon, double *Lat, int n, 
-						double *Vx, double *Vy, double *Vz, 
-						int *Date,float *ut, 
+	void GEOtoMAGUT_LL(	double *Lon, double *Lat, int n,
+						double *Vx, double *Vy, double *Vz,
+						int *Date,float *ut,
 						double *MLon, double *MLat);
-												
-	void MAGtoGEO(	double Xin, double Yin, double Zin, 
+
+	void MAGtoGEO(	double Xin, double Yin, double Zin,
 					double Vx, double Vy, double Vz, int recalc,
-					int Year, int DayNo, int Hr, int Mn, int Sc, 
+					int Year, int DayNo, int Hr, int Mn, int Sc,
 					double *Xout, double *Yout, double *Zout);
 
-	void MAGtoGEOUT(	double *Xin, double *Yin, double *Zin, int n, 
-						double *Vx, double *Vy, double *Vz, 
-						int *Date, float *ut, 
+	void MAGtoGEOUT(	double *Xin, double *Yin, double *Zin, int n,
+						double *Vx, double *Vy, double *Vz,
+						int *Date, float *ut,
 						double *Xout, double *Yout, double *Zout);
-					
-	void MAGtoGEO_LL(	double MLon, double MLat, 
+
+	void MAGtoGEO_LL(	double MLon, double MLat,
 						double Vx, double Vy, double Vz, int recalc,
-						int Year, int DayNo, int Hr, int Mn, int Sc, 
+						int Year, int DayNo, int Hr, int Mn, int Sc,
 						double *Lon, double *Lat);
 
-	void MAGtoGEOUT_LL(	double *MLon, double *MLat, int n, 
-						double *Vx, double *Vy, double *Vz, 
-						int *Date,float *ut, 
+	void MAGtoGEOUT_LL(	double *MLon, double *MLat, int n,
+						double *Vx, double *Vy, double *Vz,
+						int *Date,float *ut,
 						double *Lon, double *Lat);
 
 
@@ -244,12 +244,12 @@ double GetDipoleTiltUT(int Date, float ut, double Vx, double Vy, double Vz);
 
 	/***********************************************************************
 	 * NAME : 			void GEItoGEO(	Xin, Yin, Zin, Vx, Vy, Vz, recalc,
-	 *									Year, DayNo, Hr, Mn, Sc, 
+	 *									Year, DayNo, Hr, Mn, Sc,
 	 *									*Xout, *Yout, *Zout)
-	 * 
+	 *
 	 * DESCRIPTION : 	Wrapper for converting GEI to GEO coordinates
-	 * 
-	 * INPUTS : 
+	 *
+	 * INPUTS :
 	 * 		double	Xin		x GEI coordinate (R_E)
 	 * 		double	Yin		y GEI coordinate (R_E)
 	 * 		double	Zin		z GEI coordinate (R_E)
@@ -262,39 +262,39 @@ double GetDipoleTiltUT(int Date, float ut, double Vx, double Vy, double Vz);
 	 * 		int		Hr		Hours
 	 * 		int		Mn		Minutes
 	 * 		int		Sc		Seconds
-	 * 
-	 * OUTPUTS : 
+	 *
+	 * OUTPUTS :
 	 * 		double	*Xout	x GEO coordinate (R_E)
 	 * 		double	*Yout	y GEO coordinate (R_E)
 	 * 		double	*Zout	z GEO coordinate (R_E)
-	 * 
-	 * RETURNS : 
+	 *
+	 * RETURNS :
 	 * 		void
-	 * 
-	 * PROCESS : 
+	 *
+	 * PROCESS :
 	 * 		[1] Calls recalc_08_ function in FORTRAN (if recalc != 0)
 	 * 		[2] Calls FORTRAN code to convert from GEI to GEO coordinates
-	 * 
+	 *
 	 * ********************************************************************/
-	void GEItoGEO(	double Xin, double Yin, double Zin, 
+	void GEItoGEO(	double Xin, double Yin, double Zin,
 					double Vx, double Vy, double Vz, int recalc,
-					int Year, int DayNo, int Hr, int Mn, int Sc, 
+					int Year, int DayNo, int Hr, int Mn, int Sc,
 					double *Xout, double *Yout, double *Zout);
-					
-	void GEItoGEOUT(	double *Xin, double *Yin, double *Zin, int n, 
-						double *Vx, double *Vy, double *Vz, 
-						int *Date, float *ut, 
+
+	void GEItoGEOUT(	double *Xin, double *Yin, double *Zin, int n,
+						double *Vx, double *Vy, double *Vz,
+						int *Date, float *ut,
 						double *Xout, double *Yout, double *Zout);
 
 
 	/***********************************************************************
 	 * NAME : 			void GEOtoGEI(	Xin, Yin, Zin, Vx, Vy, Vz, recalc,
-	 *									Year, DayNo, Hr, Mn, Sc, 
+	 *									Year, DayNo, Hr, Mn, Sc,
 	 *									*Xout, *Yout, *Zout)
-	 * 
+	 *
 	 * DESCRIPTION : 	Wrapper for converting GEO to GEI coordinates
-	 * 
-	 * INPUTS : 
+	 *
+	 * INPUTS :
 	 * 		double	Xin		x GEO coordinate (R_E)
 	 * 		double	Yin		y GEO coordinate (R_E)
 	 * 		double	Zin		z GEO coordinate (R_E)
@@ -307,28 +307,28 @@ double GetDipoleTiltUT(int Date, float ut, double Vx, double Vy, double Vz);
 	 * 		int		Hr		Hours
 	 * 		int		Mn		Minutes
 	 * 		int		Sc		Seconds
-	 * 
-	 * OUTPUTS : 
+	 *
+	 * OUTPUTS :
 	 * 		double	*Xout	x GEI coordinate (R_E)
 	 * 		double	*Yout	y GEI coordinate (R_E)
 	 * 		double	*Zout	z GEI coordinate (R_E)
-	 * 
-	 * RETURNS : 
+	 *
+	 * RETURNS :
 	 * 		void
-	 * 
-	 * PROCESS : 
+	 *
+	 * PROCESS :
 	 * 		[1] Calls recalc_08_ function in FORTRAN (if recalc != 0)
 	 * 		[2] Calls FORTRAN code to convert from GEO to GEI coordinates
-	 * 
+	 *
 	 * ********************************************************************/
-	void GEOtoGEI(	double Xin, double Yin, double Zin, 
+	void GEOtoGEI(	double Xin, double Yin, double Zin,
 					double Vx, double Vy, double Vz, int recalc,
-					int Year, int DayNo, int Hr, int Mn, int Sc, 
+					int Year, int DayNo, int Hr, int Mn, int Sc,
 					double *Xout, double *Yout, double *Zout);
 
-	void GEOtoGEIUT(	double *Xin, double *Yin, double *Zin, int n, 
-						double *Vx, double *Vy, double *Vz, 
-						int *Date, float *ut, 
+	void GEOtoGEIUT(	double *Xin, double *Yin, double *Zin, int n,
+						double *Vx, double *Vy, double *Vz,
+						int *Date, float *ut,
 						double *Xout, double *Yout, double *Zout);
 
 
@@ -336,12 +336,12 @@ double GetDipoleTiltUT(int Date, float ut, double Vx, double Vy, double Vz);
 
 	/***********************************************************************
 	 * NAME : 			void GSMtoGEO(	Xin, Yin, Zin, Vx, Vy, Vz, recalc,
-	 *									Year, DayNo, Hr, Mn, Sc, 
+	 *									Year, DayNo, Hr, Mn, Sc,
 	 *									*Xout, *Yout, *Zout)
-	 * 
+	 *
 	 * DESCRIPTION : 	Wrapper for converting GSM to GEO coordinates
-	 * 
-	 * INPUTS : 
+	 *
+	 * INPUTS :
 	 * 		double	Xin		x GSM coordinate (R_E)
 	 * 		double	Yin		y GSM coordinate (R_E)
 	 * 		double	Zin		z GSM coordinate (R_E)
@@ -354,39 +354,39 @@ double GetDipoleTiltUT(int Date, float ut, double Vx, double Vy, double Vz);
 	 * 		int		Hr		Hours
 	 * 		int		Mn		Minutes
 	 * 		int		Sc		Seconds
-	 * 
-	 * OUTPUTS : 
+	 *
+	 * OUTPUTS :
 	 * 		double	*Xout	x GEO coordinate (R_E)
 	 * 		double	*Yout	y GEO coordinate (R_E)
 	 * 		double	*Zout	z GEO coordinate (R_E)
-	 * 
-	 * RETURNS : 
+	 *
+	 * RETURNS :
 	 * 		void
-	 * 
-	 * PROCESS : 
+	 *
+	 * PROCESS :
 	 * 		[1] Calls recalc_08_ function in FORTRAN (if recalc != 0)
 	 * 		[2] Calls FORTRAN code to convert from GSM to GEO coordinates
-	 * 
+	 *
 	 * ********************************************************************/
-	void GSMtoGEO(	double Xin, double Yin, double Zin, 
+	void GSMtoGEO(	double Xin, double Yin, double Zin,
 					double Vx, double Vy, double Vz, int recalc,
-					int Year, int DayNo, int Hr, int Mn, int Sc, 
+					int Year, int DayNo, int Hr, int Mn, int Sc,
 					double *Xout, double *Yout, double *Zout);
-					
-	void GSMtoGEOUT(	double *Xin, double *Yin, double *Zin, int n, 
-						double *Vx, double *Vy, double *Vz, 
-						int *Date, float *ut, 
+
+	void GSMtoGEOUT(	double *Xin, double *Yin, double *Zin, int n,
+						double *Vx, double *Vy, double *Vz,
+						int *Date, float *ut,
 						double *Xout, double *Yout, double *Zout);
 
 
 	/***********************************************************************
 	 * NAME : 			void GEOtoGSM(	Xin, Yin, Zin, Vx, Vy, Vz, recalc,
-	 *									Year, DayNo, Hr, Mn, Sc, 
+	 *									Year, DayNo, Hr, Mn, Sc,
 	 *									*Xout, *Yout, *Zout)
-	 * 
+	 *
 	 * DESCRIPTION : 	Wrapper for converting GEO to GSM coordinates
-	 * 
-	 * INPUTS : 
+	 *
+	 * INPUTS :
 	 * 		double	Xin		x GEO coordinate (R_E)
 	 * 		double	Yin		y GEO coordinate (R_E)
 	 * 		double	Zin		z GEO coordinate (R_E)
@@ -399,28 +399,28 @@ double GetDipoleTiltUT(int Date, float ut, double Vx, double Vy, double Vz);
 	 * 		int		Hr		Hours
 	 * 		int		Mn		Minutes
 	 * 		int		Sc		Seconds
-	 * 
-	 * OUTPUTS : 
+	 *
+	 * OUTPUTS :
 	 * 		double	*Xout	x GSM coordinate (R_E)
 	 * 		double	*Yout	y GSM coordinate (R_E)
 	 * 		double	*Zout	z GSM coordinate (R_E)
-	 * 
-	 * RETURNS : 
+	 *
+	 * RETURNS :
 	 * 		void
-	 * 
-	 * PROCESS : 
+	 *
+	 * PROCESS :
 	 * 		[1] Calls recalc_08_ function in FORTRAN (if recalc != 0)
 	 * 		[2] Calls FORTRAN code to convert from GEO to GSM coordinates
-	 * 
+	 *
 	 * ********************************************************************/
-	void GEOtoGSM(	double Xin, double Yin, double Zin, 
+	void GEOtoGSM(	double Xin, double Yin, double Zin,
 					double Vx, double Vy, double Vz, int recalc,
-					int Year, int DayNo, int Hr, int Mn, int Sc, 
+					int Year, int DayNo, int Hr, int Mn, int Sc,
 					double *Xout, double *Yout, double *Zout);
 
-	void GEOtoGSMUT(	double *Xin, double *Yin, double *Zin, int n, 
-						double *Vx, double *Vy, double *Vz, 
-						int *Date, float *ut, 
+	void GEOtoGSMUT(	double *Xin, double *Yin, double *Zin, int n,
+						double *Vx, double *Vy, double *Vz,
+						int *Date, float *ut,
 						double *Xout, double *Yout, double *Zout);
 
 
@@ -430,12 +430,12 @@ double GetDipoleTiltUT(int Date, float ut, double Vx, double Vy, double Vz);
 
 	/***********************************************************************
 	 * NAME : 			void GSEtoGEO(	Xin, Yin, Zin, Vx, Vy, Vz, recalc,
-	 *									Year, DayNo, Hr, Mn, Sc, 
+	 *									Year, DayNo, Hr, Mn, Sc,
 	 *									*Xout, *Yout, *Zout)
-	 * 
+	 *
 	 * DESCRIPTION : 	Wrapper for converting GSE to GEO coordinates
-	 * 
-	 * INPUTS : 
+	 *
+	 * INPUTS :
 	 * 		double	Xin		x GSE coordinate (R_E)
 	 * 		double	Yin		y GSE coordinate (R_E)
 	 * 		double	Zin		z GSE coordinate (R_E)
@@ -448,40 +448,40 @@ double GetDipoleTiltUT(int Date, float ut, double Vx, double Vy, double Vz);
 	 * 		int		Hr		Hours
 	 * 		int		Mn		Minutes
 	 * 		int		Sc		Seconds
-	 * 
-	 * OUTPUTS : 
+	 *
+	 * OUTPUTS :
 	 * 		double	*Xout	x GEO coordinate (R_E)
 	 * 		double	*Yout	y GEO coordinate (R_E)
 	 * 		double	*Zout	z GEO coordinate (R_E)
-	 * 
-	 * RETURNS : 
+	 *
+	 * RETURNS :
 	 * 		void
-	 * 
-	 * PROCESS : 
+	 *
+	 * PROCESS :
 	 * 		[1] Calls recalc_08_ function in FORTRAN (if recalc != 0)
 	 * 		[2] Calls FORTRAN code to convert from GSE to GEO coordinates
-	 * 
+	 *
 	 * ********************************************************************/
-	void GSEtoGEO(	double Xin, double Yin, double Zin, 
+	void GSEtoGEO(	double Xin, double Yin, double Zin,
 					double Vx, double Vy, double Vz, int recalc,
-					int Year, int DayNo, int Hr, int Mn, int Sc, 
+					int Year, int DayNo, int Hr, int Mn, int Sc,
 					double *Xout, double *Yout, double *Zout);
 
-	void GSEtoGEOUT(	double *Xin, double *Yin, double *Zin, int n, 
-						double *Vx, double *Vy, double *Vz, 
-						int *Date, float *ut, 
+	void GSEtoGEOUT(	double *Xin, double *Yin, double *Zin, int n,
+						double *Vx, double *Vy, double *Vz,
+						int *Date, float *ut,
 						double *Xout, double *Yout, double *Zout);
 
 
 
 	/***********************************************************************
 	 * NAME : 			void GEOtoGSE(	Xin, Yin, Zin, Vx, Vy, Vz, recalc,
-	 *									Year, DayNo, Hr, Mn, Sc, 
+	 *									Year, DayNo, Hr, Mn, Sc,
 	 *									*Xout, *Yout, *Zout)
-	 * 
+	 *
 	 * DESCRIPTION : 	Wrapper for converting GEO to GSE coordinates
-	 * 
-	 * INPUTS : 
+	 *
+	 * INPUTS :
 	 * 		double	Xin		x GEO coordinate (R_E)
 	 * 		double	Yin		y GEO coordinate (R_E)
 	 * 		double	Zin		z GEO coordinate (R_E)
@@ -494,28 +494,28 @@ double GetDipoleTiltUT(int Date, float ut, double Vx, double Vy, double Vz);
 	 * 		int		Hr		Hours
 	 * 		int		Mn		Minutes
 	 * 		int		Sc		Seconds
-	 * 
-	 * OUTPUTS : 
+	 *
+	 * OUTPUTS :
 	 * 		double	*Xout	x GSE coordinate (R_E)
 	 * 		double	*Yout	y GSE coordinate (R_E)
 	 * 		double	*Zout	z GSE coordinate (R_E)
-	 * 
-	 * RETURNS : 
+	 *
+	 * RETURNS :
 	 * 		void
-	 * 
-	 * PROCESS : 
+	 *
+	 * PROCESS :
 	 * 		[1] Calls recalc_08_ function in FORTRAN (if recalc != 0)
 	 * 		[2] Calls FORTRAN code to convert from GEO to GSE coordinates
-	 * 
+	 *
 	 * ********************************************************************/
-	void GEOtoGSE(	double Xin, double Yin, double Zin, 
+	void GEOtoGSE(	double Xin, double Yin, double Zin,
 					double Vx, double Vy, double Vz, int recalc,
-					int Year, int DayNo, int Hr, int Mn, int Sc, 
+					int Year, int DayNo, int Hr, int Mn, int Sc,
 					double *Xout, double *Yout, double *Zout);
 
-	void GEOtoGSEUT(	double *Xin, double *Yin, double *Zin, int n, 
-						double *Vx, double *Vy, double *Vz, 
-						int *Date, float *ut, 
+	void GEOtoGSEUT(	double *Xin, double *Yin, double *Zin, int n,
+						double *Vx, double *Vy, double *Vz,
+						int *Date, float *ut,
 						double *Xout, double *Yout, double *Zout);
 
 
@@ -525,12 +525,12 @@ double GetDipoleTiltUT(int Date, float ut, double Vx, double Vy, double Vz);
 
 	/***********************************************************************
 	 * NAME : 			void SMtoGEO(	Xin, Yin, Zin, Vx, Vy, Vz, recalc,
-	 *									Year, DayNo, Hr, Mn, Sc, 
+	 *									Year, DayNo, Hr, Mn, Sc,
 	 *									*Xout, *Yout, *Zout)
-	 * 
+	 *
 	 * DESCRIPTION : 	Wrapper for converting SM to GEO coordinates
-	 * 
-	 * INPUTS : 
+	 *
+	 * INPUTS :
 	 * 		double	Xin		x SM coordinate (R_E)
 	 * 		double	Yin		y SM coordinate (R_E)
 	 * 		double	Zin		z SM coordinate (R_E)
@@ -543,39 +543,39 @@ double GetDipoleTiltUT(int Date, float ut, double Vx, double Vy, double Vz);
 	 * 		int		Hr		Hours
 	 * 		int		Mn		Minutes
 	 * 		int		Sc		Seconds
-	 * 
-	 * OUTPUTS : 
+	 *
+	 * OUTPUTS :
 	 * 		double	*Xout	x GEO coordinate (R_E)
 	 * 		double	*Yout	y GEO coordinate (R_E)
 	 * 		double	*Zout	z GEO coordinate (R_E)
-	 * 
-	 * RETURNS : 
+	 *
+	 * RETURNS :
 	 * 		void
-	 * 
-	 * PROCESS : 
+	 *
+	 * PROCESS :
 	 * 		[1] Calls recalc_08_ function in FORTRAN (if recalc != 0)
 	 * 		[2] Calls FORTRAN code to convert from SM to GEO coordinates
-	 * 
+	 *
 	 * ********************************************************************/
-	void SMtoGEO(	double Xin, double Yin, double Zin, 
+	void SMtoGEO(	double Xin, double Yin, double Zin,
 					double Vx, double Vy, double Vz, int recalc,
-					int Year, int DayNo, int Hr, int Mn, int Sc, 
+					int Year, int DayNo, int Hr, int Mn, int Sc,
 					double *Xout, double *Yout, double *Zout);
 
-	void SMtoGEOUT(	double *Xin, double *Yin, double *Zin, int n, 
-						double *Vx, double *Vy, double *Vz, 
-						int *Date, float *ut, 
+	void SMtoGEOUT(	double *Xin, double *Yin, double *Zin, int n,
+						double *Vx, double *Vy, double *Vz,
+						int *Date, float *ut,
 						double *Xout, double *Yout, double *Zout);
 
 
 	/***********************************************************************
 	 * NAME : 			void GEOtoSM(	Xin, Yin, Zin, Vx, Vy, Vz, recalc,
-	 *									Year, DayNo, Hr, Mn, Sc, 
+	 *									Year, DayNo, Hr, Mn, Sc,
 	 *									*Xout, *Yout, *Zout)
-	 * 
+	 *
 	 * DESCRIPTION : 	Wrapper for converting GEO to SM coordinates
-	 * 
-	 * INPUTS : 
+	 *
+	 * INPUTS :
 	 * 		double	Xin		x GEO coordinate (R_E)
 	 * 		double	Yin		y GEO coordinate (R_E)
 	 * 		double	Zin		z GEO coordinate (R_E)
@@ -588,28 +588,28 @@ double GetDipoleTiltUT(int Date, float ut, double Vx, double Vy, double Vz);
 	 * 		int		Hr		Hours
 	 * 		int		Mn		Minutes
 	 * 		int		Sc		Seconds
-	 * 
-	 * OUTPUTS : 
+	 *
+	 * OUTPUTS :
 	 * 		double	*Xout	x SM coordinate (R_E)
 	 * 		double	*Yout	y SM coordinate (R_E)
 	 * 		double	*Zout	z SM coordinate (R_E)
-	 * 
-	 * RETURNS : 
+	 *
+	 * RETURNS :
 	 * 		void
-	 * 
-	 * PROCESS : 
+	 *
+	 * PROCESS :
 	 * 		[1] Calls recalc_08_ function in FORTRAN (if recalc != 0)
 	 * 		[2] Calls FORTRAN code to convert from GEO to SM coordinates
-	 * 
+	 *
 	 * ********************************************************************/
-	void GEOtoSM(	double Xin, double Yin, double Zin, 
+	void GEOtoSM(	double Xin, double Yin, double Zin,
 					double Vx, double Vy, double Vz, int recalc,
-					int Year, int DayNo, int Hr, int Mn, int Sc, 
+					int Year, int DayNo, int Hr, int Mn, int Sc,
 					double *Xout, double *Yout, double *Zout);
 
-	void GEOtoSMUT(	double *Xin, double *Yin, double *Zin, int n, 
-						double *Vx, double *Vy, double *Vz, 
-						int *Date, float *ut, 
+	void GEOtoSMUT(	double *Xin, double *Yin, double *Zin, int n,
+						double *Vx, double *Vy, double *Vz,
+						int *Date, float *ut,
 						double *Xout, double *Yout, double *Zout);
 
 
@@ -617,12 +617,12 @@ double GetDipoleTiltUT(int Date, float ut, double Vx, double Vy, double Vz);
 
 	/***********************************************************************
 	 * NAME : 			void GSEtoGEI(	Xin, Yin, Zin, Vx, Vy, Vz, recalc,
-	 *									Year, DayNo, Hr, Mn, Sc, 
+	 *									Year, DayNo, Hr, Mn, Sc,
 	 *									*Xout, *Yout, *Zout)
-	 * 
+	 *
 	 * DESCRIPTION : 	Wrapper for converting GSE to GEI coordinates
-	 * 
-	 * INPUTS : 
+	 *
+	 * INPUTS :
 	 * 		double	Xin		x GSE coordinate (R_E)
 	 * 		double	Yin		y GSE coordinate (R_E)
 	 * 		double	Zin		z GSE coordinate (R_E)
@@ -635,40 +635,40 @@ double GetDipoleTiltUT(int Date, float ut, double Vx, double Vy, double Vz);
 	 * 		int		Hr		Hours
 	 * 		int		Mn		Minutes
 	 * 		int		Sc		Seconds
-	 * 
-	 * OUTPUTS : 
+	 *
+	 * OUTPUTS :
 	 * 		double	*Xout	x GEI coordinate (R_E)
 	 * 		double	*Yout	y GEI coordinate (R_E)
 	 * 		double	*Zout	z GEI coordinate (R_E)
-	 * 
-	 * RETURNS : 
+	 *
+	 * RETURNS :
 	 * 		void
-	 * 
-	 * PROCESS : 
+	 *
+	 * PROCESS :
 	 * 		[1] Calls recalc_08_ function in FORTRAN (if recalc != 0)
 	 * 		[2] Calls FORTRAN code to convert from GSE to GEI coordinates
-	 * 
+	 *
 	 * ********************************************************************/
-	void GSEtoGEI(	double Xin, double Yin, double Zin, 
+	void GSEtoGEI(	double Xin, double Yin, double Zin,
 					double Vx, double Vy, double Vz, int recalc,
-					int Year, int DayNo, int Hr, int Mn, int Sc, 
+					int Year, int DayNo, int Hr, int Mn, int Sc,
 					double *Xout, double *Yout, double *Zout);
 
-	void GSEtoGEIUT(	double *Xin, double *Yin, double *Zin, int n, 
-						double *Vx, double *Vy, double *Vz, 
-						int *Date, float *ut, 
+	void GSEtoGEIUT(	double *Xin, double *Yin, double *Zin, int n,
+						double *Vx, double *Vy, double *Vz,
+						int *Date, float *ut,
 						double *Xout, double *Yout, double *Zout);
 
 
 
 	/***********************************************************************
 	 * NAME : 			void GEItoGSE(	Xin, Yin, Zin, Vx, Vy, Vz, recalc,
-	 *									Year, DayNo, Hr, Mn, Sc, 
+	 *									Year, DayNo, Hr, Mn, Sc,
 	 *									*Xout, *Yout, *Zout)
-	 * 
+	 *
 	 * DESCRIPTION : 	Wrapper for converting GEI to GSE coordinates
-	 * 
-	 * INPUTS : 
+	 *
+	 * INPUTS :
 	 * 		double	Xin		x GEI coordinate (R_E)
 	 * 		double	Yin		y GEI coordinate (R_E)
 	 * 		double	Zin		z GEI coordinate (R_E)
@@ -681,39 +681,39 @@ double GetDipoleTiltUT(int Date, float ut, double Vx, double Vy, double Vz);
 	 * 		int		Hr		Hours
 	 * 		int		Mn		Minutes
 	 * 		int		Sc		Seconds
-	 * 
-	 * OUTPUTS : 
+	 *
+	 * OUTPUTS :
 	 * 		double	*Xout	x GSE coordinate (R_E)
 	 * 		double	*Yout	y GSE coordinate (R_E)
 	 * 		double	*Zout	z GSE coordinate (R_E)
-	 * 
-	 * RETURNS : 
+	 *
+	 * RETURNS :
 	 * 		void
-	 * 
-	 * PROCESS : 
+	 *
+	 * PROCESS :
 	 * 		[1] Calls recalc_08_ function in FORTRAN (if recalc != 0)
 	 * 		[2] Calls FORTRAN code to convert from GEI to GSE coordinates
-	 * 
+	 *
 	 * ********************************************************************/
-	void GEItoGSE(	double Xin, double Yin, double Zin, 
+	void GEItoGSE(	double Xin, double Yin, double Zin,
 					double Vx, double Vy, double Vz, int recalc,
-					int Year, int DayNo, int Hr, int Mn, int Sc, 
+					int Year, int DayNo, int Hr, int Mn, int Sc,
 					double *Xout, double *Yout, double *Zout);
 
-	void GEItoGSEUT(	double *Xin, double *Yin, double *Zin, int n, 
-						double *Vx, double *Vy, double *Vz, 
-						int *Date, float *ut, 
+	void GEItoGSEUT(	double *Xin, double *Yin, double *Zin, int n,
+						double *Vx, double *Vy, double *Vz,
+						int *Date, float *ut,
 						double *Xout, double *Yout, double *Zout);
 
 
 	/***********************************************************************
 	 * NAME : 			void GSMtoGEI(	Xin, Yin, Zin, Vx, Vy, Vz, recalc,
-	 *									Year, DayNo, Hr, Mn, Sc, 
+	 *									Year, DayNo, Hr, Mn, Sc,
 	 *									*Xout, *Yout, *Zout)
-	 * 
+	 *
 	 * DESCRIPTION : 	Wrapper for converting GSM to GEI coordinates
-	 * 
-	 * INPUTS : 
+	 *
+	 * INPUTS :
 	 * 		double	Xin		x GSM coordinate (R_E)
 	 * 		double	Yin		y GSM coordinate (R_E)
 	 * 		double	Zin		z GSM coordinate (R_E)
@@ -726,40 +726,40 @@ double GetDipoleTiltUT(int Date, float ut, double Vx, double Vy, double Vz);
 	 * 		int		Hr		Hours
 	 * 		int		Mn		Minutes
 	 * 		int		Sc		Seconds
-	 * 
-	 * OUTPUTS : 
+	 *
+	 * OUTPUTS :
 	 * 		double	*Xout	x GEI coordinate (R_E)
 	 * 		double	*Yout	y GEI coordinate (R_E)
 	 * 		double	*Zout	z GEI coordinate (R_E)
-	 * 
-	 * RETURNS : 
+	 *
+	 * RETURNS :
 	 * 		void
-	 * 
-	 * PROCESS : 
+	 *
+	 * PROCESS :
 	 * 		[1] Calls recalc_08_ function in FORTRAN (if recalc != 0)
 	 * 		[2] Calls FORTRAN code to convert from GSM to GEI coordinates
-	 * 
+	 *
 	 * ********************************************************************/
-	void GSMtoGEI(	double Xin, double Yin, double Zin, 
+	void GSMtoGEI(	double Xin, double Yin, double Zin,
 					double Vx, double Vy, double Vz, int recalc,
-					int Year, int DayNo, int Hr, int Mn, int Sc, 
+					int Year, int DayNo, int Hr, int Mn, int Sc,
 					double *Xout, double *Yout, double *Zout);
 
-	void GSMtoGEIUT(	double *Xin, double *Yin, double *Zin, int n, 
-						double *Vx, double *Vy, double *Vz, 
-						int *Date, float *ut, 
+	void GSMtoGEIUT(	double *Xin, double *Yin, double *Zin, int n,
+						double *Vx, double *Vy, double *Vz,
+						int *Date, float *ut,
 						double *Xout, double *Yout, double *Zout);
 
 
 
 	/***********************************************************************
 	 * NAME : 			void GEItoGSM(	Xin, Yin, Zin, Vx, Vy, Vz, recalc,
-	 *									Year, DayNo, Hr, Mn, Sc, 
+	 *									Year, DayNo, Hr, Mn, Sc,
 	 *									*Xout, *Yout, *Zout)
-	 * 
+	 *
 	 * DESCRIPTION : 	Wrapper for converting GEI to GSM coordinates
-	 * 
-	 * INPUTS : 
+	 *
+	 * INPUTS :
 	 * 		double	Xin		x GEI coordinate (R_E)
 	 * 		double	Yin		y GEI coordinate (R_E)
 	 * 		double	Zin		z GEI coordinate (R_E)
@@ -772,39 +772,39 @@ double GetDipoleTiltUT(int Date, float ut, double Vx, double Vy, double Vz);
 	 * 		int		Hr		Hours
 	 * 		int		Mn		Minutes
 	 * 		int		Sc		Seconds
-	 * 
-	 * OUTPUTS : 
+	 *
+	 * OUTPUTS :
 	 * 		double	*Xout	x GSM coordinate (R_E)
 	 * 		double	*Yout	y GSM coordinate (R_E)
 	 * 		double	*Zout	z GSM coordinate (R_E)
-	 * 
-	 * RETURNS : 
+	 *
+	 * RETURNS :
 	 * 		void
-	 * 
-	 * PROCESS : 
+	 *
+	 * PROCESS :
 	 * 		[1] Calls recalc_08_ function in FORTRAN (if recalc != 0)
 	 * 		[2] Calls FORTRAN code to convert from GEI to GSM coordinates
-	 * 
+	 *
 	 * ********************************************************************/
-	void GEItoGSM(	double Xin, double Yin, double Zin, 
+	void GEItoGSM(	double Xin, double Yin, double Zin,
 					double Vx, double Vy, double Vz, int recalc,
-					int Year, int DayNo, int Hr, int Mn, int Sc, 
+					int Year, int DayNo, int Hr, int Mn, int Sc,
 					double *Xout, double *Yout, double *Zout);
 
-	void GEItoGSMUT(	double *Xin, double *Yin, double *Zin, int n, 
-						double *Vx, double *Vy, double *Vz, 
-						int *Date, float *ut, 
+	void GEItoGSMUT(	double *Xin, double *Yin, double *Zin, int n,
+						double *Vx, double *Vy, double *Vz,
+						int *Date, float *ut,
 						double *Xout, double *Yout, double *Zout);
 
 
 	/***********************************************************************
 	 * NAME : 			void SMtoGEI(	Xin, Yin, Zin, Vx, Vy, Vz, recalc,
-	 *									Year, DayNo, Hr, Mn, Sc, 
+	 *									Year, DayNo, Hr, Mn, Sc,
 	 *									*Xout, *Yout, *Zout)
-	 * 
+	 *
 	 * DESCRIPTION : 	Wrapper for converting SM to GEI coordinates
-	 * 
-	 * INPUTS : 
+	 *
+	 * INPUTS :
 	 * 		double	Xin		x SM coordinate (R_E)
 	 * 		double	Yin		y SM coordinate (R_E)
 	 * 		double	Zin		z SM coordinate (R_E)
@@ -817,40 +817,40 @@ double GetDipoleTiltUT(int Date, float ut, double Vx, double Vy, double Vz);
 	 * 		int		Hr		Hours
 	 * 		int		Mn		Minutes
 	 * 		int		Sc		Seconds
-	 * 
-	 * OUTPUTS : 
+	 *
+	 * OUTPUTS :
 	 * 		double	*Xout	x GEI coordinate (R_E)
 	 * 		double	*Yout	y GEI coordinate (R_E)
 	 * 		double	*Zout	z GEI coordinate (R_E)
-	 * 
-	 * RETURNS : 
+	 *
+	 * RETURNS :
 	 * 		void
-	 * 
-	 * PROCESS : 
+	 *
+	 * PROCESS :
 	 * 		[1] Calls recalc_08_ function in FORTRAN (if recalc != 0)
 	 * 		[2] Calls FORTRAN code to convert from SM to GEI coordinates
-	 * 
+	 *
 	 * ********************************************************************/
-	void SMtoGEI(	double Xin, double Yin, double Zin, 
+	void SMtoGEI(	double Xin, double Yin, double Zin,
 					double Vx, double Vy, double Vz, int recalc,
-					int Year, int DayNo, int Hr, int Mn, int Sc, 
+					int Year, int DayNo, int Hr, int Mn, int Sc,
 					double *Xout, double *Yout, double *Zout);
 
-	void SMtoGEIUT(	double *Xin, double *Yin, double *Zin, int n, 
-						double *Vx, double *Vy, double *Vz, 
-						int *Date, float *ut, 
+	void SMtoGEIUT(	double *Xin, double *Yin, double *Zin, int n,
+						double *Vx, double *Vy, double *Vz,
+						int *Date, float *ut,
 						double *Xout, double *Yout, double *Zout);
 
 
 
 	/***********************************************************************
 	 * NAME : 			void GEItoSM(	Xin, Yin, Zin, Vx, Vy, Vz, recalc,
-	 *									Year, DayNo, Hr, Mn, Sc, 
+	 *									Year, DayNo, Hr, Mn, Sc,
 	 *									*Xout, *Yout, *Zout)
-	 * 
+	 *
 	 * DESCRIPTION : 	Wrapper for converting GEI to SM coordinates
-	 * 
-	 * INPUTS : 
+	 *
+	 * INPUTS :
 	 * 		double	Xin		x GEI coordinate (R_E)
 	 * 		double	Yin		y GEI coordinate (R_E)
 	 * 		double	Zin		z GEI coordinate (R_E)
@@ -863,28 +863,28 @@ double GetDipoleTiltUT(int Date, float ut, double Vx, double Vy, double Vz);
 	 * 		int		Hr		Hours
 	 * 		int		Mn		Minutes
 	 * 		int		Sc		Seconds
-	 * 
-	 * OUTPUTS : 
+	 *
+	 * OUTPUTS :
 	 * 		double	*Xout	x SM coordinate (R_E)
 	 * 		double	*Yout	y SM coordinate (R_E)
 	 * 		double	*Zout	z SM coordinate (R_E)
-	 * 
-	 * RETURNS : 
+	 *
+	 * RETURNS :
 	 * 		void
-	 * 
-	 * PROCESS : 
+	 *
+	 * PROCESS :
 	 * 		[1] Calls recalc_08_ function in FORTRAN (if recalc != 0)
 	 * 		[2] Calls FORTRAN code to convert from GEI to SM coordinates
-	 * 
+	 *
 	 * ********************************************************************/
-	void GEItoSM(	double Xin, double Yin, double Zin, 
+	void GEItoSM(	double Xin, double Yin, double Zin,
 					double Vx, double Vy, double Vz, int recalc,
-					int Year, int DayNo, int Hr, int Mn, int Sc, 
+					int Year, int DayNo, int Hr, int Mn, int Sc,
 					double *Xout, double *Yout, double *Zout);
 
-	void GEItoSMUT(	double *Xin, double *Yin, double *Zin, int n, 
-						double *Vx, double *Vy, double *Vz, 
-						int *Date, float *ut, 
+	void GEItoSMUT(	double *Xin, double *Yin, double *Zin, int n,
+						double *Vx, double *Vy, double *Vz,
+						int *Date, float *ut,
 						double *Xout, double *Yout, double *Zout);
 
 
@@ -897,12 +897,12 @@ double GetDipoleTiltUT(int Date, float ut, double Vx, double Vy, double Vz);
 
 	/***********************************************************************
 	 * NAME : 			void MAGtoGEI(	Xin, Yin, Zin, Vx, Vy, Vz, recalc,
-	 *									Year, DayNo, Hr, Mn, Sc, 
+	 *									Year, DayNo, Hr, Mn, Sc,
 	 *									*Xout, *Yout, *Zout)
-	 * 
+	 *
 	 * DESCRIPTION : 	Wrapper for converting MAG to GEI coordinates
-	 * 
-	 * INPUTS : 
+	 *
+	 * INPUTS :
 	 * 		double	Xin		x MAG coordinate (R_E)
 	 * 		double	Yin		y MAG coordinate (R_E)
 	 * 		double	Zin		z MAG coordinate (R_E)
@@ -915,40 +915,40 @@ double GetDipoleTiltUT(int Date, float ut, double Vx, double Vy, double Vz);
 	 * 		int		Hr		Hours
 	 * 		int		Mn		Minutes
 	 * 		int		Sc		Seconds
-	 * 
-	 * OUTPUTS : 
+	 *
+	 * OUTPUTS :
 	 * 		double	*Xout	x GEI coordinate (R_E)
 	 * 		double	*Yout	y GEI coordinate (R_E)
 	 * 		double	*Zout	z GEI coordinate (R_E)
-	 * 
-	 * RETURNS : 
+	 *
+	 * RETURNS :
 	 * 		void
-	 * 
-	 * PROCESS : 
+	 *
+	 * PROCESS :
 	 * 		[1] Calls recalc_08_ function in FORTRAN (if recalc != 0)
 	 * 		[2] Calls FORTRAN code to convert from MAG to GEI coordinates
-	 * 
+	 *
 	 * ********************************************************************/
-	void MAGtoGEI(	double Xin, double Yin, double Zin, 
+	void MAGtoGEI(	double Xin, double Yin, double Zin,
 					double Vx, double Vy, double Vz, int recalc,
-					int Year, int DayNo, int Hr, int Mn, int Sc, 
+					int Year, int DayNo, int Hr, int Mn, int Sc,
 					double *Xout, double *Yout, double *Zout);
 
-	void MAGtoGEIUT(	double *Xin, double *Yin, double *Zin, int n, 
-						double *Vx, double *Vy, double *Vz, 
-						int *Date, float *ut, 
+	void MAGtoGEIUT(	double *Xin, double *Yin, double *Zin, int n,
+						double *Vx, double *Vy, double *Vz,
+						int *Date, float *ut,
 						double *Xout, double *Yout, double *Zout);
 
 
 
 	/***********************************************************************
 	 * NAME : 			void GEItoMAG(	Xin, Yin, Zin, Vx, Vy, Vz, recalc,
-	 *									Year, DayNo, Hr, Mn, Sc, 
+	 *									Year, DayNo, Hr, Mn, Sc,
 	 *									*Xout, *Yout, *Zout)
-	 * 
+	 *
 	 * DESCRIPTION : 	Wrapper for converting GEI to MAG coordinates
-	 * 
-	 * INPUTS : 
+	 *
+	 * INPUTS :
 	 * 		double	Xin		x GEI coordinate (R_E)
 	 * 		double	Yin		y GEI coordinate (R_E)
 	 * 		double	Zin		z GEI coordinate (R_E)
@@ -961,28 +961,28 @@ double GetDipoleTiltUT(int Date, float ut, double Vx, double Vy, double Vz);
 	 * 		int		Hr		Hours
 	 * 		int		Mn		Minutes
 	 * 		int		Sc		Seconds
-	 * 
-	 * OUTPUTS : 
+	 *
+	 * OUTPUTS :
 	 * 		double	*Xout	x MAG coordinate (R_E)
 	 * 		double	*Yout	y MAG coordinate (R_E)
 	 * 		double	*Zout	z MAG coordinate (R_E)
-	 * 
-	 * RETURNS : 
+	 *
+	 * RETURNS :
 	 * 		void
-	 * 
-	 * PROCESS : 
+	 *
+	 * PROCESS :
 	 * 		[1] Calls recalc_08_ function in FORTRAN (if recalc != 0)
 	 * 		[2] Calls FORTRAN code to convert from GEI to MAG coordinates
-	 * 
+	 *
 	 * ********************************************************************/
-	void GEItoMAG(	double Xin, double Yin, double Zin, 
+	void GEItoMAG(	double Xin, double Yin, double Zin,
 					double Vx, double Vy, double Vz, int recalc,
-					int Year, int DayNo, int Hr, int Mn, int Sc, 
+					int Year, int DayNo, int Hr, int Mn, int Sc,
 					double *Xout, double *Yout, double *Zout);
 
-	void GEItoMAGUT(	double *Xin, double *Yin, double *Zin, int n, 
-						double *Vx, double *Vy, double *Vz, 
-						int *Date, float *ut, 
+	void GEItoMAGUT(	double *Xin, double *Yin, double *Zin, int n,
+						double *Vx, double *Vy, double *Vz,
+						int *Date, float *ut,
 						double *Xout, double *Yout, double *Zout);
 
 
@@ -990,12 +990,12 @@ double GetDipoleTiltUT(int Date, float ut, double Vx, double Vy, double Vz);
 
 	/***********************************************************************
 	 * NAME : 			void MAGtoGSM(	Xin, Yin, Zin, Vx, Vy, Vz, recalc,
-	 *									Year, DayNo, Hr, Mn, Sc, 
+	 *									Year, DayNo, Hr, Mn, Sc,
 	 *									*Xout, *Yout, *Zout)
-	 * 
+	 *
 	 * DESCRIPTION : 	Wrapper for converting MAG to GSM coordinates
-	 * 
-	 * INPUTS : 
+	 *
+	 * INPUTS :
 	 * 		double	Xin		x MAG coordinate (R_E)
 	 * 		double	Yin		y MAG coordinate (R_E)
 	 * 		double	Zin		z MAG coordinate (R_E)
@@ -1008,40 +1008,40 @@ double GetDipoleTiltUT(int Date, float ut, double Vx, double Vy, double Vz);
 	 * 		int		Hr		Hours
 	 * 		int		Mn		Minutes
 	 * 		int		Sc		Seconds
-	 * 
-	 * OUTPUTS : 
+	 *
+	 * OUTPUTS :
 	 * 		double	*Xout	x GSM coordinate (R_E)
 	 * 		double	*Yout	y GSM coordinate (R_E)
 	 * 		double	*Zout	z GSM coordinate (R_E)
-	 * 
-	 * RETURNS : 
+	 *
+	 * RETURNS :
 	 * 		void
-	 * 
-	 * PROCESS : 
+	 *
+	 * PROCESS :
 	 * 		[1] Calls recalc_08_ function in FORTRAN (if recalc != 0)
 	 * 		[2] Calls FORTRAN code to convert from MAG to GSM coordinates
-	 * 
+	 *
 	 * ********************************************************************/
-	void MAGtoGSM(	double Xin, double Yin, double Zin, 
+	void MAGtoGSM(	double Xin, double Yin, double Zin,
 					double Vx, double Vy, double Vz, int recalc,
-					int Year, int DayNo, int Hr, int Mn, int Sc, 
+					int Year, int DayNo, int Hr, int Mn, int Sc,
 					double *Xout, double *Yout, double *Zout);
 
-	void MAGtoGSMUT(	double *Xin, double *Yin, double *Zin, int n, 
-						double *Vx, double *Vy, double *Vz, 
-						int *Date, float *ut, 
+	void MAGtoGSMUT(	double *Xin, double *Yin, double *Zin, int n,
+						double *Vx, double *Vy, double *Vz,
+						int *Date, float *ut,
 						double *Xout, double *Yout, double *Zout);
 
 
 
 	/***********************************************************************
 	 * NAME : 			void GSMtoMAG(	Xin, Yin, Zin, Vx, Vy, Vz, recalc,
-	 *									Year, DayNo, Hr, Mn, Sc, 
+	 *									Year, DayNo, Hr, Mn, Sc,
 	 *									*Xout, *Yout, *Zout)
-	 * 
+	 *
 	 * DESCRIPTION : 	Wrapper for converting GSM to MAG coordinates
-	 * 
-	 * INPUTS : 
+	 *
+	 * INPUTS :
 	 * 		double	Xin		x GSM coordinate (R_E)
 	 * 		double	Yin		y GSM coordinate (R_E)
 	 * 		double	Zin		z GSM coordinate (R_E)
@@ -1054,28 +1054,28 @@ double GetDipoleTiltUT(int Date, float ut, double Vx, double Vy, double Vz);
 	 * 		int		Hr		Hours
 	 * 		int		Mn		Minutes
 	 * 		int		Sc		Seconds
-	 * 
-	 * OUTPUTS : 
+	 *
+	 * OUTPUTS :
 	 * 		double	*Xout	x MAG coordinate (R_E)
 	 * 		double	*Yout	y MAG coordinate (R_E)
 	 * 		double	*Zout	z MAG coordinate (R_E)
-	 * 
-	 * RETURNS : 
+	 *
+	 * RETURNS :
 	 * 		void
-	 * 
-	 * PROCESS : 
+	 *
+	 * PROCESS :
 	 * 		[1] Calls recalc_08_ function in FORTRAN (if recalc != 0)
 	 * 		[2] Calls FORTRAN code to convert from GSM to MAG coordinates
-	 * 
+	 *
 	 * ********************************************************************/
-	void GSMtoMAG(	double Xin, double Yin, double Zin, 
+	void GSMtoMAG(	double Xin, double Yin, double Zin,
 					double Vx, double Vy, double Vz, int recalc,
-					int Year, int DayNo, int Hr, int Mn, int Sc, 
+					int Year, int DayNo, int Hr, int Mn, int Sc,
 					double *Xout, double *Yout, double *Zout);
 
-	void GSMtoMAGUT(	double *Xin, double *Yin, double *Zin, int n, 
-						double *Vx, double *Vy, double *Vz, 
-						int *Date, float *ut, 
+	void GSMtoMAGUT(	double *Xin, double *Yin, double *Zin, int n,
+						double *Vx, double *Vy, double *Vz,
+						int *Date, float *ut,
 						double *Xout, double *Yout, double *Zout);
 
 
@@ -1084,12 +1084,12 @@ double GetDipoleTiltUT(int Date, float ut, double Vx, double Vy, double Vz);
 
 	/***********************************************************************
 	 * NAME : 			void MAGtoSM(	Xin, Yin, Zin, Vx, Vy, Vz, recalc,
-	 *									Year, DayNo, Hr, Mn, Sc, 
+	 *									Year, DayNo, Hr, Mn, Sc,
 	 *									*Xout, *Yout, *Zout)
-	 * 
+	 *
 	 * DESCRIPTION : 	Wrapper for converting MAG to SM coordinates
-	 * 
-	 * INPUTS : 
+	 *
+	 * INPUTS :
 	 * 		double	Xin		x MAG coordinate (R_E)
 	 * 		double	Yin		y MAG coordinate (R_E)
 	 * 		double	Zin		z MAG coordinate (R_E)
@@ -1102,40 +1102,40 @@ double GetDipoleTiltUT(int Date, float ut, double Vx, double Vy, double Vz);
 	 * 		int		Hr		Hours
 	 * 		int		Mn		Minutes
 	 * 		int		Sc		Seconds
-	 * 
-	 * OUTPUTS : 
+	 *
+	 * OUTPUTS :
 	 * 		double	*Xout	x SM coordinate (R_E)
 	 * 		double	*Yout	y SM coordinate (R_E)
 	 * 		double	*Zout	z SM coordinate (R_E)
-	 * 
-	 * RETURNS : 
+	 *
+	 * RETURNS :
 	 * 		void
-	 * 
-	 * PROCESS : 
+	 *
+	 * PROCESS :
 	 * 		[1] Calls recalc_08_ function in FORTRAN (if recalc != 0)
 	 * 		[2] Calls FORTRAN code to convert from MAG to SM coordinates
-	 * 
+	 *
 	 * ********************************************************************/
-	void MAGtoSM(	double Xin, double Yin, double Zin, 
+	void MAGtoSM(	double Xin, double Yin, double Zin,
 					double Vx, double Vy, double Vz, int recalc,
-					int Year, int DayNo, int Hr, int Mn, int Sc, 
+					int Year, int DayNo, int Hr, int Mn, int Sc,
 					double *Xout, double *Yout, double *Zout);
 
-	void MAGtoSMUT(	double *Xin, double *Yin, double *Zin, int n, 
-						double *Vx, double *Vy, double *Vz, 
-						int *Date, float *ut, 
+	void MAGtoSMUT(	double *Xin, double *Yin, double *Zin, int n,
+						double *Vx, double *Vy, double *Vz,
+						int *Date, float *ut,
 						double *Xout, double *Yout, double *Zout);
 
 
 
 	/***********************************************************************
 	 * NAME : 			void SMtoMAG(	Xin, Yin, Zin, Vx, Vy, Vz, recalc,
-	 *									Year, DayNo, Hr, Mn, Sc, 
+	 *									Year, DayNo, Hr, Mn, Sc,
 	 *									*Xout, *Yout, *Zout)
-	 * 
+	 *
 	 * DESCRIPTION : 	Wrapper for converting SM to MAG coordinates
-	 * 
-	 * INPUTS : 
+	 *
+	 * INPUTS :
 	 * 		double	Xin		x SM coordinate (R_E)
 	 * 		double	Yin		y SM coordinate (R_E)
 	 * 		double	Zin		z SM coordinate (R_E)
@@ -1148,44 +1148,44 @@ double GetDipoleTiltUT(int Date, float ut, double Vx, double Vy, double Vz);
 	 * 		int		Hr		Hours
 	 * 		int		Mn		Minutes
 	 * 		int		Sc		Seconds
-	 * 
-	 * OUTPUTS : 
+	 *
+	 * OUTPUTS :
 	 * 		double	*Xout	x MAG coordinate (R_E)
 	 * 		double	*Yout	y MAG coordinate (R_E)
 	 * 		double	*Zout	z MAG coordinate (R_E)
-	 * 
-	 * RETURNS : 
+	 *
+	 * RETURNS :
 	 * 		void
-	 * 
-	 * PROCESS : 
+	 *
+	 * PROCESS :
 	 * 		[1] Calls recalc_08_ function in FORTRAN (if recalc != 0)
 	 * 		[2] Calls FORTRAN code to convert from SM to MAG coordinates
-	 * 
+	 *
 	 * ********************************************************************/
-	void SMtoMAG(	double Xin, double Yin, double Zin, 
+	void SMtoMAG(	double Xin, double Yin, double Zin,
 					double Vx, double Vy, double Vz, int recalc,
-					int Year, int DayNo, int Hr, int Mn, int Sc, 
+					int Year, int DayNo, int Hr, int Mn, int Sc,
 					double *Xout, double *Yout, double *Zout);
 
-	void SMtoMAGUT(	double *Xin, double *Yin, double *Zin, int n, 
-						double *Vx, double *Vy, double *Vz, 
-						int *Date, float *ut, 
+	void SMtoMAGUT(	double *Xin, double *Yin, double *Zin, int n,
+						double *Vx, double *Vy, double *Vz,
+						int *Date, float *ut,
 						double *Xout, double *Yout, double *Zout);
 
 bool WithinMP(double x, double y, double z, double Bz, double Pdyn);
 
 	void TraceField(int n, double *xin, double *yin, double *zin,
 					int *Date, float *ut, const char *Model,
-					int *iopt, double **parmod, 
+					int *iopt, double **parmod,
 					double *Vx, double *Vy, double *Vz,
-					double alt, int MaxLen, double DSMax, 
+					double alt, int MaxLen, double DSMax,
 					bool Verbose, int TraceDir,
 					const char *CoordIn, int *nstep,
-					double **xgsm, double **ygsm, double **zgsm, 
+					double **xgsm, double **ygsm, double **zgsm,
 					double **bxgsm, double **bygsm, double **bzgsm,
-					double **xgse, double **ygse, double **zgse, 
+					double **xgse, double **ygse, double **zgse,
 					double **bxgse, double **bygse, double **bzgse,
-					double **xsm, double **ysm, double **zsm, 
+					double **xsm, double **ysm, double **zsm,
 					double **bxsm, double **bysm, double **bzsm,
 					double **s, double **r, double **rnorm, double **FP,
 					int nalpha, double *alpha, double *halpha);
@@ -1249,9 +1249,9 @@ typedef struct ModelCFG{
 ModelCFG GetModelCFG(	int n, int *Date, float *ut, bool SameTime,
 						const char *Model, int *iopt, double **parmod,
 						double *Vx, double *Vy, double *Vz,
-						const char *CoordIn, const char *CoordOut, bool WithinMPOnly); 
+						const char *CoordIn, const char *CoordOut, bool WithinMPOnly);
 
-void ModelFieldNew(	int n, double *Xin, double *Yin, double *Zin, 
+void ModelFieldNew(	int n, double *Xin, double *Yin, double *Zin,
 					ModelCFG cfg,double *Bx, double *By, double *Bz);
 
 
@@ -1259,60 +1259,57 @@ void ModelFieldNew(	int n, double *Xin, double *Yin, double *Zin,
 
 /***********************************************************************
  * This object will store a bunch of field traces within it.
- * 
+ *
  * It will have the ability to either allocate and store field vectors
  * and positions, or to accept pointers which can be created externally
  * (e.g. inside Python)
- * 
- * There will be optional member functions which obtain things like 
+ *
+ * There will be optional member functions which obtain things like
  * footprints and h_alphas.
- * 
+ *
  * The basic trace will be in GSM/GSW.
- * 
+ *
  * Other coordinate systems will be calculated as needed.
- * 
+ *
  * ********************************************************************/
 class Trace {
-	
+
 	public:
 		/* initialize the object */
 		Trace();
-		
+
 		/* delete the object */
 		~Trace();
-		
+
 		/* copy constructor */
 	//	Trace(const Trace &);
-		
+
 		/* this will take in the input positions where the traces start*/
 		void InputPos(int,double*,double*,double*,int*,float*,const char*, double*, double*, double*);
 		void InputPos(int,double*,double*,double*,int*,float*,const char*);
-		
+
 		/* set model parameters */
 		void SetModelParams(int*, double**);
 		void SetModelParams();
 		void SetModel(const char *);
-		
+
 		/* set the trace configuration */
 		void SetTraceCFG(double,int,double,bool,int);
 		void SetTraceCFG();
-		
+
 		/* polarization stuff */
 		void SetAlpha(int,double*,double);
 
-			
+
 		/* trace function to do basic trace in GSW coords */
-		void TraceGSM(int*,double**,double**,double**,double**,double**,double**);
+		void TraceGSM(int*,
+		  double**,double**,double**,double**,double**,double**,
+			double**,double**,double**,double**,double**,double**,
+			double**,double**,double**,double**,double**,double**
+		);
 		void TraceGSM(int*);
 		void TraceGSM();
-		
-		
-		/* these will convert to other coords */
-		void TraceGSE(double**,double**,double**,double**,double**,double**);
-		void TraceGSE();
-		void TraceSM(double**,double**,double**,double**,double**,double**);
-		void TraceSM();
-	
+
 		/* calculate trace distance,R,Rnorm */
 		void CalculateTraceDist(double**);
 		void CalculateTraceDist();
@@ -1323,18 +1320,18 @@ class Trace {
 		void CalculateTraceRnorm(double**);
 		void CalculateTraceRnorm();
 		void _CalculateTraceRnorm();
-	
+
 		/* Calculate footprints */
 		void CalculateTraceFP(double**);
 		void CalculateTraceFP();
 		void _CalculateTraceFP();
-		
+
 		/* calculate halpha */
 		void CalculateHalpha();
 		void CalculateHalpha(double*);
 		void CalculateHalpha(double***);
 		void CalculateHalpha(double*,double***);
-	
+
 		/* return things*/
 		void GetTraceNstep(int*);
 		void GetTraceGSM(double**,double**,double**);
@@ -1349,13 +1346,13 @@ class Trace {
 		void GetTraceFootprints(double**);
 		void GetTraceHalpha(double*);	/* python will use this */
 		void GetTraceHalpha(double***); /* no idea how to link this to python*/
-		
+
 		Trace TracePosition(int,double,double,double);
-	
+
 
 		/* input coords */
 		int n_;
-		double *x0_, *y0_, *z0_;  
+		double *x0_, *y0_, *z0_;
 		int *Date_;
 		float *ut_;
 
@@ -1368,7 +1365,7 @@ class Trace {
 		bool Verbose_;
 		double alt_;
 		int TraceDir_;
-		
+
 		/* model params */
 		int *iopt_;
 		double **parmod_;
@@ -1379,7 +1376,7 @@ class Trace {
 		double **xgsm_, **ygsm_, **zgsm_;
 		double **xgse_, **ygse_, **zgse_;
 		double **xsm_, **ysm_, **zsm_;
-	
+
 		/* trace fields */
 		double **bxgsm_, **bygsm_, **bzgsm_;
 		double **bxgse_, **bygse_, **bzgse_;
@@ -1411,9 +1408,9 @@ class Trace {
 		bool allocEqFP_;
 		bool allocMP_;
 
-		
 
-	
+
+
 		/* field length, R, Rnorm, Halpha, Footprints */
 		int nalpha_;
 		double *alpha0_, *alpha1_;
@@ -1424,15 +1421,13 @@ class Trace {
 		double *Halpha_;
 		double ***Halpha3D_;
 		double **FP_;
-		
+
 		/* model */
 		const char *Model_;
 		ModelFuncPtr ModelFunc_;
-	
+
 		/* hidden trace functions */
 		void _TraceGSM();
-		void _TraceGSE();
-		void _TraceSM();
 
 		/* halpha functions */
 		bool _CheckHalpha();
